@@ -1,0 +1,17 @@
+{
+  "name": "rx-http",
+  "description": "http client designed to work with rx-js",
+  "main": "dist/rx-http.js",
+  "authors": [
+    "Nick Fisher <nfisher110@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/nrf110/rx-http",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
