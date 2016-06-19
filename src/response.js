@@ -1,6 +1,7 @@
 /**
-* Immutable response container
-**/
+ * Immutable response container
+ * @class
+ */
 function Response(xhr) {
   function lazy(value) {
     let _value
@@ -18,8 +19,11 @@ function Response(xhr) {
     };
   }
 
-  this.status = lazy(xhr.status)
-  this.statusText = lazy(xhr.statusText)
-  this.headers = lazy(xhr.getAllResponseHeaders)
+  this.status = lazy(xhr.status);
+
+  this.statusText = lazy(xhr.statusText);
+
+  this.headers = lazy(xhr.getAllResponseHeaders);
+
   this.header = (name) => this.headers()[name];
 }

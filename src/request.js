@@ -1,5 +1,6 @@
-/** @class
+/**
  * A Request should only ever be created by an instance of {@link Http}
+ * @class
  * @param {Object} config - Override default settings for this Request only.
  * @private
  */
@@ -152,6 +153,18 @@ function Request(config) {
     }
   }
 
+  /** @method
+   * @name execute
+   * @returns {Object} - Executes the request and returns an object containing
+   * the response, uploadProgress, and downloadProgress streams.
+   * @example
+   * {{
+   *    var streams = request.execute();
+   *    streams.response.forEach((response) => console.log(response));
+   *    streams.uploadProgress.forEach((event) => console.log(event));
+   *    streams.downloadProgress.forEach((event) => console.log(event));
+   * }}
+   */
   this.execute = function() {
     return config.provider(this);
   }

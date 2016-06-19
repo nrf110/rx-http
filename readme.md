@@ -30,15 +30,15 @@ bower:
 ```javascript
 import Http from 'rx-http';
 
-const request = Http.post('http://example.com/my/path')
+const client = new Http();
+
+const streams = client.post('http://example.com/my/path')
   .header('Content-Type', 'application/json')
   .header('Accept', 'application/json')
   .body({ "foo": "bar"})
   .timeout(5000)
   .retries(3)
-  .build()
-
-const streams = request.execute();
+  .execute();
 
 streams.downloadProgress
   .subscribe((progress) => console.log('Received progress'));
@@ -47,7 +47,6 @@ streams.uploadProgress
   .subscribe((progress) => console.log('Received progress'));
 
 streams.response
-  .filter((response) => response.status() === 200)
   .map((response) => response.body())
   .subscribe(
     ((body) => console.log(body)),

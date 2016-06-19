@@ -1,31 +1,39 @@
 function XHRProvider(request) {
   function registerEvents(xhr, observable, retries) {
-    const progressHandler = (type) => (evt) => {
-      observable.onNext({ type, progress: evt });
-    };
 
-    const exceptionHandler = (evt) => {
+    function progressHandler(type, evt) {
+      observable.onNext({ type, progress: evt });
+    }
+
+    function exceptionHandler(evt) {
       if (retries > 0) {
         attempt(observable, retries - 1);
       } else {
         observable.onError(evt);
         observable.onCompleted();
       }
-    };
+    }
 
     if (xhr.upload) {
-      xhr.upload.addEventListener('progress', progressHandler(HTTP_EVENTS.UPLOAD_PROGRESS));
+      xhr.upload.addEventListener('progress', _.partial(progressHandler, HTTP_EVENTS.UPLOAD_PROGRESS));
       xhr.upload.addEventListener('error', exceptionHandler);
       xhr.upload.addEventListener('abort', exceptionHandler);
     }
 
-    xhr.addEventListener('progress', progressHandler(HTTP_EVENTS.DOWNLOAD_PROGRESS));
+    xhr.addEventListener('progress', _.partial(progressHandler, HTTP_EVENTS.DOWNLOAD_PROGRESS));
     xhr.addEventListener('error', exceptionHandler);
     xhr.addEventListener('abort', exceptionHandler);
     xhr.addEventListener('load', (evt) => {
       const response = new Response(xhr);
-      observable.onNext({ type: HTTP_EVENTS.RESPONSE_RECEIVED, response });
+      const interceptors = request.interceptors();
+      const successHandler = function(transformed) {
+        observable.onNext({ type: HTTP_EVENTS.RESPONSE_RECEIVED, response: transformed});
+      }
+
+      new ResponseInterceptorChain(interceptors, successHandler, exceptionHandler)
+        .run(response);
     });
+
   }
 
   function attempt(observable, remaining = request.retries()) {
@@ -44,8 +52,14 @@ function XHRProvider(request) {
     });
 
     // TODO: consider dealing with xhr.responseType
-    // TODO: detect/transform request body
-    xhr.send(request.body());
+    const interceptors = request.interceptors();
+    const success = (transformed) => xhr.send(transformed.body());
+    const failure = (error) => {
+      observable.onError(error);
+      observable.onCompleted();
+    }
+    new RequestInterceptorChain(interceptors, success, failure)
+      .run(request);
   }
 
   const stream = Rx.Observable.create(attempt).share();
