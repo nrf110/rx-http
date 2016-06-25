@@ -247,12 +247,23 @@ function Http(options = {}) {
   }
 }
 
+const provider = (function() {
+  const thisIsNode =
+    !_.isUndefined(process) &&
+      !_.isUndefined(process.release) &&
+      !_.isUndefined(process.release.name) &&
+      process.release.name.search(/node|io.js/) !== -1;
+
+  if (thisIsNode) throw new Error("Node.js is not yet supported!");
+  else return XHRProvider;
+})();
+
 Http.defaults = {
   baseUrl: '',
   retries: 0,
   timeout: 30000,
   xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN'
+  xsrfHeaderName: 'X-XSRF-TOKEN',
   interceptors: [
     Interceptors.MethodOverride,
     Interceptors.BodyTransformer,

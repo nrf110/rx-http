@@ -19,7 +19,8 @@
   "dependencies": {
     "js-cookie": "^2.1.2",
     "lodash": "^4.13.1",
-    "rx": "~4.1.0"
+    "rx": "~4.1.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "babel-core": "^6.8.0",

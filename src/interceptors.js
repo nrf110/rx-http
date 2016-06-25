@@ -12,10 +12,6 @@ const Interceptors = {
       }
 
       accept(request);
-    },
-    response: (response, accept, reject) => {
-      // TODO: Use Content-Type to determine parser
-      // if (response.header(Headers.CONTENT_TYPE))
     }
   },
 
@@ -106,8 +102,12 @@ function RequestInterceptorChain(interceptors, accept, reject) {
     }
   }
 
+  /** @method
+   * Runs the request through the chain of request interceptors
+   * @name run
+   */
   this.run = function(request) {
-    function step(remaining, next)) {
+    function step(remaining, next) {
       if (!_.isEmpty(remaining)) {
         const interceptor = _.head(remaining);
         const tail = _.tail(remaining);
@@ -173,8 +173,12 @@ function ResponseInterceptorChain(interceptors, accept, reject) {
     }
   }
 
+  /** @method
+   * Runs the response through the chain of response interceptors
+   * @name run
+   */
   this.run = function(response) {
-    function step(remaining, next)) {
+    function step(remaining, next) {
       if (!_.isEmpty(remaining)) {
         const interceptor = _.head(remaining);
         const tail = _.tail(remaining);

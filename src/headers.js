@@ -1,5 +1,5 @@
 const Headers = {
 
-  CONTENT_TYPE = "Content-Type"
-  
+  CONTENT_TYPE: "Content-Type"
+
 }

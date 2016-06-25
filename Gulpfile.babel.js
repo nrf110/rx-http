@@ -42,6 +42,18 @@ gulp.task('build', () => {
             cjs: 'rx',
             global: 'Rx',
             param: 'Rx'
+          },
+          {
+            amd: 'lodash',
+            cjs: 'lodash',
+            global: '_',
+            param: '_'
+          },
+          {
+            amd: 'js-cookie',
+            cjs: 'js-cookie',
+            global: 'Cookies',
+            param: 'Cookies'
           }
         ]
       }

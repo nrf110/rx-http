@@ -7,8 +7,8 @@ function Response(xhr) {
     let _value
 
     return function() {
-      if (value === undefined) {
-        if (typeof value === 'function') {
+      if (_.isUndefined(value)) {
+        if (_.isFunction(value)) {
           _value = value()
         } else {
           _value = value
@@ -26,4 +26,6 @@ function Response(xhr) {
   this.headers = lazy(xhr.getAllResponseHeaders);
 
   this.header = (name) => this.headers()[name];
+
+  this.body = lazy(xhr.response);
 }

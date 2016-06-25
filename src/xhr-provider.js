@@ -1,3 +1,13 @@
+const HTTP_EVENTS = {
+
+  UPLOAD_PROGRESS: 'UPLOAD_PROGRESS',
+
+  DOWNLOAD_PROGRESS: 'DOWNLOAD_PROGRESS',
+
+  RESPONSE_RECEIVED: 'RESPONSE_RECEIVED'
+
+};
+
 function XHRProvider(request) {
   function registerEvents(xhr, observable, retries) {
 
@@ -37,7 +47,9 @@ function XHRProvider(request) {
   }
 
   function attempt(observable, remaining = request.retries()) {
-    const xhr = new window.XmlHTTPRequest();
+
+    const xhr = new XmlHttpRequest();
+
     registerEvents(xhr, observable, remaining);
 
     xhr.open(request.method(), request.url());
@@ -51,7 +63,6 @@ function XHRProvider(request) {
       xhr.setRequestHeader(headerName, headers[headerName]);
     });
 
-    // TODO: consider dealing with xhr.responseType
     const interceptors = request.interceptors();
     const success = (transformed) => xhr.send(transformed.body());
     const failure = (error) => {
