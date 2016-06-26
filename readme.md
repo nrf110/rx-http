@@ -32,7 +32,7 @@ import Http from 'rx-http';
 
 const client = new Http();
 
-const streams = client.post('http://example.com/my/path')
+const response = client.post('http://example.com/my/path')
   .header('Content-Type', 'application/json')
   .header('Accept', 'application/json')
   .body({ "foo": "bar"})
@@ -40,13 +40,13 @@ const streams = client.post('http://example.com/my/path')
   .retries(3)
   .execute();
 
-streams.downloadProgress
+response.downloadProgress
   .subscribe((progress) => console.log('Received progress'));
 
-streams.uploadProgress
+response.uploadProgress
   .subscribe((progress) => console.log('Received progress'));
 
-streams.response
+response
   .map((response) => response.body())
   .subscribe(
     ((body) => console.log(body)),

@@ -1,3 +1,7 @@
+import _ from 'lodash';
+import Cookies from 'js-cookie';
+import { isFile, isFormData, isBlob } from './utilities';
+
 const BROWSER_METHODS = ['GET', 'POST'];
 
 const Interceptors = {
@@ -194,3 +198,9 @@ function ResponseInterceptorChain(interceptors, accept, reject) {
     step(interceptors, request);
   }
 }
+
+export default {
+  Interceptors,
+  RequestInterceptorChain,
+  ResponseInterceptorChain
+};

@@ -1,24 +1,26 @@
+import _ from 'lodash';
+import Request from './request';
+import { Interceptors } from './interceptors';
+import Uri from './uri';
+import Path from './path';
+
 /**
  * An HTTP client.
  * @class
  * @param {Object} [options] - A hash of settings for this client.
  */
 function Http(options = {}) {
+  const self = this;
   const settings = _.assign({}, Http.defaults, options);
 
-  /** @method
-   * @name timeout
-   * @param {number} [value] - The request timeout in milliseconds
-   * @returns {number|Http} - If value is specified, updates the default request
-   * timeout for all requests created with this client, and returns the client
-   * instance.  If value is ommitted, returns the current timeout value.
-   */
-  this.timeout = function(value) {
-    if (_.isInteger(value)) {
-      settings.timeout = value;
-      return this;
-    } else {
-      return settings.timeout;
+  function property(key, isValid) {
+    return function(value) {
+      if (isValid(value)) {
+        settings[key] = value;
+        return self;
+      } else {
+        return settings[key];
+      }
     }
   }
 
@@ -30,30 +32,25 @@ function Http(options = {}) {
    * for all requests created with this client, and returns the client instance.
    * If value is ommitted, returns the current baseUrl.
    */
-  this.baseUrl = function(url) {
-    if (_.isString(url)) {
-      settings.baseUrl = url;
-      return this;
-    } else {
-      return settings.url;
-    }
-  }
+  property('baseUrl', _.isString);
+
+  /** @method
+   * @name timeout
+   * @param {number} [value] - The request timeout in milliseconds
+   * @returns {number|Http} - If value is specified, updates the default request
+   * timeout for all requests created with this client, and returns the client
+   * instance.  If value is ommitted, returns the current timeout value.
+   */
+  property('timeout', _.isInteger);
 
   /** @method
    * @name retries
-   * @param {number} [count] - The number of retries allowed
+   * @param {number} [value] - The number of retries allowed
    * @returns {number|Http} - If count is specified, sets the default number
    * of retries allowed for requests from this client, and returns the client
    * instance.  If count is ommitted, returns the current value.
    */
-  this.retries = function(count) {
-    if (_.isInteger(count)) {
-      settings.retries = count;
-      return this;
-    } else {
-      return settings.retries;
-    }
-  }
+  property('retries', _.isInteger);
 
   /** @method
    * @name interceptors
@@ -63,14 +60,7 @@ function Http(options = {}) {
    * instance.  If values is ommitted, returns the current array of
    * interceptors.
    */
-  this.interceptors = function(values) {
-    if (_.isArray(values)) {
-      settings.interceptors = values;
-      return this;
-    } else {
-      return settings.interceptors;
-    }
-  }
+  property('interceptors', _.isArray);
 
   /** @method
    * @name addInterceptor
@@ -108,8 +98,21 @@ function Http(options = {}) {
   * }}
   **/
   const request = this.request = function(url, options = {}) {
-    // TODO: parse URI.  merge query-string with value from settings
-    return new Request(settings);
+    const base = settings.baseUrl || '';
+    const fullUrl = Path.join(base + url);
+    const parsed = parseUri(fullUrl);
+    const config = _.defaults(options, settings)
+
+    _.assign(parsed.query, options.query);
+    _.assign(config, { url: new Url(parsed) })
+
+    return new Request(config);
+  }
+
+  function generateRequestMethod(method) {
+    self[method.toLowerCase()] = function(url, options = {}) {
+      return request(url, _.assign({ method }, options));
+    }
   }
 
   /** @method
@@ -126,7 +129,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.head = generateRequestMethod('HEAD')
+  generateRequestMethod('HEAD');
 
   /** @method
   * @name get
@@ -142,7 +145,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.get = generateRequestMethod('GET');
+  generateRequestMethod('GET');
 
   /** @method
   * @name options
@@ -158,7 +161,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.options = generateRequestMethod('OPTIONS');
+  generateRequestMethod('OPTIONS');
 
   /** @method
   * @name delete
@@ -174,7 +177,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.delete = generateRequestMethod('DELETE');
+  generateRequestMethod('DELETE');
 
   /** @method
   * @name trace
@@ -190,7 +193,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.trace = generateRequestMethod('TRACE');
+  generateRequestMethod('TRACE');
 
   /** @method
   * @name post
@@ -206,7 +209,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.post = generateRequestMethod('POST');
+  generateRequestMethod('POST');
 
   /** @method
   * @name put
@@ -222,7 +225,7 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.put = generateRequestMethod('PUT');
+  generateRequestMethod('PUT');
 
   /** @method
   * @name patch
@@ -238,20 +241,14 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  this.patch = generateRequestMethod('PATCH');
-
-  function generateRequestMethod(method) {
-    return function(url, options = {}) {
-      return request(url, _.assign({ method }, options));
-    }
-  }
+  generateRequestMethod('PATCH');
 }
 
 const provider = (function() {
   const thisIsNode =
-    !_.isUndefined(process) &&
-      !_.isUndefined(process.release) &&
-      !_.isUndefined(process.release.name) &&
+    typeof process !== 'undefined' &&
+      typeof process.release !== 'undefined' &&
+      typeof process.release.name !== 'undefined' &&
       process.release.name.search(/node|io.js/) !== -1;
 
   if (thisIsNode) throw new Error("Node.js is not yet supported!");
@@ -272,3 +269,5 @@ Http.defaults = {
   ],
   provider
 };
+
+export default Http;

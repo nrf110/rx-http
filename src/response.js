@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /**
  * Immutable response container
  * @class
@@ -29,3 +31,5 @@ function Response(xhr) {
 
   this.body = lazy(xhr.response);
 }
+
+export default Response;

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 /**
  * A Request should only ever be created by an instance of {@link Http}
  * @class
@@ -5,6 +7,19 @@
  * @private
  */
 function Request(config) {
+  const self = this;
+
+  function property(key, transformIn = _.identity, transformOut = _.identity) {
+    self[key] = function(value) {
+      if (_.isUndefined(value)) {
+        return transformOut(config[key]);
+      } else {
+        config[key] = transformIn(value);
+        return self;
+      }
+    };
+  }
+
   /** @method
    * @name method
    * @param {string} [value] - The HTTP method for this request
@@ -12,14 +27,7 @@ function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current HTTP method
    */
-  this.method = function(value) {
-    if (_.isUndefined(value)) {
-      return config.method
-    } else {
-      config.method = value;
-      return this;
-    }
-  }
+  property('method');
 
   /** @method
    * @name header
@@ -46,64 +54,7 @@ function Request(config) {
    * and returns the current Request.  If value is ommitted, returns a copy
    * of the current headers.
    */
-  this.headers = function(value) {
-    if (_.isUndefined(value)) {
-      return Object.assign({}, config.headers);
-    } else {
-      config.headers = value;
-      return this;
-    }
-  }
-
-  /** @method
-   * @name query
-   * @param {string|object} [name] - The name of the query-string parameter
-   * @param [value] - The value of the query-string parameter
-   * @returns {object|string|Request} -
-   * If no parameters are specified - returns a copy of the entire query hash.
-   * @example
-   * {{
-   *   request.query() // returns { "foo": "bar" }
-   * }}
-   * If only name is specified, and name is a string - returns the value for the key in the query hash.
-   * @example
-   * {{
-   *    request.query("foo") // returns "bar"
-   * }}
-   * If only name is specified, and name is an object - replaces the entire query hash
-   * and returns the current Request.
-   * @example
-   * {{
-   *    request.query({ "foo": "bar", "baz": 1 }).execute()
-   * }}
-   * If name and value are specified - sets the value of name in the query hash
-   * and returns the current Request.
-   * @example
-   * {{
-   *   request.query("foo", "bar").execute()
-   * }}
-   */
-  this.query = function(name, value) {
-    if (_.isUndefined(name)) {
-
-      if (_.isUndefined(value)) {
-
-        if (_.isObject(name)) {
-          config.query = name;
-          return this;
-        } else {
-          return config.query[name];
-        }
-
-      } else {
-        config.query[name] = value;
-        return this;
-      }
-
-    } else {
-      return Object.assign({}, config.query);
-    }
-  }
+  property('headers', transformOut = (headers) => _.assign({}, headers));
 
   /** @method
    * @name body
@@ -112,14 +63,16 @@ function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current body
    */
-  this.body = function(value) {
-    if (_.isUndefined(value)) {
-      return config.body;
-    } else {
-      config.body = value;
-      return this;
-    }
-  }
+  property('body');
+
+  /** @method
+   * @name url
+   * @param {@link Url} [value] - The {@link Url} for this request.
+   * @returns {@link Url} - If value is specified, sets the {@link Url} for
+   * this request and returns the current Request.  If value is ommitted,
+   * returns the current {@link Url}.
+   */
+  property('url');
 
   /** @method
    * @name timeout
@@ -128,14 +81,7 @@ function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current timeout.
    */
-  this.timeout = function(value) {
-    if (_.isUndefined(value)) {
-      return config.timeout;
-    } else {
-      config.timeout = value;
-      return this;
-    }
-  }
+  property('timeout');
 
   /** @method
    * @name retries
@@ -144,14 +90,7 @@ function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current number of retries.
    */
-  this.retries = function(value) {
-    if (_.isUndefined(value)) {
-      return config.retries;
-    } else {
-      config.retries = value;
-      return this;
-    }
-  }
+  property('retries');
 
   /** @method
    * @name execute
@@ -169,3 +108,5 @@ function Request(config) {
     return config.provider(this);
   }
 }
+
+export default Request;

@@ -1,3 +1,7 @@
+import Response from './response';
+import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';
+import Rx from 'rx';
+
 const HTTP_EVENTS = {
 
   UPLOAD_PROGRESS: 'UPLOAD_PROGRESS',
@@ -47,8 +51,7 @@ function XHRProvider(request) {
   }
 
   function attempt(observable, remaining = request.retries()) {
-
-    const xhr = new XmlHttpRequest();
+    const xhr = new XMLHttpRequest();
 
     registerEvents(xhr, observable, remaining);
 
@@ -93,3 +96,5 @@ function XHRProvider(request) {
     response
   };
 }
+
+export default XHRProvider;
