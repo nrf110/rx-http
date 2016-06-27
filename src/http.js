@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Request from './request';
 import { Interceptors } from './interceptors';
-import Uri from './uri';
+import Url from './url';
 import Path from './path';
 
 /**
@@ -99,7 +99,7 @@ function Http(options = {}) {
   **/
   const request = this.request = function(url, options = {}) {
     const base = settings.baseUrl || '';
-    const fullUrl = Path.join(base + url);
+    const fullUrl = Path.join(base, url);
     const parsed = parseUri(fullUrl);
     const config = _.defaults(options, settings)
 

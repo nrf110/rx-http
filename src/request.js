@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import Path from './path';
+import Url from './url';
 
 /**
  * A Request should only ever be created by an instance of {@link Http}
@@ -72,7 +74,21 @@ function Request(config) {
    * this request and returns the current Request.  If value is ommitted,
    * returns the current {@link Url}.
    */
-  property('url');
+  property('url', transformIn = (url) => {
+    if (_.isString(url)) {
+      const base = config.baseUrl || '';
+      const fullUrl = Path.join(base, url);
+      const parsed = parseUri(fullUrl);
+      const config = _.defaults(options, settings)
+
+      _.assign(parsed.query, options.query);
+
+    } else if (url instanceof Url) {
+      return url;
+    } else {
+      return new Url(url);
+    }
+  });
 
   /** @method
    * @name timeout

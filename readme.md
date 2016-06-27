@@ -28,7 +28,7 @@ bower:
 
 ## Basic Usage
 ```javascript
-import Http from 'rx-http';
+import { Http } from 'rx-http';
 
 const client = new Http();
 

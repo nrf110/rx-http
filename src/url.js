@@ -1,6 +1,17 @@
 import _ from 'lodash';
 import { parseUri } from './utilities';
 
+function encode(val) {
+  return encodeURIComponent(val)
+    .replace(/%40/gi, '@')
+    .replace(/%3A/gi, ':')
+    .replace(/%24/g, '$')
+    .replace(/%2C/gi, ',')
+    .replace(/%20/g, '+')
+    .replace(/%5B/gi, '[')
+    .replace(/%5D/gi, ']');
+}
+
 function Url(url) {
   const self = this;
   const parts = {};
@@ -115,21 +126,48 @@ function Url(url) {
     return `${dir}/${f}`;
   };
 
-  this.toString = function() {
-    let auth = authority();
-    let p = path();
+  /** @method
+   * @name toString
+   */
+  this.toString = function(serializeQuery) {
+    const auth = authority();
+    const p = path();
+    const f = fragment();
+    const q = serializeQuery(query());
 
-    if (auth.endsWith('/')) {
-      if (p.endsWith('/')) {
-        return auth + p.substring(1);
+    const fullyQualified = (() => {
+      if (auth.endsWith('/')) {
+        if (p.endsWith('/')) {
+          return auth + p.substring(1);
+        }
+
+        return auth + p;
+      } else if (p.startsWith('/')) {
+        return auth + p;
       }
 
-      return auth + p;
-    } else if (p.startsWith('/')) {
-      return auth + p;
+      return `${auth}/${p}`;
+    })();
+
+    const queryParts = _.reduce(q, (accum, value, key) => {
+      let pair = `${encode(key)}=${encode(value)}`;
+      accum.push(pair);
+      return accum;
+    }, []);
+
+    const fullyQualifiedWithQuery = (() => {
+      if (!_.isEmpty(queryParts)) {
+        return `${fullyQualified}?${queryParts.join('&')}`;
+      }
+
+      return fullyQualified;
+    })();
+
+    if (!_.isEmpty(f)) {
+      return `${fullyQualifiedWithQuery}#${f}`;
     }
 
-    return `${auth}/${p}`;
+    return fullyQualifiedWithQuery;
   };
 }
 
