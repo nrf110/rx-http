@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import Path from './path';
-import Url from './url';
+const _     = require('lodash');
+const Path  = require('./path');
+const Url   = require('./url');
 
 /**
  * A Request should only ever be created by an instance of {@link Http}
@@ -125,4 +125,4 @@ function Request(config) {
   }
 }
 
-export default Request;
+module.exports = Request;

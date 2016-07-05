@@ -16,28 +16,41 @@ function generateConfig(name, minify) {
     },
     externals: [
       {
-        root: 'Cookies',
-        commonjs: 'js-cookie',
-        amd: 'js-cookie'
+        "js-cookie": {
+          root: 'Cookies',
+          commonjs2: ['js-cookie'],
+          commonjs: 'js-cookie',
+          amd: 'js-cookie'
+        }
       },
       {
-        root: '_',
-        commonjs: 'lodash',
-        amd: 'lodash'
+        "lodash": {
+          root: '_',
+          commonjs2: ['lodash'],
+          commonjs: 'lodash',
+          amd: 'lodash'
+        }
       },
       {
-        root: 'Rx',
-        commonjs: 'rx',
-        amd: 'rx'
+        "rx": {
+          root: 'Rx',
+          commonjs2: ['rx'],
+          commonjs: 'rx',
+          amd: 'rx'
+        }
       }
     ],
     devtool: 'source-map',
     module: {
       loaders: [
         {
-          test: /\.js?$/,
+          test: /\.json$/,
+          loader: 'json-loader'
+        },
+        {
+          test: /\.js$/,
           exclude: [
-            path.resolve('node_modules/')
+            path.resolve('./node_modules/')
           ],
           loader: 'babel-loader'
         }

@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { parseUri } from './utilities';
+const _ = require('lodash');
+const { parseUri } = require('./utilities');
 
 function encode(val) {
   return encodeURIComponent(val)
@@ -14,7 +14,7 @@ function encode(val) {
 
 function Url(url) {
   const self = this;
-  const parts = {};
+  let parts = {};
 
   if (_.isObject(url)) {
     _.assign(parts, url);
@@ -118,7 +118,7 @@ function Url(url) {
         return dir + f.substring(1);
       }
 
-      return return dir + f;
+      return dir + f;
     } else if (f.startsWith('/')) {
       return dir + f;
     }
@@ -171,4 +171,4 @@ function Url(url) {
   };
 }
 
-export default Url;
+module.exports = Url;

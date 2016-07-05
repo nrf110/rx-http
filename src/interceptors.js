@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import Cookies from 'js-cookie';
-import { isFile, isFormData, isBlob } from './utilities';
+const _                               = require('lodash');
+const Cookies                         = require('js-cookie');
+const { isFile, isFormData, isBlob }  = require('./utilities');
 
 const BROWSER_METHODS = ['GET', 'POST'];
 
@@ -199,7 +199,7 @@ function ResponseInterceptorChain(interceptors, accept, reject) {
   }
 }
 
-export default {
+module.exports =  {
   Interceptors,
   RequestInterceptorChain,
   ResponseInterceptorChain

@@ -8,7 +8,7 @@ import { Server } from 'karma';
 import TestServer from './test-server';
 
 gulp.task('clean', () => {
-  return del.sync(DEST);
+  return del.sync('./dist');
 });
 
 gulp.task('build', (done) => {
@@ -35,7 +35,7 @@ gulp.task('default', () => {
 });
 
 gulp.task('dev', () => {
-  watch(['src/**', 'test/**'], function() {
+  watch(['src/**', 'test/**', 'index.js'], function() {
     gulp.start('clean');
     gulp.start('karma');
   });

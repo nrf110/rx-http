@@ -1,8 +1,10 @@
-import _ from 'lodash';
-import Request from './request';
-import { Interceptors } from './interceptors';
-import Url from './url';
-import Path from './path';
+const _                 = require('lodash');
+const Request           = require('./request');
+const { Interceptors }  = require('./interceptors');
+const XHRProvider       = require('./xhr-provider');
+const Url               = require('./url');
+const Path              = require('./path');
+const { parseUri }      = require('./utilities');
 
 /**
  * An HTTP client.
@@ -270,4 +272,4 @@ Http.defaults = {
   provider
 };
 
-export default Http;
+module.exports = Http;

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
 /**
  * Immutable response container
@@ -32,4 +32,4 @@ function Response(xhr) {
   this.body = lazy(xhr.response);
 }
 
-export default Response;
+module.exports = Response;

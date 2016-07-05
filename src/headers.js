@@ -4,4 +4,4 @@ const Headers = {
 
 }
 
-export default Headers;
+module.exports = Headers;

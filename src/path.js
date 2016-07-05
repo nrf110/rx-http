@@ -1,15 +1,18 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
-export default {
-  join(separator = '/') {
-    const args = Array.from(arguments);
-    return _.reduce(args, (accum, value) => {
+module.exports =  {
+  separator: '/',
+
+  join() {
+    const separator = this.separator;
+
+    return _.reduce(arguments, (accum, value) => {
       var result = accum;
 
-      if (value.startsWith(separator)) {
-        if (value.endsWith(separator)) result += value.substring(0, value.length - 1);
+      if (_.startsWith(value, separator)) {
+        if (_.endsWith(value, separator)) result += value.substring(0, value.length - 1);
         else result += value;
-      } else if (value.endsWith(separator)) {
+      } else if (_.endsWith(value, separator)) {
         result += '/' + value.substring(0, value.length - 1);
       } else {
         result += '/' + value;
@@ -18,4 +21,4 @@ export default {
       return result;
     }, '/');
   }
-}
+};

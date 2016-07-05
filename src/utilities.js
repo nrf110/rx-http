@@ -43,7 +43,7 @@ parseUri.options = {
 	}
 };
 
-export default {
+module.exports = {
   isFile,
   isFormData,
   isBlob,

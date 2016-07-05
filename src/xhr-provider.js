@@ -1,6 +1,8 @@
-import Response from './response';
-import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';
-import Rx from 'rx';
+const Response      = require('./response');
+const Interceptors  = require('./interceptors');
+const Rx            = require('rx');
+
+const { RequestInterceptorChain, ResponseInterceptorChain } = Interceptors;
 
 const HTTP_EVENTS = {
 
@@ -90,11 +92,10 @@ function XHRProvider(request) {
     .filter(evt => evt.type === HTTP_EVENTS.RESPONSE_RECEIVED)
     .map(evt => evt.response);
 
-  return {
-    uploadProgress,
-    downloadProgress,
-    response
-  };
+  response.downloadProgress = downloadProgress;
+  response.uploadProgress = uploadProgress;
+
+  return response;
 }
 
-export default XHRProvider;
+module.exports = XHRProvider;
