@@ -1,18 +1,41 @@
 const webpack = require('webpack');
+const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
+const env  = require('yargs').argv.env; // use --env with webpack 2
 
-function generateConfig(name, minify) {
-  const settings = {
-    entry: './index.js',
+module.exports = function(minify = false) {
+  let libraryName = 'rx-http';
+  let plugins = [], outputFile;
+
+  if (minify) {
+    plugins.push(new UglifyJsPlugin({ minimize: true }));
+    outputFile = libraryName + '.min.js';
+  } else {
+    outputFile = libraryName + '.js';
+  }
+
+  return {
+    entry: __dirname + '/src/index.js',
+    devtool: 'source-map',
     output: {
-      path: 'dist/',
-      filename: `${name}.js`,
-      sourceMapFilename: `${name}.map`,
-      library: 'rx-http',
-      libraryTarget: 'umd'
+      path: __dirname + '/lib',
+      filename: outputFile,
+      library: libraryName,
+      libraryTarget: 'umd',
+      umdNamedDefine: true
     },
-    node: {
-      process: false
+    module: {
+      rules: [
+        {
+          test: /(\.jsx|\.js)$/,
+          loader: 'babel-loader',
+          exclude: /(node_modules|bower_components)/
+        }
+      ]
+    },
+    resolve: {
+      modules: [path.resolve('./src'), './node_modules'],
+      extensions: ['.js']
     },
     externals: [
       {
@@ -32,54 +55,14 @@ function generateConfig(name, minify) {
         }
       },
       {
-        "rx": {
+        "rxjs": {
           root: 'Rx',
-          commonjs2: ['rx'],
-          commonjs: 'rx',
-          amd: 'rx'
+          commonjs2: ['rxjs'],
+          commonjs: 'rxjs',
+          amd: 'rxjs'
         }
       }
     ],
-    devtool: 'source-map',
-    module: {
-      loaders: [
-        {
-          test: /\.json$/,
-          loader: 'json-loader'
-        },
-        {
-          test: /\.js$/,
-          exclude: [
-            path.resolve('./node_modules/')
-          ],
-          loader: 'babel-loader'
-        }
-      ]
-    },
-    resolve: {
-      extensions: ['', '.js']
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-      })
-    ]
+    plugins: plugins
   };
-
-  if (minify) {
-    settings.plugins.push(
-      new webpack.optimize.UglifyJsPlugin({
-        compressor: {
-          warnings: false
-        }
-      })
-    )
-  }
-
-  return settings;
-}
-
-module.exports = [
-  generateConfig('rx-http', false),
-  generateConfig('rx-http.min', true)
-];
+};

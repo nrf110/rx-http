@@ -1,23 +1,23 @@
-const _ = require('lodash');
+import { isUndefined, isFunction } from 'lodash';
 
 /**
  * Immutable response container
  * @class
  */
-function Response(xhr) {
+export default function Response(xhr) {
   function lazy(value) {
-    let _value
+    let _value;
 
-    return function() {
-      if (_.isUndefined(value)) {
-        if (_.isFunction(value)) {
-          _value = value()
+    return function () {
+      if (!isUndefined(value)) {
+        if (isFunction(value)) {
+          _value = value();
         } else {
-          _value = value
+          _value = value;
         }
       }
 
-      return _value
+      return _value;
     };
   }
 
@@ -31,5 +31,3 @@ function Response(xhr) {
 
   this.body = lazy(xhr.response);
 }
-
-module.exports = Response;

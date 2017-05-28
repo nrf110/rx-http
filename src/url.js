@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const { parseUri } = require('./utilities');
+import { isObject, isString, isUndefined, isEmpty, assign, reduce, endsWith, startsWith, identity } from 'lodash';
+import { parseUri } from './utilities';
 
 function encode(val) {
   return encodeURIComponent(val)
@@ -12,35 +12,34 @@ function encode(val) {
     .replace(/%5D/gi, ']');
 }
 
-function Url(url) {
+export default function Url(url) {
   const self = this;
   let parts = {};
 
-  if (_.isObject(url)) {
-    _.assign(parts, url);
-  } else if (_.isString(url)) {
+  if (isObject(url)) {
+    assign(parts, url);
+  } else if (isString(url)) {
     parts = parseUri(url);
   }
 
   function property(key) {
-    return function(value) {
-      if (_.isUndefined(value)) {
+    return function (value) {
+      if (isUndefined(value)) {
         return parts[key];
-      } else {
-        parts[key] = value;
-        return self;
       }
-    }
+      parts[key] = value;
+      return self;
+    };
   }
 
-  const protocol  = this.protocol   = property('protocol');
-  const user      = this.user       = property('user');
-  const password  = this.password   = property('password');
-  const host      = this.host       = property('host');
-  const port      = this.port       = property('port');
-  const directory = this.directory  = property('directory');
-  const file      = this.file       = property('file');
-  const fragment  = this.fragment   = property('fragment');
+  const protocol = this.protocol = property('protocol');
+  const user = this.user = property('user');
+  const password = this.password = property('password');
+  const host = this.host = property('host');
+  const port = this.port = property('port');
+  const directory = this.directory = property('directory');
+  const file = this.file = property('file');
+  const fragment = this.fragment = property('fragment');
 
   /** @method
    * @name query
@@ -70,38 +69,34 @@ function Url(url) {
    *   request.query("foo", "bar").execute()
    * }}
    */
-  const query = this.query = function(name, value) {
-    if (_.isUndefined(name)) {
-
-      if (_.isUndefined(value)) {
-
-        if (_.isObject(name)) {
+  const query = this.query = function (name, value) {
+    if (isUndefined(name)) {
+      if (isUndefined(value)) {
+        if (isObject(name)) {
           parts.query = name;
           return self;
-        } else {
-          return config.query[name];
         }
-
-      } else {
-        config.query[name] = value;
-        return self;
+        return parts.query[name];
       }
-
-    } else {
-      return _.assign({}, config.query);
+      parts.query[name] = value;
+      return self;
     }
+    return assign({}, parts.query);
   };
 
-  const userInfo = this.userInfo = function() {
-    if (_.isString(user()) && _.isString(password())) {
-      return `${self.user}:${self.password}`;
+  const userInfo = this.userInfo = function () {
+    const u = user();
+    const p = password();
+
+    if (isString(u) && !isEmpty(u.trim()) && isString(p) && isEmpty(p.trim())) {
+      return `${u}:${p}`;
     }
 
     return null;
   };
 
-  const authority = this.authority = function() {
-    const pr = protocol() ? `${protocol}://` : '';
+  const authority = this.authority = function () {
+    const pr = protocol() ? `${protocol()}://` : '';
     const ui = userInfo() ? `${userInfo()}@` : '';
     const h = host() || '';
     const p = port() ? `:${port()}` : '';
@@ -109,17 +104,17 @@ function Url(url) {
     return pr + ui + h + p;
   };
 
-  const path = this.path = function() {
+  const path = this.path = function () {
     let dir = directory() || '';
     let f = file() || '';
 
-    if (dir.endsWith('/')) {
-      if (f.startsWith('/')) {
+    if (endsWith(dir, '/')) {
+      if (startsWith(f, '/')) {
         return dir + f.substring(1);
       }
 
       return dir + f;
-    } else if (f.startsWith('/')) {
+    } else if (startsWith(f, '/')) {
       return dir + f;
     }
 
@@ -129,46 +124,46 @@ function Url(url) {
   /** @method
    * @name toString
    */
-  this.toString = function(serializeQuery) {
+  this.toString = function (serializeQuery) {
     const auth = authority();
     const p = path();
     const f = fragment();
-    const q = serializeQuery(query());
+    const querySerializer = serializeQuery || identity;
+    const q = querySerializer(query());
 
     const fullyQualified = (() => {
-      if (auth.endsWith('/')) {
-        if (p.endsWith('/')) {
+      if (endsWith(auth, '/')) {
+        if (endsWith(p, '/')) {
           return auth + p.substring(1);
         }
 
         return auth + p;
-      } else if (p.startsWith('/')) {
+      } else if (startsWith(p, '/')) {
         return auth + p;
       }
 
       return `${auth}/${p}`;
     })();
 
-    const queryParts = _.reduce(q, (accum, value, key) => {
+    const queryParts = reduce(q, (accum, value, key) => {
       let pair = `${encode(key)}=${encode(value)}`;
+
       accum.push(pair);
       return accum;
     }, []);
 
     const fullyQualifiedWithQuery = (() => {
-      if (!_.isEmpty(queryParts)) {
+      if (!isEmpty(queryParts)) {
         return `${fullyQualified}?${queryParts.join('&')}`;
       }
 
       return fullyQualified;
     })();
 
-    if (!_.isEmpty(f)) {
+    if (!isEmpty(f)) {
       return `${fullyQualifiedWithQuery}#${f}`;
     }
 
     return fullyQualifiedWithQuery;
   };
 }
-
-module.exports = Url;

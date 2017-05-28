@@ -1,6 +1,7 @@
-const _     = require('lodash');
-const Path  = require('./path');
-const Url   = require('./url');
+import { isUndefined, identity, assign, isString } from 'lodash';
+import Path from './path';
+import Url from './url';
+import { parseUri } from './utilities';
 
 /**
  * A Request should only ever be created by an instance of {@link Http}
@@ -8,17 +9,17 @@ const Url   = require('./url');
  * @param {Object} config - Override default settings for this Request only.
  * @private
  */
-function Request(config) {
+export default function Request(config) {
   const self = this;
 
-  function property(key, transformIn = _.identity, transformOut = _.identity) {
-    self[key] = function(value) {
-      if (_.isUndefined(value)) {
+  function property(key, transformIn = identity, transformOut = identity) {
+    self[key] = function (value) {
+      if (isUndefined(value)) {
         return transformOut(config[key]);
-      } else {
-        config[key] = transformIn(value);
-        return self;
       }
+
+      config[key] = transformIn(value);
+      return self;
     };
   }
 
@@ -39,14 +40,13 @@ function Request(config) {
    * and returns the current Request.  If value is ommitted, returns the
    * value for the header.
    */
-  this.header = function(name, value) {
-    if (_.isUndefined(value)) {
+  this.header = function (name, value) {
+    if (isUndefined(value)) {
       return config.headers[name];
-    } else {
-      config.headers[name] = value.toString();
-      return this;
     }
-  }
+    config.headers[name] = value.toString();
+    return this;
+  };
 
   /** @method
    * @name headers
@@ -56,7 +56,7 @@ function Request(config) {
    * and returns the current Request.  If value is ommitted, returns a copy
    * of the current headers.
    */
-  property('headers', transformOut = (headers) => _.assign({}, headers));
+  property('headers', identity, (headers) => assign({}, headers));
 
   /** @method
    * @name body
@@ -74,20 +74,18 @@ function Request(config) {
    * this request and returns the current Request.  If value is ommitted,
    * returns the current {@link Url}.
    */
-  property('url', transformIn = (url) => {
-    if (_.isString(url)) {
-      const base = config.baseUrl || '';
+  property('url', (url) => {
+    if (url instanceof Url) {      
+      return url;
+    } else if (isString(url)) {
+      const base = config.url.baseUrl || '';
       const fullUrl = Path.join(base, url);
       const parsed = parseUri(fullUrl);
-      const config = _.defaults(options, settings)
 
-      _.assign(parsed.query, options.query);
-
-    } else if (url instanceof Url) {
-      return url;
-    } else {
-      return new Url(url);
+      return new Url(parsed);
     }
+
+    return new Url(url);
   });
 
   /** @method
@@ -109,6 +107,31 @@ function Request(config) {
   property('retries');
 
   /** @method
+  * @name interceptors
+  * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response
+  * @returns {Object|Request} - If value is specified, overrides the current set of interceptors
+  * for this Request and/or Response and returns the current Request.  If value is ommitted,
+  * returns the current set of interceptors.
+  */
+  property('interceptors');
+
+  /** @method
+  * @name xsrfCookieName
+  * @param {string} [value] - The name of the XSRF cookie
+  * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie
+  * and returns the current Request.  If value is ommitted, returns the current name.
+  */
+  property('xsrfCookieName');
+
+  /** @method
+  * @name xsrfHeaderName
+  * @param {string} [value] - The name of the XSRF header
+  * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header
+  * and returns the current Request.  If value is ommitted, returns the current name.
+  */
+  property('xsrfHeaderName');
+
+  /** @method
    * @name execute
    * @returns {Object} - Executes the request and returns an object containing
    * the response, uploadProgress, and downloadProgress streams.
@@ -120,9 +143,7 @@ function Request(config) {
    *    streams.downloadProgress.forEach((event) => console.log(event));
    * }}
    */
-  this.execute = function() {
+  this.execute = function () {
     return config.provider(this);
-  }
+  };
 }
-
-module.exports = Request;

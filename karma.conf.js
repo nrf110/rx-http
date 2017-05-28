@@ -13,41 +13,29 @@ module.exports = function(config) {
     autowatch: false,
     singleRun: true,
     frameworks: [
-      'sinon-chai',
       'sinon',
-      'chai-as-promised',
       'chai',
       'mocha'
     ],
     preprocessors: {
-      'test/tests.js': ['webpack']
+      './test/*.spec.js': ['webpack']
     },
     files: [
-      'test/tests.js'
+      './test/*.spec.js'
     ],
     webpack: {
-      cache: true,
-      debug: true,
-      hot: false,
-      output: {},
-      entry: {},
       module: {
-        loaders: [
-    			{
-    				test: /sinon\.js/,
-    				loader: 'imports?define=>false,require=>false'
-    			},
+        rules: [
           {
-            test: /\.js?$/,
-            exclude: [
-              path.resolve('node_modules/')
-            ],
-            loader: 'babel-loader'
+            test: /(\.jsx|\.js)$/,
+            loader: 'babel-loader',
+            exclude: /(node_modules|bower_components)/
           }
         ]
       },
       resolve: {
-        extensions: ['', '.js']
+        modules: [path.resolve('./src'), './node_modules'],
+        extensions: ['.js']
       }
     },
     webpackMiddleware: {

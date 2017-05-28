@@ -1,17 +1,18 @@
-const _                               = require('lodash');
-const Cookies                         = require('js-cookie');
-const { isFile, isFormData, isBlob }  = require('./utilities');
+import { isObject, isString, isEmpty, head, tail, partial } from 'lodash';
+import Cookies from 'js-cookie';
+import { isFile, isFormData, isBlob } from './utilities';
 
 const BROWSER_METHODS = ['GET', 'POST'];
 
-const Interceptors = {
+export const Interceptors = {
 
   BodyTransformer: {
     request: (request, accept, reject) => {
       const body = request.body();
 
-      if (_.isObject(body) && !isFile(body) && !isFormData(body) && !isBlob(body)) {
+      if (isObject(body) && !isFile(body) && !isFormData(body) && !isBlob(body)) {
         const json = JSON.stringify(body);
+
         request.body(json);
       }
 
@@ -24,7 +25,7 @@ const Interceptors = {
       const xsrfToken = Cookies.get(request.xsrfCookieName());
       const xsrfHeader = request.xsrfHeaderName();
 
-      if (_.isString(xsrfToken)) {
+      if (isString(xsrfToken)) {
         request.header(xsrfHeader, xsrfToken);
       }
 
@@ -66,7 +67,7 @@ const Interceptors = {
  * @param {Function} reject - Callback that is invoked with an error object
  * if all of the interceptors fail to recover from an error.
  */
-function RequestInterceptorChain(interceptors, accept, reject) {
+export function RequestInterceptorChain(interceptors, accept, reject) {
   /**
    * Pass-through accept for the request.
    */
@@ -88,13 +89,13 @@ function RequestInterceptorChain(interceptors, accept, reject) {
    * interceptor after the initial failure.
    */
   function failure(remaining, recover) {
-    return function(error) {
+    return function (error) {
       function step(rest, err) {
-        if (!_.isEmpty(rest)) {
-          const interceptor = _.head(rest);
-          const tail = _.tail(rest);
+        if (!isEmpty(rest)) {
+          const interceptor = head(rest);
+          const xs = tail(rest);
           const transform = interceptor.requestError || defaultRequestError;
-          const next = _.partial(step, tail);
+          const next = partial(step, xs);
 
           transform(err, recover, next);
         } else {
@@ -102,30 +103,30 @@ function RequestInterceptorChain(interceptors, accept, reject) {
         }
       }
 
-      step();
-    }
+      step(remaining, error);
+    };
   }
 
   /** @method
    * Runs the request through the chain of request interceptors
    * @name run
    */
-  this.run = function(request) {
+  this.run = function (request) {
     function step(remaining, next) {
-      if (!_.isEmpty(remaining)) {
-        const interceptor = _.head(remaining);
-        const tail = _.tail(remaining);
+      if (!isEmpty(remaining)) {
+        const interceptor = head(remaining);
+        const xs = tail(remaining);
         const transform = interceptor.request || defaultRequest;
-        const success = _.partial(step, tail);
+        const success = partial(step, xs);
 
-        transform(request, success, failure(tail, success));
+        transform(request, success, failure(xs, success));
       } else {
         accept(request);
       }
     }
 
     step(interceptors, request);
-  }
+  };
 }
 
 /**
@@ -137,12 +138,12 @@ function RequestInterceptorChain(interceptors, accept, reject) {
  * @param {Function} reject - Callback that is invoked with an error object
  * if all of the interceptors fail to recover from an error.
  */
-function ResponseInterceptorChain(interceptors, accept, reject) {
+export function ResponseInterceptorChain(interceptors, accept, reject) {
   /**
    * Pass-through accept for the response.
    */
   function defaultResponse(response, good) {
-    good(request);
+    good(response);
   }
 
   /**
@@ -159,13 +160,13 @@ function ResponseInterceptorChain(interceptors, accept, reject) {
    * interceptor after the initial failure.
    */
   function failure(remaining, recover) {
-    return function(error) {
+    return function (error) {
       function step(rest, err) {
-        if (!_.isEmpty(rest)) {
-          const interceptor = _.head(rest);
-          const tail = _.tail(rest);
+        if (isEmpty(rest)) {
+          const interceptor = head(rest);
+          const xs = tail(rest);
           const transform = interceptor.responseError || defaultResponseError;
-          const next = _.partial(step, tail);
+          const next = partial(step, xs);
 
           transform(err, recover, next);
         } else {
@@ -173,34 +174,28 @@ function ResponseInterceptorChain(interceptors, accept, reject) {
         }
       }
 
-      step();
-    }
+      step(remaining, error);
+    };
   }
 
   /** @method
    * Runs the response through the chain of response interceptors
    * @name run
    */
-  this.run = function(response) {
+  this.run = function (response) {
     function step(remaining, next) {
-      if (!_.isEmpty(remaining)) {
-        const interceptor = _.head(remaining);
-        const tail = _.tail(remaining);
+      if (!isEmpty(remaining)) {
+        const interceptor = head(remaining);
+        const xs = tail(remaining);
         const transform = interceptor.response || defaultResponse;
-        const success = _.partial(step, tail);
+        const success = partial(step, xs);
 
-        transform(response, success, failure(tail, success));
+        transform(response, success, failure(xs, success));
       } else {
         accept(response);
       }
     }
 
-    step(interceptors, request);
-  }
+    step(interceptors, response);
+  };
 }
-
-module.exports =  {
-  Interceptors,
-  RequestInterceptorChain,
-  ResponseInterceptorChain
-};

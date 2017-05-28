@@ -1,10 +1,11 @@
-const _                 = require('lodash');
-const Request           = require('./request');
-const { Interceptors }  = require('./interceptors');
-const XHRProvider       = require('./xhr-provider');
-const Url               = require('./url');
-const Path              = require('./path');
-const { parseUri }      = require('./utilities');
+import { isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';
+import Request from './request';
+import { Interceptors } from './interceptors';
+import XHRProvider from './xhr-provider';
+import Url from './url';
+import Path from './path';
+import { PropertyValidationException } from './exceptions';
+import { parseUri } from './utilities';
 
 /**
  * An HTTP client.
@@ -13,17 +14,19 @@ const { parseUri }      = require('./utilities');
  */
 function Http(options = {}) {
   const self = this;
-  const settings = _.assign({}, Http.defaults, options);
+  const settings = assign({}, Http.defaults, options);
 
   function property(key, isValid) {
-    return function(value) {
-      if (isValid(value)) {
+    self[key] = function (value) {
+      if (isUndefined(value)) {
+        return settings[key];
+      } else if (isValid(value)) {
         settings[key] = value;
         return self;
       } else {
-        return settings[key];
+        throw new PropertyValidationException(key, value);
       }
-    }
+    };
   }
 
   /** @method
@@ -34,7 +37,7 @@ function Http(options = {}) {
    * for all requests created with this client, and returns the client instance.
    * If value is ommitted, returns the current baseUrl.
    */
-  property('baseUrl', _.isString);
+  property('baseUrl', isString);
 
   /** @method
    * @name timeout
@@ -43,7 +46,7 @@ function Http(options = {}) {
    * timeout for all requests created with this client, and returns the client
    * instance.  If value is ommitted, returns the current timeout value.
    */
-  property('timeout', _.isInteger);
+  property('timeout', isInteger);
 
   /** @method
    * @name retries
@@ -52,7 +55,7 @@ function Http(options = {}) {
    * of retries allowed for requests from this client, and returns the client
    * instance.  If count is ommitted, returns the current value.
    */
-  property('retries', _.isInteger);
+  property('retries', isInteger);
 
   /** @method
    * @name interceptors
@@ -62,7 +65,7 @@ function Http(options = {}) {
    * instance.  If values is ommitted, returns the current array of
    * interceptors.
    */
-  property('interceptors', _.isArray);
+  property('interceptors', isArray);
 
   /** @method
    * @name addInterceptor
@@ -70,20 +73,20 @@ function Http(options = {}) {
    * chain of interceptors.
    * @return {Http} - The current client instance.
    */
-  this.addInterceptor = function(interceptor) {
+  this.addInterceptor = function (interceptor) {
     settings.interceptors.push(interceptor);
     return this;
-  }
+  };
 
   /** @method
    * @name removeInterceptor
    * @param interceptor - Remove the interceptor from the chain of interceptors.
    * @returns {Http} - The current client instance.
    */
-  this.removeInterceptor = function(interceptor) {
-    settings.interceptors = _.remove(settings.interceptors, (i) => i === interceptor);
+  this.removeInterceptor = function (interceptor) {
+    settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);
     return this;
-  }
+  };
 
   /** @method
   * @name request
@@ -99,22 +102,22 @@ function Http(options = {}) {
   *    })
   * }}
   **/
-  const request = this.request = function(url, options = {}) {
+  const request = this.request = function (url, options = {}) {
     const base = settings.baseUrl || '';
     const fullUrl = Path.join(base, url);
     const parsed = parseUri(fullUrl);
-    const config = _.defaults(options, settings)
+    const config = defaults(options, settings);
 
-    _.assign(parsed.query, options.query);
-    _.assign(config, { url: new Url(parsed) })
+    assign(parsed.query, options.query);
+    assign(config, { url: new Url(parsed) });
 
     return new Request(config);
-  }
+  };
 
   function generateRequestMethod(method) {
-    self[method.toLowerCase()] = function(url, options = {}) {
-      return request(url, _.assign({ method }, options));
-    }
+    self[method.toLowerCase()] = function (url, options = {}) {
+      return request(url, assign({ method }, options));
+    };
   }
 
   /** @method
@@ -246,17 +249,6 @@ function Http(options = {}) {
   generateRequestMethod('PATCH');
 }
 
-const provider = (function() {
-  const thisIsNode =
-    typeof process !== 'undefined' &&
-      typeof process.release !== 'undefined' &&
-      typeof process.release.name !== 'undefined' &&
-      process.release.name.search(/node|io.js/) !== -1;
-
-  if (thisIsNode) throw new Error("Node.js is not yet supported!");
-  else return XHRProvider;
-})();
-
 Http.defaults = {
   baseUrl: '',
   retries: 0,
@@ -269,7 +261,7 @@ Http.defaults = {
     Interceptors.XSRF,
     Interceptors.ErrorHandling
   ],
-  provider
+  provider: XHRProvider
 };
 
 module.exports = Http;

@@ -7,17 +7,20 @@ import webpack from 'webpack';
 import { Server } from 'karma';
 import TestServer from './test-server';
 
+function build(minify, eslint) {
+  return (done) => {
+    webpack(require('./webpack.config')(minify, eslint), (err, stats) => {
+        if (err) throw new gutil.PluginError('webpack', err);
+        done();
+    });
+  };
+}
+
 gulp.task('clean', () => {
   return del.sync('./dist');
 });
-
-gulp.task('build', (done) => {
-  async.map(require('./webpack.config'), webpack, (err, stats) => {
-    if (err) throw new gutil.PluginError('webpack', err);
-    done();
-  });
-});
-
+gulp.task('dist', build(true));
+gulp.task('build', build(false));
 gulp.task('karma', ['build'], (done) => {
   let testServer = new TestServer();
   testServer.start();

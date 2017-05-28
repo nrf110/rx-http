@@ -1,8 +1,7 @@
-const Response      = require('./response');
-const Interceptors  = require('./interceptors');
-const Rx            = require('rx');
-
-const { RequestInterceptorChain, ResponseInterceptorChain } = Interceptors;
+import { partial, isInteger } from 'lodash';
+import Rx from 'rxjs';
+import Response from './response';
+import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';
 
 const HTTP_EVENTS = {
 
@@ -14,11 +13,43 @@ const HTTP_EVENTS = {
 
 };
 
-function XHRProvider(request) {
+export default function XHRProvider(request) {
+  function attempt(observable, remaining = request.retries()) {
+    const xhr = new XMLHttpRequest();
+
+    registerEvents(xhr, observable, remaining);
+
+    xhr.open(request.method(), request.url().toString());
+
+    if (isInteger(request.timeout())) {
+      xhr.timeout = request.timeout();
+    }
+
+    const headers = request.headers();
+
+    Object.keys(headers).forEach((headerName) => {
+      xhr.setRequestHeader(headerName, headers[headerName]);
+    });
+
+    const interceptors = request.interceptors();
+    const success = transformed => {
+      if (!!transformed.body()) xhr.send(transformed.body());
+      else xhr.send();
+    };
+
+    const failure = (error) => {
+      observable.onError(error);
+      observable.onCompleted();
+    };
+
+    new RequestInterceptorChain(interceptors, success, failure)
+      .run(request);
+  }
+
   function registerEvents(xhr, observable, retries) {
 
     function progressHandler(type, evt) {
-      observable.onNext({ type, progress: evt });
+      observable.next({ type, progress: evt });
     }
 
     function exceptionHandler(evt) {
@@ -31,71 +62,43 @@ function XHRProvider(request) {
     }
 
     if (xhr.upload) {
-      xhr.upload.addEventListener('progress', _.partial(progressHandler, HTTP_EVENTS.UPLOAD_PROGRESS));
+      xhr.upload.addEventListener('progress', partial(progressHandler, HTTP_EVENTS.UPLOAD_PROGRESS));
       xhr.upload.addEventListener('error', exceptionHandler);
       xhr.upload.addEventListener('abort', exceptionHandler);
     }
 
-    xhr.addEventListener('progress', _.partial(progressHandler, HTTP_EVENTS.DOWNLOAD_PROGRESS));
+    xhr.addEventListener('progress', partial(progressHandler, HTTP_EVENTS.DOWNLOAD_PROGRESS));
     xhr.addEventListener('error', exceptionHandler);
     xhr.addEventListener('abort', exceptionHandler);
     xhr.addEventListener('load', (evt) => {
       const response = new Response(xhr);
       const interceptors = request.interceptors();
-      const successHandler = function(transformed) {
-        observable.onNext({ type: HTTP_EVENTS.RESPONSE_RECEIVED, response: transformed});
-      }
+      const successHandler = function (transformed) {
+        observable.next({ type: HTTP_EVENTS.RESPONSE_RECEIVED, response: transformed});
+      };
 
-      new ResponseInterceptorChain(interceptors, successHandler, exceptionHandler)
-        .run(response);
+      // new ResponseInterceptorChain(interceptors, successHandler, exceptionHandler)
+      //   .run(response);
+      successHandler(response);
     });
 
   }
 
-  function attempt(observable, remaining = request.retries()) {
-    const xhr = new XMLHttpRequest();
-
-    registerEvents(xhr, observable, remaining);
-
-    xhr.open(request.method(), request.url());
-
-    if (_.isInteger(request.timeout())) {
-      xhr.timeout = request.timeout();
-    }
-
-    const headers = request.headers();
-    Object.keys(headers).forEach((headerName) => {
-      xhr.setRequestHeader(headerName, headers[headerName]);
-    });
-
-    const interceptors = request.interceptors();
-    const success = (transformed) => xhr.send(transformed.body());
-    const failure = (error) => {
-      observable.onError(error);
-      observable.onCompleted();
-    }
-    new RequestInterceptorChain(interceptors, success, failure)
-      .run(request);
-  }
-
-  const stream = Rx.Observable.create(attempt).share();
-
-  const uploadProgress = stream
-    .filter(evt => evt.type === HTTP_EVENTS.UPLOAD_PROGRESS)
-    .map(evt => evt.progress);
-
-  const downloadProgress = stream
-    .filter(evt => evt.type === HTTP_EVENTS.DOWNLOAD_PROGRESS)
-    .map(evt => evt.progress);
-
+  const stream = Rx.Observable.create(attempt);
+  //
+  // const uploadProgress = stream
+  //   .filter(evt => evt.type === HTTP_EVENTS.UPLOAD_PROGRESS)
+  //   .map(evt => evt.progress);
+  //
+  // const downloadProgress = stream
+  //   .filter(evt => evt.type === HTTP_EVENTS.DOWNLOAD_PROGRESS)
+  //   .map(evt => evt.progress);
+  //
   const response = stream
     .filter(evt => evt.type === HTTP_EVENTS.RESPONSE_RECEIVED)
     .map(evt => evt.response);
-
-  response.downloadProgress = downloadProgress;
-  response.uploadProgress = uploadProgress;
-
+  //
+  // response.downloadProgress = downloadProgress;
+  // response.uploadProgress = uploadProgress;
   return response;
 }
-
-module.exports = XHRProvider;

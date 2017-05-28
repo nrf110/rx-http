@@ -6,7 +6,10 @@ var server;
 
 class TestServer {
   constructor() {
-    routes(app);
+    // routes(app);
+    app.use(function(req, res, next) {
+      res.send('test');
+    });
   }
 
   start() {
@@ -20,5 +23,5 @@ class TestServer {
     server.close();
   }
 }
-
-module.exports = TestServer;
+new TestServer().start();
+// module.exports = TestServer;

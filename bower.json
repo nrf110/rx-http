@@ -1,7 +1,7 @@
 {
   "name": "rx-http",
   "description": "http client designed to work with rx-js",
-  "main": "dist/rx-http.js",
+  "main": "lib/rx-http.js",
   "authors": [
     "Nick Fisher <nfisher110@gmail.com>"
   ],
