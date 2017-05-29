@@ -255,6 +255,7 @@ Http.defaults = {
   timeout: 30000,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
+  withCredentials: false,
   interceptors: [
     Interceptors.MethodOverride,
     Interceptors.BodyTransformer,

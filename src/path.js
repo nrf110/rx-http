@@ -5,20 +5,19 @@ export default {
 
   join() {
     const separator = this.separator;
+    const initial = arguments[0];
+    const args = [...arguments].slice(1)
 
-    return reduce(arguments, (accum, value) => {
-      var result = accum;
-
-      if (startsWith(value, separator)) {
-        if (endsWith(value, separator)) result += value.substring(0, value.length - 1);
-        else result += value;
-      } else if (endsWith(value, separator)) {
-        result += '/' + value.substring(0, value.length - 1);
+    return reduce(args, (accum, value) => {
+      if (endsWith(accum, separator) && startsWith(value, separator)) {
+        accum += value.substring(1);
+      } else if (endsWith(accum, separator) || startsWith(value, separator)) {
+        accum += value;
       } else {
-        result += '/' + value;
+        accum += '/' + value;
       }
 
-      return result;
-    }, '/');
+      return accum;
+    }, initial);
   }
 };

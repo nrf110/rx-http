@@ -75,7 +75,7 @@ export default function Request(config) {
    * returns the current {@link Url}.
    */
   property('url', (url) => {
-    if (url instanceof Url) {      
+    if (url instanceof Url) {
       return url;
     } else if (isString(url)) {
       const base = config.url.baseUrl || '';
@@ -130,6 +130,17 @@ export default function Request(config) {
   * and returns the current Request.  If value is ommitted, returns the current name.
   */
   property('xsrfHeaderName');
+
+  /** @method
+  * @name withCredentials
+  * @param {boolean} [value] - Flag indicating whether cross-site AccessControl
+  * requests should be made using cookies, authorization headers, or TLS client
+  * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
+  * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag
+  * and returns the current Request.  If value is ommitted, returns the current
+  * value of the flag.
+  */
+  property('withCredentials');
 
   /** @method
    * @name execute

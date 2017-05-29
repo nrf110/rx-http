@@ -1,6 +1,6 @@
 module.exports = function(app) {
-  const methodsWithBodies = ['GET', 'DELETE', 'OPTIONS'];
-  const methodsWithoutBodies = ['POST', 'PUT'];
+  const methodsWithoutBodies = ['GET', 'DELETE', 'OPTIONS'];
+  const methodsWithBodies = ['POST', 'PUT'];
 
   methodsWithoutBodies.forEach((method) => {
     app[method.toLowerCase()]('/text', (request, response) => {

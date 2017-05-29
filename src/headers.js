@@ -1,5 +1,7 @@
-export default const Headers = {
+export default {
 
-  CONTENT_TYPE: "Content-Type"
+  CONTENT_TYPE: "Content-Type",
+
+  TRANSFER_ENCODING: "Transfer-Encoding"
 
 }

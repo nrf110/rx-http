@@ -1,104 +1,95 @@
 import { partial, isInteger } from 'lodash';
 import Rx from 'rxjs';
+import XHRBuilder from './xhr-builder';
 import Response from './response';
 import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';
 
-const HTTP_EVENTS = {
-
-  UPLOAD_PROGRESS: 'UPLOAD_PROGRESS',
-
-  DOWNLOAD_PROGRESS: 'DOWNLOAD_PROGRESS',
-
-  RESPONSE_RECEIVED: 'RESPONSE_RECEIVED'
-
-};
-
 export default function XHRProvider(request) {
-  function attempt(observable, remaining = request.retries()) {
-    const xhr = new XMLHttpRequest();
+  const interceptors = request.interceptors();
 
-    registerEvents(xhr, observable, remaining);
+  function attempt(observable, retries = request.retries()) {
+    let response;
+    let offset = 0;
+    let body = new Rx.Subject();
+    let uploadProgress = new Rx.Subject();
+    let downloadProgress = new Rx.Subject();
+    let all = [observable, body, uploadProgress, downloadProgress];
 
-    xhr.open(request.method(), request.url().toString());
-
-    if (isInteger(request.timeout())) {
-      xhr.timeout = request.timeout();
+    function errorAll(err) {
+      all.forEach(o => o.error(err));
     }
 
-    const headers = request.headers();
+    function completeAll() {
+      all.forEach(o => o.complete());
+    }
 
-    Object.keys(headers).forEach((headerName) => {
-      xhr.setRequestHeader(headerName, headers[headerName]);
-    });
+    function exceptionHandler(evt) {
+      if (retries > 0) attempt(observable, retries - 1);
+      else errorAll(evt);
+    }
 
-    const interceptors = request.interceptors();
+    function nextChunk() {
+      console.log('called nextChunk')
+      let chunk = xhr.responseText.slice(offset);
+      offset = xhr.responseText.length;
+      body.next(chunk);
+    }
+
+    const xhr = new XHRBuilder()
+      .request(request)
+      .onHeadersReceived((evt) => {
+        response = new Response(
+          xhr,
+          body,
+          uploadProgress,
+          downloadProgress
+        );
+
+        const responseChain = new ResponseInterceptorChain(
+          interceptors,
+          (transformedResponse) => observable.next(transformedResponse),
+          exceptionHandler
+        );
+
+        responseChain.run(response);
+      })
+      .onUploadProgress(uploadProgress.next)
+      .onDownloadProgress((evt) => {
+        downloadProgress.next(evt);
+        if (response.isChunked()) {
+          nextChunk();
+        }
+      })
+      .onLoad((evt) => {
+        if (response.isChunked()) {
+          if (xhr.responseText.length > offset) {
+            nextChunk();
+          }
+        } else {
+          body.next(xhr.responseText);
+        }
+      })
+      .onError(exceptionHandler)
+      .onAbort(exceptionHandler)
+      .onLoadEnd(completeAll)
+      .build();
+
     const success = transformed => {
       if (!!transformed.body()) xhr.send(transformed.body());
       else xhr.send();
     };
 
-    const failure = (error) => {
-      observable.onError(error);
-      observable.onCompleted();
-    };
-
-    new RequestInterceptorChain(interceptors, success, failure)
-      .run(request);
-  }
-
-  function registerEvents(xhr, observable, retries) {
-
-    function progressHandler(type, evt) {
-      observable.next({ type, progress: evt });
-    }
-
-    function exceptionHandler(evt) {
-      if (retries > 0) {
-        attempt(observable, retries - 1);
-      } else {
-        observable.onError(evt);
-        observable.onCompleted();
+    const requestChain = new RequestInterceptorChain(
+      interceptors,
+      success,
+      (err) => {
+        observable.error(err);
+        completeAll();
       }
-    }
+    );
 
-    if (xhr.upload) {
-      xhr.upload.addEventListener('progress', partial(progressHandler, HTTP_EVENTS.UPLOAD_PROGRESS));
-      xhr.upload.addEventListener('error', exceptionHandler);
-      xhr.upload.addEventListener('abort', exceptionHandler);
-    }
-
-    xhr.addEventListener('progress', partial(progressHandler, HTTP_EVENTS.DOWNLOAD_PROGRESS));
-    xhr.addEventListener('error', exceptionHandler);
-    xhr.addEventListener('abort', exceptionHandler);
-    xhr.addEventListener('load', (evt) => {
-      const response = new Response(xhr);
-      const interceptors = request.interceptors();
-      const successHandler = function (transformed) {
-        observable.next({ type: HTTP_EVENTS.RESPONSE_RECEIVED, response: transformed});
-      };
-
-      // new ResponseInterceptorChain(interceptors, successHandler, exceptionHandler)
-      //   .run(response);
-      successHandler(response);
-    });
-
+    requestChain.run(request);
   }
 
-  const stream = Rx.Observable.create(attempt);
-  //
-  // const uploadProgress = stream
-  //   .filter(evt => evt.type === HTTP_EVENTS.UPLOAD_PROGRESS)
-  //   .map(evt => evt.progress);
-  //
-  // const downloadProgress = stream
-  //   .filter(evt => evt.type === HTTP_EVENTS.DOWNLOAD_PROGRESS)
-  //   .map(evt => evt.progress);
-  //
-  const response = stream
-    .filter(evt => evt.type === HTTP_EVENTS.RESPONSE_RECEIVED)
-    .map(evt => evt.response);
-  //
-  // response.downloadProgress = downloadProgress;
-  // response.uploadProgress = uploadProgress;
-  return response;
+  return Rx.Observable.create(attempt);
 }

@@ -13,9 +13,9 @@ module.exports = function(config) {
     autowatch: false,
     singleRun: true,
     frameworks: [
-      'sinon',
+      'mocha',
       'chai',
-      'mocha'
+      'sinon'
     ],
     preprocessors: {
       './test/*.spec.js': ['webpack']

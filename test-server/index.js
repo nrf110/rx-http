@@ -1,4 +1,5 @@
 const Express = require('express'),
+      cors    = require('cors'),
       routes  = require('./routes'),
       app     = Express();
 
@@ -6,10 +7,8 @@ var server;
 
 class TestServer {
   constructor() {
-    // routes(app);
-    app.use(function(req, res, next) {
-      res.send('test');
-    });
+    app.use(cors());
+    routes(app);
   }
 
   start() {
@@ -23,5 +22,5 @@ class TestServer {
     server.close();
   }
 }
-new TestServer().start();
-// module.exports = TestServer;
+
+module.exports = TestServer;
