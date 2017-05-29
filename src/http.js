@@ -103,14 +103,17 @@ function Http(options = {}) {
   * }}
   **/
   const request = this.request = function (url, options = {}) {
-    const base = settings.baseUrl || '';
-    const fullUrl = Path.join(base, url);
+    let fullUrl = url;
+    if (settings.baseUrl) {
+      fullUrl = Path.join(settings.baseUrl, url);
+    }
+
     const parsed = parseUri(fullUrl);
     const config = defaults(options, settings);
 
     assign(parsed.query, options.query);
     assign(config, { url: new Url(parsed) });
-
+    
     return new Request(config);
   };
 

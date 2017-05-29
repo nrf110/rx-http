@@ -9,12 +9,14 @@ export default {
     const args = [...arguments].slice(1)
 
     return reduce(args, (accum, value) => {
-      if (endsWith(accum, separator) && startsWith(value, separator)) {
-        accum += value.substring(1);
-      } else if (endsWith(accum, separator) || startsWith(value, separator)) {
-        accum += value;
-      } else {
-        accum += '/' + value;
+      if (value.trim() != '') {
+        if (endsWith(accum, separator) && startsWith(value, separator)) {
+          accum += value.substring(1);
+        } else if (endsWith(accum, separator) || startsWith(value, separator)) {
+          accum += value;
+        } else {
+          accum += '/' + value;
+        }
       }
 
       return accum;

@@ -1,4 +1,5 @@
-import { isUndefined, identity, assign, isString } from 'lodash';
+import { isUndefined, identity, assign, isString, isObject } from 'lodash';
+import PropertyValidationException from './exceptions';
 import Path from './path';
 import Url from './url';
 import { parseUri } from './utilities';
@@ -77,15 +78,16 @@ export default function Request(config) {
   property('url', (url) => {
     if (url instanceof Url) {
       return url;
-    } else if (isString(url)) {
-      const base = config.url.baseUrl || '';
-      const fullUrl = Path.join(base, url);
-      const parsed = parseUri(fullUrl);
-
-      return new Url(parsed);
+    } else if (isString(url) || isObject(url)) {
+      const newUrl = new Url(url);
+      if (newUrl.isAbsolute()) {
+        return newUrl;
+      } else if (config.url && config.url.isAbsolute()) {
+        return config.url.merge(newUrl);
+      }
     }
 
-    return new Url(url);
+    throw new PropertyValidationException('url', url);
   });
 
   /** @method
@@ -141,6 +143,22 @@ export default function Request(config) {
   * value of the flag.
   */
   property('withCredentials');
+
+  /** @method
+  * @name username
+  * @param {string} [value] - Basic auth username
+  * @param {string|Request} - If the value is specified, sets the username and returns
+  * the current Request.  If value is ommitted, retursn the current username.
+  */
+  property('username');
+
+  /** @method
+  * @name password
+  * @param {string} [value] - Basic auth password
+  * @param {string|Request} - If the value is specified, sets the password and returns
+  * the current Request.  If value is ommitted, retursn the current password.
+  */
+  property('password');
 
   /** @method
    * @name execute

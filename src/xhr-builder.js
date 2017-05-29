@@ -66,7 +66,17 @@ export default class XHRBuilder {
     const self = this;
     const request = this.req;
     const xhr = new XMLHttpRequest();
-    xhr.open(request.method(), request.url().toString());
+
+    const openArgs = [request.method(), request.url().toString(), true];
+    if (request.username()) {
+      openArgs.push(request.username());
+
+      if (request.password()) {
+        openArgs.push(request.password());
+      }
+    }
+
+    xhr.open(...openArgs);
 
     if (isInteger(request)) {
       xhr.timeout = request.timeout();

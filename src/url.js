@@ -1,4 +1,15 @@
-import { isObject, isString, isUndefined, isEmpty, assign, reduce, endsWith, startsWith, identity } from 'lodash';
+import {
+  isObject,
+  isString,
+  isUndefined,
+  isEmpty,
+  assign,
+  reduce,
+  endsWith,
+  startsWith,
+  identity,
+  cloneDeep
+} from 'lodash';
 import { parseUri } from './utilities';
 
 function encode(val) {
@@ -40,6 +51,10 @@ export default function Url(url) {
   const directory = this.directory = property('directory');
   const file = this.file = property('file');
   const fragment = this.fragment = property('fragment');
+
+  const isAbsolute = this.isAbsolute = () => !!host;
+
+  const isRelative = this.isRelative = () => !isAbsolute();
 
   /** @method
    * @name query
@@ -120,6 +135,21 @@ export default function Url(url) {
 
     return `${dir}/${f}`;
   };
+
+  this.merge = function(other) {
+    const copied = cloneDeep(parts);
+    const otherParts = parseUri(other.toString());
+    const propertiesToMerge = ['directory', 'file', 'fragment', 'path', 'query'];
+    propertiesToMerge.forEach((property) => {
+      if (!!otherParts[property]) {
+        copied[property] = otherParts[property];
+      } else if (!!copied[property]) {
+        delete copied[property];
+      }
+    });
+
+    return new Url(copied);
+  }
 
   /** @method
    * @name toString
