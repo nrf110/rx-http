@@ -29,7 +29,6 @@ export default function XHRProvider(request) {
     }
 
     function nextChunk() {
-      console.log('called nextChunk')
       let chunk = xhr.responseText.slice(offset);
       offset = xhr.responseText.length;
       body.next(chunk);
@@ -53,7 +52,9 @@ export default function XHRProvider(request) {
 
         responseChain.run(response);
       })
-      .onUploadProgress(uploadProgress.next)
+      .onUploadProgress((evt) => {
+        uploadProgress.next(evt);
+      })
       .onDownloadProgress((evt) => {
         downloadProgress.next(evt);
         if (response.isChunked()) {

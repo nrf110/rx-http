@@ -14,12 +14,12 @@ Rx-HTTP is an HTTP library designed for native interoperability with
 ## Installation
 npm:
 
-`npm install rx-js`
+`npm install rx-http`
 
 
 bower:
 
-`bower install rx-js`
+`bower install rx-http`
 
 ## Browser Support - Based on XmlHTTPRequest browser compatibility matrix.
 - IE 10+

@@ -42,6 +42,7 @@ export default function Request(config) {
    * value for the header.
    */
   this.header = function (name, value) {
+    config.headers = config.headers || {};
     if (isUndefined(value)) {
       return config.headers[name];
     }
