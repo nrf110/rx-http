@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/url.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/nrf110/rx-http" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/xhr-builder.js~XHRBuilder.html">XHRBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFile">isFile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/url.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+  isObject,
+  isString,
+  isUndefined,
+  isEmpty,
+  assign,
+  reduce,
+  endsWith,
+  startsWith,
+  identity,
+  cloneDeep
+} from &apos;lodash&apos;;
+import { parseUri } from &apos;./utilities&apos;;
+
+function encode(val) {
+  return encodeURIComponent(val)
+    .replace(/%40/gi, &apos;@&apos;)
+    .replace(/%3A/gi, &apos;:&apos;)
+    .replace(/%24/g, &apos;$&apos;)
+    .replace(/%2C/gi, &apos;,&apos;)
+    .replace(/%20/g, &apos;+&apos;)
+    .replace(/%5B/gi, &apos;[&apos;)
+    .replace(/%5D/gi, &apos;]&apos;);
+}
+
+export default function Url(url) {
+  const self = this;
+  let parts = {};
+
+  if (isObject(url)) {
+    assign(parts, url);
+  } else if (isString(url)) {
+    parts = parseUri(url);
+  }
+
+  function property(key) {
+    return function (value) {
+      if (isUndefined(value)) {
+        return parts[key];
+      }
+      parts[key] = value;
+      return self;
+    };
+  }
+
+  const protocol = this.protocol = property(&apos;protocol&apos;);
+  const user = this.user = property(&apos;user&apos;);
+  const password = this.password = property(&apos;password&apos;);
+  const host = this.host = property(&apos;host&apos;);
+  const port = this.port = property(&apos;port&apos;);
+  const directory = this.directory = property(&apos;directory&apos;);
+  const file = this.file = property(&apos;file&apos;);
+  const fragment = this.fragment = property(&apos;fragment&apos;);
+
+  const isAbsolute = this.isAbsolute = () =&gt; !!host;
+
+  const isRelative = this.isRelative = () =&gt; !isAbsolute();
+
+  /** @method
+   * @name query
+   * @param {string|object} [name] - The name of the query-string parameter
+   * @param [value] - The value of the query-string parameter
+   * @returns {object|string|Request} -
+   * If no parameters are specified - returns a copy of the entire query hash.
+   * @example
+   * {{
+   *   request.query() // returns { &quot;foo&quot;: &quot;bar&quot; }
+   * }}
+   * If only name is specified, and name is a string - returns the value for the key in the query hash.
+   * @example
+   * {{
+   *    request.query(&quot;foo&quot;) // returns &quot;bar&quot;
+   * }}
+   * If only name is specified, and name is an object - replaces the entire query hash
+   * and returns the current Request.
+   * @example
+   * {{
+   *    request.query({ &quot;foo&quot;: &quot;bar&quot;, &quot;baz&quot;: 1 }).execute()
+   * }}
+   * If name and value are specified - sets the value of name in the query hash
+   * and returns the current Request.
+   * @example
+   * {{
+   *   request.query(&quot;foo&quot;, &quot;bar&quot;).execute()
+   * }}
+   */
+  const query = this.query = function (name, value) {
+    if (isUndefined(name)) {
+      if (isUndefined(value)) {
+        if (isObject(name)) {
+          parts.query = name;
+          return self;
+        }
+        return parts.query[name];
+      }
+      parts.query[name] = value;
+      return self;
+    }
+    return assign({}, parts.query);
+  };
+
+  const userInfo = this.userInfo = function () {
+    const u = user();
+    const p = password();
+
+    if (isString(u) &amp;&amp; !isEmpty(u.trim()) &amp;&amp; isString(p) &amp;&amp; isEmpty(p.trim())) {
+      return `${u}:${p}`;
+    }
+
+    return null;
+  };
+
+  const authority = this.authority = function () {
+    const pr = protocol() ? `${protocol()}://` : &apos;&apos;;
+    const ui = userInfo() ? `${userInfo()}@` : &apos;&apos;;
+    const h = host() || &apos;&apos;;
+    const p = port() ? `:${port()}` : &apos;&apos;;
+
+    return pr + ui + h + p;
+  };
+
+  const path = this.path = function () {
+    let dir = directory() || &apos;&apos;;
+    let f = file() || &apos;&apos;;
+
+    if (endsWith(dir, &apos;/&apos;)) {
+      if (startsWith(f, &apos;/&apos;)) {
+        return dir + f.substring(1);
+      }
+
+      return dir + f;
+    } else if (startsWith(f, &apos;/&apos;)) {
+      return dir + f;
+    }
+
+    return `${dir}/${f}`;
+  };
+
+  this.merge = function(other) {
+    const copied = cloneDeep(parts);
+    const otherParts = parseUri(other.toString());
+    const propertiesToMerge = [&apos;directory&apos;, &apos;file&apos;, &apos;fragment&apos;, &apos;path&apos;, &apos;query&apos;];
+    propertiesToMerge.forEach((property) =&gt; {
+      if (!!otherParts[property]) {
+        copied[property] = otherParts[property];
+      } else if (!!copied[property]) {
+        delete copied[property];
+      }
+    });
+
+    return new Url(copied);
+  }
+
+  /** @method
+   * @name toString
+   */
+  this.toString = function (serializeQuery) {
+    const auth = authority();
+    const p = path();
+    const f = fragment();
+    const querySerializer = serializeQuery || identity;
+    const q = querySerializer(query());
+
+    const fullyQualified = (() =&gt; {
+      if (endsWith(auth, &apos;/&apos;)) {
+        if (endsWith(p, &apos;/&apos;)) {
+          return auth + p.substring(1);
+        }
+
+        return auth + p;
+      } else if (startsWith(p, &apos;/&apos;)) {
+        return auth + p;
+      }
+
+      return `${auth}/${p}`;
+    })();
+
+    const queryParts = reduce(q, (accum, value, key) =&gt; {
+      let pair = `${encode(key)}=${encode(value)}`;
+
+      accum.push(pair);
+      return accum;
+    }, []);
+
+    const fullyQualifiedWithQuery = (() =&gt; {
+      if (!isEmpty(queryParts)) {
+        return `${fullyQualified}?${queryParts.join(&apos;&amp;&apos;)}`;
+      }
+
+      return fullyQualified;
+    })();
+
+    if (!isEmpty(f)) {
+      return `${fullyQualifiedWithQuery}#${f}`;
+    }
+
+    return fullyQualifiedWithQuery;
+  };
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

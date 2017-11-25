@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/response.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/nrf110/rx-http" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/xhr-builder.js~XHRBuilder.html">XHRBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFile">isFile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/response.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isUndefined, isFunction } from &apos;lodash&apos;;
+import Headers from &apos;./headers&apos;;
+
+/**
+ * Immutable response container
+ * @class
+ */
+export default function Response(xhr, body, uploadProgress, downloadProgress) {
+  self = this;
+
+  function lazy(value) {
+    let _value;
+
+    return function () {
+      if (!isUndefined(value)) {
+        if (isFunction(value)) {
+          _value = value();
+        } else {
+          _value = value;
+        }
+      }
+
+      return _value;
+    };
+  }
+
+  this.uploadProgress = lazy(uploadProgress);
+
+  this.downloadProgress = lazy(downloadProgress);
+
+  this.body = lazy(body);
+
+  this.status = lazy(xhr.status);
+
+  this.statusText = lazy(xhr.statusText);
+
+  this.headers = lazy(xhr.getAllResponseHeaders());
+
+  this.header = (name) =&gt; this.headers()[name];
+
+  this.isChunked = lazy(() =&gt; {
+    let transferEncoding = (self.header(Headers.TRANSFER_ENCODING) || &apos;&apos;).toLowerCase();
+    let isChunked = transferEncoding.indexOf(&apos;chunked&apos;) &gt; -1 ||
+                    transferEncoding.indexOf(&apos;identity&apos;) &gt; -1;
+    // Detect SPDY. It uses chunked transfer but doesn&apos;t set the Transfer-Encoding header.
+    if (!isChunked) {
+      let c = window.chrome;
+      let loadTimes = c &amp;&amp; c.loadTimes &amp;&amp; c.loadTimes();
+      let chromeSpdy = loadTimes &amp;&amp; loadTimes.wasFetchedViaSpdy;
+      let ffSpdy = !!self.header(&apos;X-Firefox-Spdy&apos;);
+      isChunked = ffSpdy || chromeSpdy;
+    }
+
+    return isChunked;
+  });
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

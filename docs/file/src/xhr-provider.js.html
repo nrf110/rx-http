@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/xhr-provider.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/nrf110/rx-http" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/xhr-builder.js~XHRBuilder.html">XHRBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFile">isFile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/xhr-provider.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { partial, isInteger } from &apos;lodash&apos;;
+import Rx from &apos;rxjs&apos;;
+import XHRBuilder from &apos;./xhr-builder&apos;;
+import Response from &apos;./response&apos;;
+import { RequestInterceptorChain, ResponseInterceptorChain } from &apos;./interceptors&apos;;
+
+export default function XHRProvider(request) {
+  const interceptors = request.interceptors();
+
+  function attempt(observable, retries = request.retries()) {
+    let response;
+    let offset = 0;
+    let body = new Rx.Subject();
+    let uploadProgress = new Rx.Subject();
+    let downloadProgress = new Rx.Subject();
+    let all = [observable, body, uploadProgress, downloadProgress];
+
+    function errorAll(err) {
+      all.forEach(o =&gt; o.error(err));
+    }
+
+    function completeAll() {
+      all.forEach(o =&gt; o.complete());
+    }
+
+    function exceptionHandler(evt) {
+      if (retries &gt; 0) attempt(observable, retries - 1);
+      else errorAll(evt);
+    }
+
+    function nextChunk() {
+      let chunk = xhr.responseText.slice(offset);
+      offset = xhr.responseText.length;
+      body.next(chunk);
+    }
+
+    const xhr = new XHRBuilder()
+      .request(request)
+      .onHeadersReceived((evt) =&gt; {
+        response = new Response(
+          xhr,
+          body,
+          uploadProgress,
+          downloadProgress
+        );
+
+        const responseChain = new ResponseInterceptorChain(
+          interceptors,
+          (transformedResponse) =&gt; observable.next(transformedResponse),
+          exceptionHandler
+        );
+
+        responseChain.run(response);
+      })
+      .onUploadProgress((evt) =&gt; {
+        uploadProgress.next(evt);
+      })
+      .onDownloadProgress((evt) =&gt; {
+        downloadProgress.next(evt);
+        if (response.isChunked()) {
+          nextChunk();
+        }
+      })
+      .onLoad((evt) =&gt; {
+        if (response.isChunked()) {
+          if (xhr.responseText.length &gt; offset) {
+            nextChunk();
+          }
+        } else {
+          body.next(xhr.responseText);
+        }
+      })
+      .onError(exceptionHandler)
+      .onAbort(exceptionHandler)
+      .onLoadEnd(completeAll)
+      .build();
+
+    const success = transformed =&gt; {
+      if (!!transformed.body()) xhr.send(transformed.body());
+      else xhr.send();
+    };
+
+    const requestChain = new RequestInterceptorChain(
+      interceptors,
+      success,
+      (err) =&gt; {
+        observable.error(err);
+        completeAll();
+      }
+    );
+
+    requestChain.run(request);
+  }
+
+  return Rx.Observable.create(attempt);
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

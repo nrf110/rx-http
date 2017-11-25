@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/nrf110/rx-http" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/xhr-builder.js~XHRBuilder.html">XHRBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFile">isFile</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="rx-http">Rx-HTTP</h1>
+<p>Rx-HTTP is an HTTP library designed for native interoperability with
+<a href="https://github.com/Reactive-Extensions/RxJS">RxJS</a>.</p>
+<p><em>This library is still in early development.  It is not yet finished, tested, documented, nor anywhere near production-ready.</em></p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Simple builder pattern for requests</li>
+<li>Progress reporting of both uploads and downloads</li>
+<li>RxJS-style transformations, and easy composition with other RxJS observables</li>
+<li>Works with CommonJS, AMD, and ES6-style module loaders</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>npm:</p>
+<p><code>npm install rx-http</code></p>
+<p>bower:</p>
+<p><code>bower install rx-http</code></p>
+<h2 id="browser-support-based-on-xmlhttprequest-browser-compatibility-matrix-">Browser Support - Based on XmlHTTPRequest browser compatibility matrix.</h2>
+<ul>
+<li>IE 10+</li>
+<li>Chrome 31+ - Tested against Chrome 50</li>
+<li>Firefox 20+ - Tested against Firefox 45</li>
+</ul>
+<h2 id="basic-usage">Basic Usage</h2>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
+
+const client = new Http();
+
+client.post(&apos;http://example.com/my/path&apos;)
+  .header(&apos;Content-Type&apos;, &apos;application/json&apos;)
+  .header(&apos;Accept&apos;, &apos;application/json&apos;)
+  .body({ &quot;foo&quot;: &quot;bar&quot;})
+  .timeout(5000)
+  .retries(3)
+  .execute()
+  .subscribe((response) =&gt; {
+    response.downloadProgress()
+      .subscribe((progress) =&gt; console.log(&apos;Received progress&apos;));
+
+    response.uploadProgress()
+      .subscribe((progress) =&gt; console.log(&apos;Received progress&apos;));
+
+    response.body()
+      .subscribe((body) =&gt; console.log(body));
+  });</code>
+</code></pre>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
