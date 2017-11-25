@@ -5,6 +5,7 @@ import del from 'del';
 import async from 'async';
 import webpack from 'webpack';
 import { Server } from 'karma';
+import gulpDocumentation from 'gulp-documentation';
 import TestServer from './test-server';
 
 function build(minify, eslint) {
@@ -15,6 +16,12 @@ function build(minify, eslint) {
     });
   };
 }
+
+gulp.task('docs', () => {
+  return gulp.src('./src/*.js')
+    .pipe(gulpDocumentation('md', { filename: 'index.md' }))
+    .pipe(gulp.dest('docs'));
+});
 
 gulp.task('clean', () => {
   return del.sync('./dist');
