@@ -34,13 +34,8 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
 </ul>
@@ -48,26 +43,26 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/utilities.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @module utilities
- * @private
- */
- 
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @private **/
 export function isFile(value) {
   return toString.call(value) === &apos;[object File]&apos;;
 }
 
+/** @private **/
 export function isFormData(value) {
   return toString.call(value) === &apos;[object FormData]&apos;;
 }
 
+/** @private **/
 export function isBlob(value) {
   return toString.call(value) === &apos;[object Blob]&apos;;
 }
 
-// parseUri 1.2.2
-// (c) Steven Levithan &lt;stevenlevithan.com&gt;
-// MIT License
-
+/** parseUri 1.2.2
+ * (c) Steven Levithan &lt;stevenlevithan.com&gt;
+ * MIT License
+ * @private
+ */
 export function parseUri(str) {
   let	o = parseUri.options;
   let m = o.parser[o.strictMode ? &apos;strict&apos; : &apos;loose&apos;].exec(str);

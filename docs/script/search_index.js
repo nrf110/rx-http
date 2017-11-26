@@ -18,22 +18,10 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "rx-http/src/interceptors.js~requestinterceptorchain",
-    "function/index.html#static-function-RequestInterceptorChain",
-    "<span>RequestInterceptorChain</span> <span class=\"search-result-import-path\">rx-http/src/interceptors.js</span>",
-    "function"
-  ],
-  [
     "rx-http/src/response.js~response",
-    "function/index.html#static-function-Response",
+    "class/src/response.js~Response.html",
     "<span>Response</span> <span class=\"search-result-import-path\">rx-http/src/response.js</span>",
-    "function"
-  ],
-  [
-    "rx-http/src/interceptors.js~responseinterceptorchain",
-    "function/index.html#static-function-ResponseInterceptorChain",
-    "<span>ResponseInterceptorChain</span> <span class=\"search-result-import-path\">rx-http/src/interceptors.js</span>",
-    "function"
+    "class"
   ],
   [
     "rx-http/src/url.js~url",
@@ -45,24 +33,6 @@ window.esdocSearchIndex = [
     "rx-http/src/xhr-provider.js~xhrprovider",
     "function/index.html#static-function-XHRProvider",
     "<span>XHRProvider</span> <span class=\"search-result-import-path\">rx-http/src/xhr-provider.js</span>",
-    "function"
-  ],
-  [
-    "rx-http/src/utilities.js~isblob",
-    "function/index.html#static-function-isBlob",
-    "<span>isBlob</span> <span class=\"search-result-import-path\">rx-http/src/utilities.js</span>",
-    "function"
-  ],
-  [
-    "rx-http/src/utilities.js~isformdata",
-    "function/index.html#static-function-isFormData",
-    "<span>isFormData</span> <span class=\"search-result-import-path\">rx-http/src/utilities.js</span>",
-    "function"
-  ],
-  [
-    "rx-http/src/utilities.js~parseuri",
-    "function/index.html#static-function-parseUri",
-    "<span>parseUri</span> <span class=\"search-result-import-path\">rx-http/src/utilities.js</span>",
     "function"
   ],
   [
@@ -550,6 +520,60 @@ window.esdocSearchIndex = [
     "file/src/response.js.html",
     "src/response.js",
     "file"
+  ],
+  [
+    "src/response.js~response#body",
+    "class/src/response.js~Response.html#instance-method-body",
+    "src/response.js~Response#body",
+    "method"
+  ],
+  [
+    "src/response.js~response#constructor",
+    "class/src/response.js~Response.html#instance-constructor-constructor",
+    "src/response.js~Response#constructor",
+    "method"
+  ],
+  [
+    "src/response.js~response#downloadprogress",
+    "class/src/response.js~Response.html#instance-method-downloadProgress",
+    "src/response.js~Response#downloadProgress",
+    "method"
+  ],
+  [
+    "src/response.js~response#header",
+    "class/src/response.js~Response.html#instance-method-header",
+    "src/response.js~Response#header",
+    "method"
+  ],
+  [
+    "src/response.js~response#headers",
+    "class/src/response.js~Response.html#instance-method-headers",
+    "src/response.js~Response#headers",
+    "method"
+  ],
+  [
+    "src/response.js~response#ischunked",
+    "class/src/response.js~Response.html#instance-method-isChunked",
+    "src/response.js~Response#isChunked",
+    "method"
+  ],
+  [
+    "src/response.js~response#status",
+    "class/src/response.js~Response.html#instance-method-status",
+    "src/response.js~Response#status",
+    "method"
+  ],
+  [
+    "src/response.js~response#statustext",
+    "class/src/response.js~Response.html#instance-method-statusText",
+    "src/response.js~Response#statusText",
+    "method"
+  ],
+  [
+    "src/response.js~response#uploadprogress",
+    "class/src/response.js~Response.html#instance-method-uploadProgress",
+    "src/response.js~Response#uploadProgress",
+    "method"
   ],
   [
     "src/url.js",

@@ -1,23 +1,23 @@
-/** @module utilities
- * @private
- */
- 
+/** @private **/
 export function isFile(value) {
   return toString.call(value) === '[object File]';
 }
 
+/** @private **/
 export function isFormData(value) {
   return toString.call(value) === '[object FormData]';
 }
 
+/** @private **/
 export function isBlob(value) {
   return toString.call(value) === '[object Blob]';
 }
 
-// parseUri 1.2.2
-// (c) Steven Levithan <stevenlevithan.com>
-// MIT License
-
+/** parseUri 1.2.2
+ * (c) Steven Levithan <stevenlevithan.com>
+ * MIT License
+ * @private
+ */
 export function parseUri(str) {
   let	o = parseUri.options;
   let m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str);

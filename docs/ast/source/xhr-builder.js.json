@@ -644,7 +644,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @class\n * @name XHRBuilder\n * @private\n ",
+            "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n ",
             "start": 200,
             "end": 304,
             "loc": {
@@ -6983,7 +6983,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @class\n * @name XHRBuilder\n * @private\n ",
+              "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n ",
               "start": 200,
               "end": 304,
               "loc": {
@@ -7003,7 +7003,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @class\n * @name XHRBuilder\n * @private\n ",
+            "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n ",
             "start": 200,
             "end": 304,
             "loc": {
@@ -7025,7 +7025,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @class\n * @name XHRBuilder\n * @private\n ",
+      "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n ",
       "start": 200,
       "end": 304,
       "loc": {
@@ -8143,7 +8143,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @class\n * @name XHRBuilder\n * @private\n ",
+      "value": "*\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n ",
       "start": 200,
       "end": 304,
       "loc": {

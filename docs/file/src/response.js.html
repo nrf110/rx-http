@@ -34,13 +34,8 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
 </ul>
@@ -51,58 +46,133 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isUndefined, isFunction } from &apos;lodash&apos;;
 import Headers from &apos;./headers&apos;;
 
+let _status = new WeakMap();
+let _statusText = new WeakMap();
+let _headers = new WeakMap();
+let _body = new WeakMap();
+let _uploadProgress = new WeakMap();
+let _downloadProgress = new WeakMap();
+let _isChunked = new WeakMap();
+
+const evaluateLazy = (context, property) =&gt; {
+  const value = property.get(context);
+  if (!isUndefined(value) &amp;&amp; isFunction(value)) {
+    property.set(context, value());
+  }
+  return property.get(context);
+}
+
 /**
- * Immutable response container
+ * Immutable response container.  Should only be created by executing a {@link Request}.
  * @class
+ * @name Response
+ * @param {XMLHttpRequest} xhr
+ * @param {Observable&lt;string&gt;} body - An Observable representing the body/entity of the response
+ * @param {Observable&lt;Object&gt;} uploadProgress - An Observable representing a stream of all upload progress events
+ * @param {Observable&lt;Object&gt;} downloadProgress - An Observable representing a stram of all download progress events
  */
-export default function Response(xhr, body, uploadProgress, downloadProgress) {
-  self = this;
+export default class Response {
 
-  function lazy(value) {
-    let _value;
-
-    return function () {
-      if (!isUndefined(value)) {
-        if (isFunction(value)) {
-          _value = value();
-        } else {
-          _value = value;
-        }
-      }
-
-      return _value;
-    };
+  constructor(xhr, body, uploadProgress, downloadProgress) {
+    _status.set(this, xhr.status);
+    _statusText.set(this, xhr.statusText);
+    _headers.set(this, xhr.getAllResponseHeaders());
+    _body.set(this, body);
+    _uploadProgress.set(this, uploadProgress);
+    _downloadProgress.set(this, downloadProgress);
   }
 
-  this.uploadProgress = lazy(uploadProgress);
+  /**
+   * @method
+   * @name uploadProgress
+   * @returns {Observable&lt;Object&gt;} - an Observable stream of upload progress events
+   */
+  uploadProgress() {
+    return evaluateLazy(this, _uploadProgress);
+  }
 
-  this.downloadProgress = lazy(downloadProgress);
+  /**
+   * @method
+   * @name downloadProgress
+   * @returns {Observable&lt;Object&gt;} - an Observable stream of download progress events
+   */
+  downloadProgress() {
+    return evaluateLazy(this, _downloadProgress);
+  }
 
-  this.body = lazy(body);
+  /**
+   * @method
+   * @name body
+   * @returns {Observable&lt;string&gt;} - An Observable stream of the response body/entity contents
+   */
+  body() {
+    return evaluateLazy(this, _body);
+  }
 
-  this.status = lazy(xhr.status);
+  /**
+   * @method
+   * @name status
+   * @returns {number} - The HTTP status code of the response
+   */
+  status() {
+    return _status.get(this);
+  }
 
-  this.statusText = lazy(xhr.statusText);
+  /**
+   * @method
+   * @name statusText
+   * @returns {string} - The status text of the response
+   */
+  statusText() {
+    return _statusText.get(this);
+  }
 
-  this.headers = lazy(xhr.getAllResponseHeaders());
+  /**
+   * @method
+   * @name headers
+   * @returns {Object} - An object containing the response headers
+   * @example
+   * { &quot;Content-Type&quot;: &quot;application/json&quot;, &quot;Content-Length&quot;: &quot;22&quot; }
+   */
+  headers() {
+    return _headers.get(this);
+  }
 
-  this.header = (name) =&gt; this.headers()[name];
+  /**
+   * Look-up the value of an individual resonse header
+   * @method
+   * @name header
+   * @param {string} name - The name of the header to lookup
+   * @returns {string} - The value of the header, or undefined if not found
+   */
+  header(name) {
+    return _headers.get(this)[name];
+  }
 
-  this.isChunked = lazy(() =&gt; {
-    let transferEncoding = (self.header(Headers.TRANSFER_ENCODING) || &apos;&apos;).toLowerCase();
-    let isChunked = transferEncoding.indexOf(&apos;chunked&apos;) &gt; -1 ||
-                    transferEncoding.indexOf(&apos;identity&apos;) &gt; -1;
-    // Detect SPDY. It uses chunked transfer but doesn&apos;t set the Transfer-Encoding header.
-    if (!isChunked) {
-      let c = window.chrome;
-      let loadTimes = c &amp;&amp; c.loadTimes &amp;&amp; c.loadTimes();
-      let chromeSpdy = loadTimes &amp;&amp; loadTimes.wasFetchedViaSpdy;
-      let ffSpdy = !!self.header(&apos;X-Firefox-Spdy&apos;);
-      isChunked = ffSpdy || chromeSpdy;
+  /**
+   * @method
+   * @name isChunked
+   * @returns {boolean} - Determines if this is a chunked response.  A chunked
+   * response will send each chunk through the {@link body} stream.  A non-chunked
+   * response will only push the final result through the stream.
+   */
+  isChunked() {
+    if (!_isChunked.has(this)) {
+      let transferEncoding = (this.header(Headers.TRANSFER_ENCODING) || &apos;&apos;).toLowerCase();
+      let isChunked = transferEncoding.indexOf(&apos;chunked&apos;) &gt; -1 ||
+                      transferEncoding.indexOf(&apos;identity&apos;) &gt; -1;
+      // Detect SPDY. It uses chunked transfer but doesn&apos;t set the Transfer-Encoding header.
+      if (!isChunked) {
+        let c = window.chrome;
+        let loadTimes = c &amp;&amp; c.loadTimes &amp;&amp; c.loadTimes();
+        let chromeSpdy = loadTimes &amp;&amp; loadTimes.wasFetchedViaSpdy;
+        let ffSpdy = !!this.header(&apos;X-Firefox-Spdy&apos;);
+        isChunked = ffSpdy || chromeSpdy;
+      }
+      _isChunked.set(this, isChunked);
     }
-
-    return isChunked;
-  });
+    return _isChunked.get(this);
+  }
 }
 </code></pre>
 

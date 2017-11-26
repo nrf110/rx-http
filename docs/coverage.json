@@ -1,11 +1,11 @@
 {
-  "coverage": "62.06%",
-  "expectCount": 29,
-  "actualCount": 18,
+  "coverage": "72.72%",
+  "expectCount": 33,
+  "actualCount": 24,
   "files": {
     "src/interceptors.js": {
-      "expectCount": 3,
-      "actualCount": 2,
+      "expectCount": 1,
+      "actualCount": 0,
       "undocumentLines": [
         7
       ]
@@ -29,9 +29,11 @@
       ]
     },
     "src/response.js": {
-      "expectCount": 1,
-      "actualCount": 1,
-      "undocumentLines": []
+      "expectCount": 10,
+      "actualCount": 9,
+      "undocumentLines": [
+        31
+      ]
     },
     "src/url.js": {
       "expectCount": 1,
@@ -44,15 +46,6 @@
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
-    },
-    "src/utilities.js": {
-      "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        13,
-        9,
-        21
-      ]
     }
   }
 }

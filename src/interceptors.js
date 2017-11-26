@@ -60,6 +60,7 @@ export const Interceptors = {
 
 /**
  * Runs the request interceptors, and requestError interceptors if necessary.
+ * @private
  * @class
  * @param {Object[]} interceptors - The array of interceptors to be run
  * @param {Function} accept - Callback that is invoked with the final request
@@ -131,6 +132,7 @@ export function RequestInterceptorChain(interceptors, accept, reject) {
 
 /**
  * Runs the response interceptors, and responseError interceptors if necessary.
+ * @private
  * @class
  * @param {Object[]} interceptors - The array of interceptors to be run
  * @param {Function} accept - Callback that is invoked with the final response

@@ -11,9 +11,9 @@ const STATE = {
 
 /**
  * Internal class used to construct and XMLHttpRequest
+ * @private
  * @class
  * @name XHRBuilder
- * @private
  */
 export default class XHRBuilder {
   constructor() {

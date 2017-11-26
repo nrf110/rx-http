@@ -38,7 +38,8 @@ export default class Request {
     _provider.set(this, config.provider);
   }
 
-  /** @method
+  /**
+   * @method
    * @name method
    * @param {string} [value] - The HTTP method for this request
    * @returns {string|Request} - If value is specified, sets the HTTP method
@@ -54,7 +55,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name header
    * @param {string} name - The name of the header
    * @param {string} [value] - The value to assign to the header
@@ -72,7 +74,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name headers
    * @param {Object} [value] - The hash of headers to send with this request.
    * Replaces any existing headers
@@ -89,7 +92,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name body
    * @param {Object|FormData|Blob|File|string} [value] - The body for this request
    * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body
@@ -105,7 +109,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name url
    * @param {Url} [value] - The {@link Url} for this request.
    * @returns {Url|Request} - If value is specified, sets the {@link Url} for
@@ -134,7 +139,8 @@ export default class Request {
     throw new PropertyValidationException('url', url);
   }
 
-  /** @method
+  /**
+   * @method
    * @name retries
    * @param {number} [value] - The number of times this request will be retried on failure.
    * @returns {number|Request} - If value is specified, sets the number of retries
@@ -149,7 +155,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name interceptors
    * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response
    * @returns {Object|Request} - If value is specified, overrides the current set of interceptors
@@ -164,7 +171,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name xsrfCookieName
    * @param {string} [value] - The name of the XSRF cookie
    * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie
@@ -178,7 +186,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name xsrfHeaderName
    * @param {string} [value] - The name of the XSRF header
    * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header
@@ -192,7 +201,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name withCredentials
    * @param {boolean} [value] - Flag indicating whether cross-site AccessControl
    * requests should be made using cookies, authorization headers, or TLS client
@@ -209,7 +219,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name username
    * @param {string} [value] - Basic auth username
    * @returns {string|Request} - If the value is specified, sets the username and returns
@@ -223,7 +234,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name password
    * @param {string} [value] - Basic auth password
    * @returns {string|Request} - If the value is specified, sets the password and returns
@@ -237,7 +249,8 @@ export default class Request {
     return this;
   }
 
-  /** @method
+  /**
+   * @method
    * @name execute
    * @returns {Object} - Executes the request and returns an object containing
    * the response, uploadProgress, and downloadProgress streams.
