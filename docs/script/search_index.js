@@ -42,12 +42,6 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "rx-http/src/xhr-builder.js~xhrbuilder",
-    "class/src/xhr-builder.js~XHRBuilder.html",
-    "<span>XHRBuilder</span> <span class=\"search-result-import-path\">rx-http/src/xhr-builder.js</span>",
-    "class"
-  ],
-  [
     "rx-http/src/xhr-provider.js~xhrprovider",
     "function/index.html#static-function-XHRProvider",
     "<span>XHRProvider</span> <span class=\"search-result-import-path\">rx-http/src/xhr-provider.js</span>",
@@ -57,12 +51,6 @@ window.esdocSearchIndex = [
     "rx-http/src/utilities.js~isblob",
     "function/index.html#static-function-isBlob",
     "<span>isBlob</span> <span class=\"search-result-import-path\">rx-http/src/utilities.js</span>",
-    "function"
-  ],
-  [
-    "rx-http/src/utilities.js~isfile",
-    "function/index.html#static-function-isFile",
-    "<span>isFile</span> <span class=\"search-result-import-path\">rx-http/src/utilities.js</span>",
     "function"
   ],
   [
@@ -580,126 +568,6 @@ window.esdocSearchIndex = [
     "file/src/xhr-builder.js.html",
     "src/xhr-builder.js",
     "file"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#abort",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-abort",
-    "src/xhr-builder.js~XHRBuilder#abort",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#build",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-build",
-    "src/xhr-builder.js~XHRBuilder#build",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#complete",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-complete",
-    "src/xhr-builder.js~XHRBuilder#complete",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#constructor",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-constructor-constructor",
-    "src/xhr-builder.js~XHRBuilder#constructor",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#downloadprogress",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-downloadProgress",
-    "src/xhr-builder.js~XHRBuilder#downloadProgress",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#error",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-error",
-    "src/xhr-builder.js~XHRBuilder#error",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#headersreceived",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-headersReceived",
-    "src/xhr-builder.js~XHRBuilder#headersReceived",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#load",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-load",
-    "src/xhr-builder.js~XHRBuilder#load",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#loadend",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-loadEnd",
-    "src/xhr-builder.js~XHRBuilder#loadEnd",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#onabort",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onAbort",
-    "src/xhr-builder.js~XHRBuilder#onAbort",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#ondownloadprogress",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onDownloadProgress",
-    "src/xhr-builder.js~XHRBuilder#onDownloadProgress",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#onerror",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onError",
-    "src/xhr-builder.js~XHRBuilder#onError",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#onheadersreceived",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onHeadersReceived",
-    "src/xhr-builder.js~XHRBuilder#onHeadersReceived",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#onload",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onLoad",
-    "src/xhr-builder.js~XHRBuilder#onLoad",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#onloadend",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onLoadEnd",
-    "src/xhr-builder.js~XHRBuilder#onLoadEnd",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#onuploadprogress",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-onUploadProgress",
-    "src/xhr-builder.js~XHRBuilder#onUploadProgress",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#progress",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-progress",
-    "src/xhr-builder.js~XHRBuilder#progress",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#req",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-req",
-    "src/xhr-builder.js~XHRBuilder#req",
-    "member"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#request",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-method-request",
-    "src/xhr-builder.js~XHRBuilder#request",
-    "method"
-  ],
-  [
-    "src/xhr-builder.js~xhrbuilder#uploadprogress",
-    "class/src/xhr-builder.js~XHRBuilder.html#instance-member-uploadProgress",
-    "src/xhr-builder.js~XHRBuilder#uploadProgress",
-    "member"
   ],
   [
     "src/xhr-provider.js",

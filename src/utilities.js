@@ -1,3 +1,7 @@
+/** @module utilities
+ * @private
+ */
+ 
 export function isFile(value) {
   return toString.call(value) === '[object File]';
 }

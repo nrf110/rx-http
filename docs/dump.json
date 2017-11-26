@@ -391,7 +391,7 @@
     "__docId__": 16,
     "kind": "file",
     "name": "src/request.js",
-    "content": "import { isUndefined, identity, assign, isString, isObject } from 'lodash';\nimport PropertyValidationException from './exceptions';\nimport Path from './path';\nimport Url from './url';\nimport { parseUri } from './utilities';\n\nlet _method = new WeakMap();\nlet _headers = new WeakMap();\nlet _body = new WeakMap();\nlet _url = new WeakMap();\nlet _retries = new WeakMap();\nlet _interceptors = new WeakMap();\nlet _xsrfCookieName = new WeakMap();\nlet _xsrfHeaderName = new WeakMap();\nlet _withCredentials = new WeakMap();\nlet _username = new WeakMap();\nlet _password = new WeakMap();\nlet _provider = new WeakMap();\n\n/**\n * A Request should only ever be created by an instance of {@link Http}\n * @class\n * @param {Object} config - Override default settings for this Request only.\n */\nexport default class Request {\n  constructor(config) {\n    _method.set(this, config.method || null);\n    _headers.set(this, config.headers || {});\n    _body.set(this, config.body || null);\n    _url.set(this, config.url || null);\n    _retries.set(this, config.retries || 0);\n    _interceptors.set(this, config.interceptors || {})\n    _xsrfCookieName.set(this, config.xsrfCookieName);\n    _xsrfHeaderName.set(this, config.xsrfHeaderName);\n    _withCredentials.set(this, !!config.withCredentials);\n    _username.set(this, config.username || null);\n    _password.set(this, config.password || null);\n    _provider.set(this, config.provider);\n  }\n\n  /** @method\n   * @name method\n   * @param {string} [value] - The HTTP method for this request\n   * @returns {string|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   */\n  method(value) {\n    if (isUndefined(value)) {\n     return _method.get(this);\n    }\n\n    _method.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name header\n   * @param {string} name - The name of the header\n   * @param {string} [value] - The value to assign to the header\n   * @returns {string|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   */\n  header(name, value) {\n    let headers = _headers.get(this);\n    if (isUndefined(value)) {\n      return headers[name];\n    }\n    headers[name] = value.toString();\n    _headers.set(this, headers);\n    return this;\n  }\n\n  /** @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   */\n  headers(value) {\n    if (isUndefined(value)) {\n      return assign({}, _headers.get(this));\n    }\n\n    _headers.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name body\n   * @param {Object|FormData|Blob|File|string} [value] - The body for this request\n   * @returns - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   */\n  body(value) {\n    if (isUndefined(value)) {\n     return _body.get(this);\n    }\n\n    _body.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name url\n   * @param {@link Url} [value] - The {@link Url} for this request.\n   * @returns {@link Url} - If value is specified, sets the {@link Url} for\n   * this request and returns the current Request.  If value is ommitted,\n   * returns the current {@link Url}.\n   */\n  url(value) {\n    if (isUndefined(value)) {\n      return _url.get(this);\n    }\n\n    if (value instanceof Url) {\n      _url.set(this, value);\n      return this;\n    } else if (isString(value) || isObject(value)) {\n      const newUrl = new Url(url);\n      if (newUrl.isAbsolute()) {\n        _url.set(this, newUrl);\n        return this;\n      } else if (_url.get(this) && _url.get().isAbsolute()) {\n        _url.set(this, _url.get(this).merge(newUrl));\n        return this;\n      }\n    }\n\n    throw new PropertyValidationException('url', url);\n  }\n\n  /** @method\n   * @name retries\n   * @param {number} [value] - The number of times this request will be retried on failure.\n   * @returns {number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   */\n  retries(value) {\n    if (isUndefined(value)) {\n      return _retries.get(this);\n    }\n    _retries.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name interceptors\n   * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response\n   * @returns {Object|Request} - If value is specified, overrides the current set of interceptors\n   * for this Request and/or Response and returns the current Request.  If value is ommitted,\n   * returns the current set of interceptors.\n   */\n  interceptors(value) {\n    if (isUndefined(value)) {\n      return _interceptors.get(this);\n    }\n    _interceptors.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name xsrfCookieName\n   * @param {string} [value] - The name of the XSRF cookie\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    if (isUndefined(value)) {\n      return _xsrfCookieName.get(this);\n    }\n    _xsrfCookieName.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name xsrfHeaderName\n   * @param {string} [value] - The name of the XSRF header\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    if (isUndefined(value)) {\n      return _xsrfHeaderName.get(this);\n    }\n    _xsrfHeaderName.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name withCredentials\n   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    if (isUndefined(value)) {\n      return this.config.withCredentials = value;\n    }\n    this.config.withCredentials = value;\n    return this;\n  }\n\n  /** @method\n   * @name username\n   * @param {string} [value] - Basic auth username\n   * @param {string|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   */\n  username(value) {\n    if (isUndefined(value)) {\n      return _username.get(this);\n    }\n    _username.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name password\n   * @param {string} [value] - Basic auth password\n   * @param {string|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   */\n  password(value) {\n    if (isUndefined(value)) {\n      return _password.get(this);\n    }\n    _password.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name execute\n   * @returns {Object} - Executes the request and returns an object containing\n   * the response, uploadProgress, and downloadProgress streams.\n   * @example\n   * var streams = request.execute();\n   * streams.flatMap(response => response.body()).forEach((body) => console.log(body));\n   * streams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));\n   * streams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));\n   */\n  execute() {\n    const provider = _provider.get(this);\n    return provider(this);\n  };\n}\n",
+    "content": "import { isUndefined, identity, assign, isString, isObject } from 'lodash';\nimport PropertyValidationException from './exceptions';\nimport Path from './path';\nimport Url from './url';\nimport { parseUri } from './utilities';\n\nlet _method = new WeakMap();\nlet _headers = new WeakMap();\nlet _body = new WeakMap();\nlet _url = new WeakMap();\nlet _retries = new WeakMap();\nlet _interceptors = new WeakMap();\nlet _xsrfCookieName = new WeakMap();\nlet _xsrfHeaderName = new WeakMap();\nlet _withCredentials = new WeakMap();\nlet _username = new WeakMap();\nlet _password = new WeakMap();\nlet _provider = new WeakMap();\n\n/**\n * A Request should only ever be created by an instance of {@link Http}\n * @class\n * @param {Object} config - Override default settings for this Request only.\n */\nexport default class Request {\n  constructor(config) {\n    _method.set(this, config.method || null);\n    _headers.set(this, config.headers || {});\n    _body.set(this, config.body || null);\n    _url.set(this, config.url || null);\n    _retries.set(this, config.retries || 0);\n    _interceptors.set(this, config.interceptors || {})\n    _xsrfCookieName.set(this, config.xsrfCookieName);\n    _xsrfHeaderName.set(this, config.xsrfHeaderName);\n    _withCredentials.set(this, !!config.withCredentials);\n    _username.set(this, config.username || null);\n    _password.set(this, config.password || null);\n    _provider.set(this, config.provider);\n  }\n\n  /** @method\n   * @name method\n   * @param {string} [value] - The HTTP method for this request\n   * @returns {string|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   */\n  method(value) {\n    if (isUndefined(value)) {\n     return _method.get(this);\n    }\n\n    _method.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name header\n   * @param {string} name - The name of the header\n   * @param {string} [value] - The value to assign to the header\n   * @returns {string|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   */\n  header(name, value) {\n    let headers = _headers.get(this);\n    if (isUndefined(value)) {\n      return headers[name];\n    }\n    headers[name] = value.toString();\n    _headers.set(this, headers);\n    return this;\n  }\n\n  /** @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   */\n  headers(value) {\n    if (isUndefined(value)) {\n      return assign({}, _headers.get(this));\n    }\n\n    _headers.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name body\n   * @param {Object|FormData|Blob|File|string} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   */\n  body(value) {\n    if (isUndefined(value)) {\n     return _body.get(this);\n    }\n\n    _body.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name url\n   * @param {Url} [value] - The {@link Url} for this request.\n   * @returns {Url|Request} - If value is specified, sets the {@link Url} for\n   * this request and returns the current Request.  If value is ommitted,\n   * returns the current {@link Url}.\n   */\n  url(value) {\n    if (isUndefined(value)) {\n      return _url.get(this);\n    }\n\n    if (value instanceof Url) {\n      _url.set(this, value);\n      return this;\n    } else if (isString(value) || isObject(value)) {\n      const newUrl = new Url(url);\n      if (newUrl.isAbsolute()) {\n        _url.set(this, newUrl);\n        return this;\n      } else if (_url.get(this) && _url.get().isAbsolute()) {\n        _url.set(this, _url.get(this).merge(newUrl));\n        return this;\n      }\n    }\n\n    throw new PropertyValidationException('url', url);\n  }\n\n  /** @method\n   * @name retries\n   * @param {number} [value] - The number of times this request will be retried on failure.\n   * @returns {number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   */\n  retries(value) {\n    if (isUndefined(value)) {\n      return _retries.get(this);\n    }\n    _retries.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name interceptors\n   * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response\n   * @returns {Object|Request} - If value is specified, overrides the current set of interceptors\n   * for this Request and/or Response and returns the current Request.  If value is ommitted,\n   * returns the current set of interceptors.\n   */\n  interceptors(value) {\n    if (isUndefined(value)) {\n      return _interceptors.get(this);\n    }\n    _interceptors.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name xsrfCookieName\n   * @param {string} [value] - The name of the XSRF cookie\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    if (isUndefined(value)) {\n      return _xsrfCookieName.get(this);\n    }\n    _xsrfCookieName.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name xsrfHeaderName\n   * @param {string} [value] - The name of the XSRF header\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    if (isUndefined(value)) {\n      return _xsrfHeaderName.get(this);\n    }\n    _xsrfHeaderName.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name withCredentials\n   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    if (isUndefined(value)) {\n      return this.config.withCredentials = value;\n    }\n    this.config.withCredentials = value;\n    return this;\n  }\n\n  /** @method\n   * @name username\n   * @param {string} [value] - Basic auth username\n   * @returns {string|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   */\n  username(value) {\n    if (isUndefined(value)) {\n      return _username.get(this);\n    }\n    _username.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name password\n   * @param {string} [value] - Basic auth password\n   * @returns {string|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   */\n  password(value) {\n    if (isUndefined(value)) {\n      return _password.get(this);\n    }\n    _password.set(this, value);\n    return this;\n  }\n\n  /** @method\n   * @name execute\n   * @returns {Object} - Executes the request and returns an object containing\n   * the response, uploadProgress, and downloadProgress streams.\n   * @example\n   * var streams = request.execute();\n   * streams.flatMap(response => response.body()).forEach((body) => console.log(body));\n   * streams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));\n   * streams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));\n   */\n  execute() {\n    const provider = _provider.get(this);\n    return provider(this);\n  };\n}\n",
     "static": true,
     "longname": "src/request.js",
     "access": null,
@@ -932,7 +932,7 @@
       },
       {
         "tagName": "@returns",
-        "tagValue": "- If value is specified, sets the body\nfor this request and returns the current Request.  If value is ommitted,\nreturns the current body"
+        "tagValue": "{Object|FormData|Blob|File|string|Request} - If value is specified, sets the body\nfor this request and returns the current Request.  If value is ommitted,\nreturns the current body"
       }
     ],
     "params": [
@@ -954,7 +954,12 @@
     "return": {
       "nullable": null,
       "types": [
-        "*"
+        "Object",
+        "FormData",
+        "Blob",
+        "File",
+        "string",
+        "Request"
       ],
       "spread": false,
       "description": "If value is specified, sets the body\nfor this request and returns the current Request.  If value is ommitted,\nreturns the current body"
@@ -979,28 +984,29 @@
       },
       {
         "tagName": "@returns",
-        "tagValue": "{@link Url} - If value is specified, sets the {@link Url} for\nthis request and returns the current Request.  If value is ommitted,\nreturns the current {@link Url}."
+        "tagValue": "{Url|Request} - If value is specified, sets the {@link Url} for\nthis request and returns the current Request.  If value is ommitted,\nreturns the current {@link Url}."
       }
     ],
     "params": [
       {
         "nullable": null,
         "types": [
-          "*"
+          "Url"
         ],
         "spread": false,
-        "optional": false,
-        "name": "{@link",
-        "description": "Url} [value] - The {@link Url} for this request."
+        "optional": true,
+        "name": "value",
+        "description": "The {@link Url} for this request."
       }
     ],
     "return": {
       "nullable": null,
       "types": [
-        "*"
+        "Url",
+        "Request"
       ],
       "spread": false,
-      "description": "{@link Url} - If value is specified, sets the {@link Url} for\nthis request and returns the current Request.  If value is ommitted,\nreturns the current {@link Url}."
+      "description": "If value is specified, sets the {@link Url} for\nthis request and returns the current Request.  If value is ommitted,\nreturns the current {@link Url}."
     }
   },
   {
@@ -1239,6 +1245,10 @@
       {
         "tagName": "@method",
         "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{string|Request} - If the value is specified, sets the username and returns\nthe current Request.  If value is ommitted, retursn the current username."
       }
     ],
     "params": [
@@ -1251,23 +1261,16 @@
         "optional": true,
         "name": "value",
         "description": "Basic auth username"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "string",
-          "Request"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "-",
-        "description": "If the value is specified, sets the username and returns\nthe current Request.  If value is ommitted, retursn the current username."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "string",
+        "Request"
+      ],
+      "spread": false,
+      "description": "If the value is specified, sets the username and returns\nthe current Request.  If value is ommitted, retursn the current username."
     }
   },
   {
@@ -1286,6 +1289,10 @@
       {
         "tagName": "@method",
         "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{string|Request} - If the value is specified, sets the password and returns\nthe current Request.  If value is ommitted, retursn the current password."
       }
     ],
     "params": [
@@ -1298,23 +1305,16 @@
         "optional": true,
         "name": "value",
         "description": "Basic auth password"
-      },
-      {
-        "nullable": null,
-        "types": [
-          "string",
-          "Request"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "-",
-        "description": "If the value is specified, sets the password and returns\nthe current Request.  If value is ommitted, retursn the current password."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "string",
+        "Request"
+      ],
+      "spread": false,
+      "description": "If the value is specified, sets the password and returns\nthe current Request.  If value is ommitted, retursn the current password."
     }
   },
   {
@@ -1493,7 +1493,7 @@
     "__docId__": 49,
     "kind": "file",
     "name": "src/utilities.js",
-    "content": "export function isFile(value) {\n  return toString.call(value) === '[object File]';\n}\n\nexport function isFormData(value) {\n  return toString.call(value) === '[object FormData]';\n}\n\nexport function isBlob(value) {\n  return toString.call(value) === '[object Blob]';\n}\n\n// parseUri 1.2.2\n// (c) Steven Levithan <stevenlevithan.com>\n// MIT License\n\nexport function parseUri(str) {\n  let\to = parseUri.options;\n  let m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str);\n  let uri = {};\n  let i = 14;\n\n  while (i--) uri[o.key[i]] = m[i] || '';\n\n  uri[o.q.name] = {};\n  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {\n    if ($1) uri[o.q.name][$1] = $2;\n  });\n\n  return uri;\n};\n\nparseUri.options = {\n  strictMode: false,\n  key: [\n    'source',\n    'protocol',\n    'authority',\n    'userInfo',\n    'user',\n    'password',\n    'host',\n    'port',\n    'relative',\n    'path',\n    'directory',\n    'file',\n    'query',\n    'anchor'\n  ],\n  q: {\n    name: 'queryKey',\n    parser: /(?:^|&)([^&=]*)=?([^&]*)/g\n  },\n  parser: {\n    strict: /^(?:([^:\\/?#]+):)?(?:\\/\\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?))?((((?:[^?#\\/]*\\/)*)([^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/,\n    loose: /^(?:(?![^:@]+:[^:@\\/]*@)([^:\\/?#.]+):)?(?:\\/\\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?)(((\\/(?:[^?#](?![^?#\\/]*\\.[^?#\\/.]+(?:[?#]|$)))*\\/?)?([^?#\\/]*))(?:\\?([^#]*))?(?:#(.*))?)/\n  }\n};\n",
+    "content": "/** @module utilities\n * @private\n */\n \nexport function isFile(value) {\n  return toString.call(value) === '[object File]';\n}\n\nexport function isFormData(value) {\n  return toString.call(value) === '[object FormData]';\n}\n\nexport function isBlob(value) {\n  return toString.call(value) === '[object Blob]';\n}\n\n// parseUri 1.2.2\n// (c) Steven Levithan <stevenlevithan.com>\n// MIT License\n\nexport function parseUri(str) {\n  let\to = parseUri.options;\n  let m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str);\n  let uri = {};\n  let i = 14;\n\n  while (i--) uri[o.key[i]] = m[i] || '';\n\n  uri[o.q.name] = {};\n  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {\n    if ($1) uri[o.q.name][$1] = $2;\n  });\n\n  return uri;\n};\n\nparseUri.options = {\n  strictMode: false,\n  key: [\n    'source',\n    'protocol',\n    'authority',\n    'userInfo',\n    'user',\n    'password',\n    'host',\n    'port',\n    'relative',\n    'path',\n    'directory',\n    'file',\n    'query',\n    'anchor'\n  ],\n  q: {\n    name: 'queryKey',\n    parser: /(?:^|&)([^&=]*)=?([^&]*)/g\n  },\n  parser: {\n    strict: /^(?:([^:\\/?#]+):)?(?:\\/\\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?))?((((?:[^?#\\/]*\\/)*)([^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/,\n    loose: /^(?:(?![^:@]+:[^:@\\/]*@)([^:\\/?#.]+):)?(?:\\/\\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?)(((\\/(?:[^?#](?![^?#\\/]*\\.[^?#\\/.]+(?:[?#]|$)))*\\/?)?([^?#\\/]*))(?:\\?([^#]*))?(?:#(.*))?)/\n  }\n};\n",
     "static": true,
     "longname": "src/utilities.js",
     "access": null,
@@ -1509,17 +1509,16 @@
     "async": false,
     "static": true,
     "longname": "src/utilities.js~isFile",
-    "access": null,
+    "access": "private",
     "export": true,
     "importPath": "rx-http/src/utilities.js",
     "importStyle": "{isFile}",
     "description": null,
-    "lineNumber": 1,
-    "undocument": true,
+    "lineNumber": 5,
     "unknown": [
       {
-        "tagName": "@_undocument",
-        "tagValue": ""
+        "tagName": "@module",
+        "tagValue": "utilities"
       }
     ],
     "params": [
@@ -1550,7 +1549,7 @@
     "importPath": "rx-http/src/utilities.js",
     "importStyle": "{isFormData}",
     "description": null,
-    "lineNumber": 5,
+    "lineNumber": 9,
     "undocument": true,
     "unknown": [
       {
@@ -1586,7 +1585,7 @@
     "importPath": "rx-http/src/utilities.js",
     "importStyle": "{isBlob}",
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 13,
     "undocument": true,
     "unknown": [
       {
@@ -1622,7 +1621,7 @@
     "importPath": "rx-http/src/utilities.js",
     "importStyle": "{parseUri}",
     "description": null,
-    "lineNumber": 17,
+    "lineNumber": 21,
     "undocument": true,
     "unknown": [
       {
@@ -1648,7 +1647,7 @@
     "__docId__": 54,
     "kind": "file",
     "name": "src/xhr-builder.js",
-    "content": "import { isInteger, partial, noop } from 'lodash';\nimport { RequestInterceptorChain } from './interceptors';\n\nconst STATE = {\n  UNSENT: 0,\n  OPEN: 1,\n  HEADERS_RECEIVED: 2,\n  LOADING: 3,\n  DONE: 4\n}\n\nexport default class XHRBuilder {\n  constructor() {\n    this.headersReceived = noop;\n    this.downloadProgress = noop;\n    this.uploadProgress = noop;\n    this.complete = noop;\n    this.progress = noop;\n    this.error = noop;\n    this.abort = noop;\n    this.load = noop;\n    this.loadEnd = noop;\n  }\n\n  onHeadersReceived(fn) {\n    this.headersReceived = fn;\n    return this;\n  }\n\n  onDownloadProgress(fn) {\n    this.downloadProgress = fn;\n    return this;\n  }\n\n  onUploadProgress(fn) {\n    this.uploadProgress = fn;\n    return this;\n  }\n\n  onError(fn) {\n    this.error = fn;\n    return this;\n  }\n\n  onAbort(fn) {\n    this.abort = fn;\n    return this;\n  }\n\n  onLoad(fn) {\n    this.load = fn;\n    return this;\n  }\n\n  onLoadEnd(fn) {\n    this.loadEnd = fn;\n    return this;\n  }\n\n  request(req) {\n    this.req = req;\n    return this;\n  }\n\n  build() {\n    const self = this;\n    const request = this.req;\n    const xhr = new XMLHttpRequest();\n\n    const openArgs = [request.method(), request.url().toString(), true];\n    if (request.username()) {\n      openArgs.push(request.username());\n\n      if (request.password()) {\n        openArgs.push(request.password());\n      }\n    }\n\n    xhr.open(...openArgs);\n\n    if (isInteger(request)) {\n      xhr.timeout = request.timeout();\n    }\n\n    const headers = request.headers();\n\n    Object.keys(headers).forEach(headerName => {\n      xhr.setRequestHeader(headerName, headers[headerName]);\n    });\n\n    if (xhr.upload) {\n      xhr.upload.addEventListener('progress', self.uploadProgress);\n      xhr.upload.addEventListener('error', self.error);\n      xhr.upload.addEventListener('abort', self.abort);\n    }\n\n    xhr.addEventListener('progress', self.downloadProgress);\n    xhr.addEventListener('error', self.error);\n    xhr.addEventListener('abort', self.abort);\n    xhr.addEventListener('load', self.load);\n    xhr.addEventListener('loadend', self.loadEnd);\n\n    xhr.addEventListener('readystatechange', (evt) => {\n      if (xhr.readyState === STATE.HEADERS_RECEIVED) {\n        self.headersReceived(evt);\n      }\n    });\n\n    return xhr;\n  }\n}\n",
+    "content": "import { isInteger, partial, noop } from 'lodash';\nimport { RequestInterceptorChain } from './interceptors';\n\nconst STATE = {\n  UNSENT: 0,\n  OPEN: 1,\n  HEADERS_RECEIVED: 2,\n  LOADING: 3,\n  DONE: 4\n}\n\n/**\n * Internal class used to construct and XMLHttpRequest\n * @class\n * @name XHRBuilder\n * @private\n */\nexport default class XHRBuilder {\n  constructor() {\n    this.headersReceived = noop;\n    this.downloadProgress = noop;\n    this.uploadProgress = noop;\n    this.complete = noop;\n    this.progress = noop;\n    this.error = noop;\n    this.abort = noop;\n    this.load = noop;\n    this.loadEnd = noop;\n  }\n\n  onHeadersReceived(fn) {\n    this.headersReceived = fn;\n    return this;\n  }\n\n  onDownloadProgress(fn) {\n    this.downloadProgress = fn;\n    return this;\n  }\n\n  onUploadProgress(fn) {\n    this.uploadProgress = fn;\n    return this;\n  }\n\n  onError(fn) {\n    this.error = fn;\n    return this;\n  }\n\n  onAbort(fn) {\n    this.abort = fn;\n    return this;\n  }\n\n  onLoad(fn) {\n    this.load = fn;\n    return this;\n  }\n\n  onLoadEnd(fn) {\n    this.loadEnd = fn;\n    return this;\n  }\n\n  request(req) {\n    this.req = req;\n    return this;\n  }\n\n  build() {\n    const self = this;\n    const request = this.req;\n    const xhr = new XMLHttpRequest();\n\n    const openArgs = [request.method(), request.url().toString(), true];\n    if (request.username()) {\n      openArgs.push(request.username());\n\n      if (request.password()) {\n        openArgs.push(request.password());\n      }\n    }\n\n    xhr.open(...openArgs);\n\n    if (isInteger(request)) {\n      xhr.timeout = request.timeout();\n    }\n\n    const headers = request.headers();\n\n    Object.keys(headers).forEach(headerName => {\n      xhr.setRequestHeader(headerName, headers[headerName]);\n    });\n\n    if (xhr.upload) {\n      xhr.upload.addEventListener('progress', self.uploadProgress);\n      xhr.upload.addEventListener('error', self.error);\n      xhr.upload.addEventListener('abort', self.abort);\n    }\n\n    xhr.addEventListener('progress', self.downloadProgress);\n    xhr.addEventListener('error', self.error);\n    xhr.addEventListener('abort', self.abort);\n    xhr.addEventListener('load', self.load);\n    xhr.addEventListener('loadend', self.loadEnd);\n\n    xhr.addEventListener('readystatechange', (evt) => {\n      if (xhr.readyState === STATE.HEADERS_RECEIVED) {\n        self.headersReceived(evt);\n      }\n    });\n\n    return xhr;\n  }\n}\n",
     "static": true,
     "longname": "src/xhr-builder.js",
     "access": null,
@@ -1688,16 +1687,15 @@
     "memberof": "src/xhr-builder.js",
     "static": true,
     "longname": "src/xhr-builder.js~XHRBuilder",
-    "access": null,
+    "access": "private",
     "export": true,
     "importPath": "rx-http/src/xhr-builder.js",
     "importStyle": "XHRBuilder",
-    "description": null,
-    "lineNumber": 12,
-    "undocument": true,
+    "description": "Internal class used to construct and XMLHttpRequest",
+    "lineNumber": 18,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@class",
         "tagValue": ""
       }
     ],
@@ -1714,7 +1712,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 13,
+    "lineNumber": 19,
     "undocument": true,
     "unknown": [
       {
@@ -1733,7 +1731,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#headersReceived",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 20,
     "undocument": true,
     "unknown": [
       {
@@ -1756,7 +1754,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#downloadProgress",
     "access": null,
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 21,
     "undocument": true,
     "unknown": [
       {
@@ -1779,7 +1777,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#uploadProgress",
     "access": null,
     "description": null,
-    "lineNumber": 16,
+    "lineNumber": 22,
     "undocument": true,
     "unknown": [
       {
@@ -1802,7 +1800,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#complete",
     "access": null,
     "description": null,
-    "lineNumber": 17,
+    "lineNumber": 23,
     "undocument": true,
     "unknown": [
       {
@@ -1825,7 +1823,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#progress",
     "access": null,
     "description": null,
-    "lineNumber": 18,
+    "lineNumber": 24,
     "undocument": true,
     "unknown": [
       {
@@ -1848,7 +1846,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#error",
     "access": null,
     "description": null,
-    "lineNumber": 19,
+    "lineNumber": 25,
     "undocument": true,
     "unknown": [
       {
@@ -1871,7 +1869,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#abort",
     "access": null,
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 26,
     "undocument": true,
     "unknown": [
       {
@@ -1894,7 +1892,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#load",
     "access": null,
     "description": null,
-    "lineNumber": 21,
+    "lineNumber": 27,
     "undocument": true,
     "unknown": [
       {
@@ -1917,7 +1915,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#loadEnd",
     "access": null,
     "description": null,
-    "lineNumber": 22,
+    "lineNumber": 28,
     "undocument": true,
     "unknown": [
       {
@@ -1942,7 +1940,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onHeadersReceived",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 31,
     "undocument": true,
     "unknown": [
       {
@@ -1973,7 +1971,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#headersReceived",
     "access": null,
     "description": null,
-    "lineNumber": 26,
+    "lineNumber": 32,
     "undocument": true,
     "unknown": [
       {
@@ -1998,7 +1996,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onDownloadProgress",
     "access": null,
     "description": null,
-    "lineNumber": 30,
+    "lineNumber": 36,
     "undocument": true,
     "unknown": [
       {
@@ -2029,7 +2027,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#downloadProgress",
     "access": null,
     "description": null,
-    "lineNumber": 31,
+    "lineNumber": 37,
     "undocument": true,
     "unknown": [
       {
@@ -2054,7 +2052,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onUploadProgress",
     "access": null,
     "description": null,
-    "lineNumber": 35,
+    "lineNumber": 41,
     "undocument": true,
     "unknown": [
       {
@@ -2085,7 +2083,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#uploadProgress",
     "access": null,
     "description": null,
-    "lineNumber": 36,
+    "lineNumber": 42,
     "undocument": true,
     "unknown": [
       {
@@ -2110,7 +2108,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onError",
     "access": null,
     "description": null,
-    "lineNumber": 40,
+    "lineNumber": 46,
     "undocument": true,
     "unknown": [
       {
@@ -2141,7 +2139,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#error",
     "access": null,
     "description": null,
-    "lineNumber": 41,
+    "lineNumber": 47,
     "undocument": true,
     "unknown": [
       {
@@ -2166,7 +2164,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onAbort",
     "access": null,
     "description": null,
-    "lineNumber": 45,
+    "lineNumber": 51,
     "undocument": true,
     "unknown": [
       {
@@ -2197,7 +2195,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#abort",
     "access": null,
     "description": null,
-    "lineNumber": 46,
+    "lineNumber": 52,
     "undocument": true,
     "unknown": [
       {
@@ -2222,7 +2220,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onLoad",
     "access": null,
     "description": null,
-    "lineNumber": 50,
+    "lineNumber": 56,
     "undocument": true,
     "unknown": [
       {
@@ -2253,7 +2251,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#load",
     "access": null,
     "description": null,
-    "lineNumber": 51,
+    "lineNumber": 57,
     "undocument": true,
     "unknown": [
       {
@@ -2278,7 +2276,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#onLoadEnd",
     "access": null,
     "description": null,
-    "lineNumber": 55,
+    "lineNumber": 61,
     "undocument": true,
     "unknown": [
       {
@@ -2309,7 +2307,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#loadEnd",
     "access": null,
     "description": null,
-    "lineNumber": 56,
+    "lineNumber": 62,
     "undocument": true,
     "unknown": [
       {
@@ -2334,7 +2332,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#request",
     "access": null,
     "description": null,
-    "lineNumber": 60,
+    "lineNumber": 66,
     "undocument": true,
     "unknown": [
       {
@@ -2365,7 +2363,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#req",
     "access": null,
     "description": null,
-    "lineNumber": 61,
+    "lineNumber": 67,
     "undocument": true,
     "unknown": [
       {
@@ -2390,7 +2388,7 @@
     "longname": "src/xhr-builder.js~XHRBuilder#build",
     "access": null,
     "description": null,
-    "lineNumber": 65,
+    "lineNumber": 71,
     "undocument": true,
     "unknown": [
       {
@@ -2409,7 +2407,7 @@
     "__docId__": 84,
     "kind": "file",
     "name": "src/xhr-provider.js",
-    "content": "import { partial, isInteger } from 'lodash';\nimport Rx from 'rxjs';\nimport XHRBuilder from './xhr-builder';\nimport Response from './response';\nimport { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';\n\nexport default function XHRProvider(request) {\n  const interceptors = request.interceptors();\n\n  function attempt(observable, retries = request.retries()) {\n    let response;\n    let offset = 0;\n    let body = new Rx.Subject();\n    let uploadProgress = new Rx.Subject();\n    let downloadProgress = new Rx.Subject();\n    let all = [observable, body, uploadProgress, downloadProgress];\n\n    function errorAll(err) {\n      all.forEach(o => o.error(err));\n    }\n\n    function completeAll() {\n      all.forEach(o => o.complete());\n    }\n\n    function exceptionHandler(evt) {\n      if (retries > 0) attempt(observable, retries - 1);\n      else errorAll(evt);\n    }\n\n    function nextChunk() {\n      let chunk = xhr.responseText.slice(offset);\n      offset = xhr.responseText.length;\n      body.next(chunk);\n    }\n\n    const xhr = new XHRBuilder()\n      .request(request)\n      .onHeadersReceived((evt) => {\n        response = new Response(\n          xhr,\n          body,\n          uploadProgress,\n          downloadProgress\n        );\n\n        const responseChain = new ResponseInterceptorChain(\n          interceptors,\n          (transformedResponse) => observable.next(transformedResponse),\n          exceptionHandler\n        );\n\n        responseChain.run(response);\n      })\n      .onUploadProgress((evt) => {\n        uploadProgress.next(evt);\n      })\n      .onDownloadProgress((evt) => {\n        downloadProgress.next(evt);\n        if (response.isChunked()) {\n          nextChunk();\n        }\n      })\n      .onLoad((evt) => {\n        if (response.isChunked()) {\n          if (xhr.responseText.length > offset) {\n            nextChunk();\n          }\n        } else {\n          body.next(xhr.responseText);\n        }\n      })\n      .onError(exceptionHandler)\n      .onAbort(exceptionHandler)\n      .onLoadEnd(completeAll)\n      .build();\n\n    const success = transformed => {\n      if (!!transformed.body()) xhr.send(transformed.body());\n      else xhr.send();\n    };\n\n    const requestChain = new RequestInterceptorChain(\n      interceptors,\n      success,\n      (err) => {\n        observable.error(err);\n        completeAll();\n      }\n    );\n\n    requestChain.run(request);\n  }\n\n  return Rx.Observable.create(attempt);\n}\n",
+    "content": "import { partial, isInteger } from 'lodash';\nimport Rx from 'rxjs';\nimport XHRBuilder from './xhr-builder';\nimport Response from './response';\nimport { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';\n\n/** @function\n * Provider-implementation for browser-based clients.  Providers are simply\n * functions that take in a {@link Request} and return an RxJS Observable\n * that eventually contains the {@link Response}.\n * @name XHRProvider\n * @param {Request} request\n * @returns {Observable<Response>}\n */\nexport default function XHRProvider(request) {\n  const interceptors = request.interceptors();\n\n  function attempt(observable, retries = request.retries()) {\n    let response;\n    let offset = 0;\n    let body = new Rx.Subject();\n    let uploadProgress = new Rx.Subject();\n    let downloadProgress = new Rx.Subject();\n    let all = [observable, body, uploadProgress, downloadProgress];\n\n    function errorAll(err) {\n      all.forEach(o => o.error(err));\n    }\n\n    function completeAll() {\n      all.forEach(o => o.complete());\n    }\n\n    function exceptionHandler(evt) {\n      if (retries > 0) attempt(observable, retries - 1);\n      else errorAll(evt);\n    }\n\n    function nextChunk() {\n      let chunk = xhr.responseText.slice(offset);\n      offset = xhr.responseText.length;\n      body.next(chunk);\n    }\n\n    const xhr = new XHRBuilder()\n      .request(request)\n      .onHeadersReceived((evt) => {\n        response = new Response(\n          xhr,\n          body,\n          uploadProgress,\n          downloadProgress\n        );\n\n        const responseChain = new ResponseInterceptorChain(\n          interceptors,\n          (transformedResponse) => observable.next(transformedResponse),\n          exceptionHandler\n        );\n\n        responseChain.run(response);\n      })\n      .onUploadProgress((evt) => {\n        uploadProgress.next(evt);\n      })\n      .onDownloadProgress((evt) => {\n        downloadProgress.next(evt);\n        if (response.isChunked()) {\n          nextChunk();\n        }\n      })\n      .onLoad((evt) => {\n        if (response.isChunked()) {\n          if (xhr.responseText.length > offset) {\n            nextChunk();\n          }\n        } else {\n          body.next(xhr.responseText);\n        }\n      })\n      .onError(exceptionHandler)\n      .onAbort(exceptionHandler)\n      .onLoadEnd(completeAll)\n      .build();\n\n    const success = transformed => {\n      if (!!transformed.body()) xhr.send(transformed.body());\n      else xhr.send();\n    };\n\n    const requestChain = new RequestInterceptorChain(\n      interceptors,\n      success,\n      (err) => {\n        observable.error(err);\n        completeAll();\n      }\n    );\n\n    requestChain.run(request);\n  }\n\n  return Rx.Observable.create(attempt);\n}\n",
     "static": true,
     "longname": "src/xhr-provider.js",
     "access": null,
@@ -2430,26 +2428,36 @@
     "importPath": "rx-http/src/xhr-provider.js",
     "importStyle": "XHRProvider",
     "description": null,
-    "lineNumber": 7,
-    "undocument": true,
+    "lineNumber": 15,
     "unknown": [
       {
-        "tagName": "@_undocument",
-        "tagValue": ""
+        "tagName": "@function",
+        "tagValue": "Provider-implementation for browser-based clients.  Providers are simply\nfunctions that take in a {@link Request} and return an RxJS Observable\nthat eventually contains the {@link Response}."
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Observable<Response>}"
       }
     ],
     "params": [
       {
-        "name": "request",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Request"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "request",
+        "description": ""
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Observable<Response>"
+      ],
+      "spread": false,
+      "description": ""
     }
   },
   {

@@ -4,6 +4,14 @@ import XHRBuilder from './xhr-builder';
 import Response from './response';
 import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';
 
+/** @function
+ * Provider-implementation for browser-based clients.  Providers are simply
+ * functions that take in a {@link Request} and return an RxJS Observable
+ * that eventually contains the {@link Response}.
+ * @name XHRProvider
+ * @param {Request} request
+ * @returns {Observable<Response>}
+ */
 export default function XHRProvider(request) {
   const interceptors = request.interceptors();
 

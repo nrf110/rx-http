@@ -92,7 +92,7 @@ export default class Request {
   /** @method
    * @name body
    * @param {Object|FormData|Blob|File|string} [value] - The body for this request
-   * @returns - If value is specified, sets the body
+   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current body
    */
@@ -107,8 +107,8 @@ export default class Request {
 
   /** @method
    * @name url
-   * @param {@link Url} [value] - The {@link Url} for this request.
-   * @returns {@link Url} - If value is specified, sets the {@link Url} for
+   * @param {Url} [value] - The {@link Url} for this request.
+   * @returns {Url|Request} - If value is specified, sets the {@link Url} for
    * this request and returns the current Request.  If value is ommitted,
    * returns the current {@link Url}.
    */
@@ -212,7 +212,7 @@ export default class Request {
   /** @method
    * @name username
    * @param {string} [value] - Basic auth username
-   * @param {string|Request} - If the value is specified, sets the username and returns
+   * @returns {string|Request} - If the value is specified, sets the username and returns
    * the current Request.  If value is ommitted, retursn the current username.
    */
   username(value) {
@@ -226,7 +226,7 @@ export default class Request {
   /** @method
    * @name password
    * @param {string} [value] - Basic auth password
-   * @param {string|Request} - If the value is specified, sets the password and returns
+   * @returns {string|Request} - If the value is specified, sets the password and returns
    * the current Request.  If value is ommitted, retursn the current password.
    */
   password(value) {

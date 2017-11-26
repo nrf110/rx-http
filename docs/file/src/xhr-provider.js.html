@@ -34,13 +34,11 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/xhr-builder.js~XHRBuilder.html">XHRBuilder</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-RequestInterceptorChain">RequestInterceptorChain</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-ResponseInterceptorChain">ResponseInterceptorChain</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Response">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isBlob">isBlob</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFile">isFile</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFormData">isFormData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseUri">parseUri</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
@@ -56,6 +54,14 @@ import XHRBuilder from &apos;./xhr-builder&apos;;
 import Response from &apos;./response&apos;;
 import { RequestInterceptorChain, ResponseInterceptorChain } from &apos;./interceptors&apos;;
 
+/** @function
+ * Provider-implementation for browser-based clients.  Providers are simply
+ * functions that take in a {@link Request} and return an RxJS Observable
+ * that eventually contains the {@link Response}.
+ * @name XHRProvider
+ * @param {Request} request
+ * @returns {Observable&lt;Response&gt;}
+ */
 export default function XHRProvider(request) {
   const interceptors = request.interceptors();
 

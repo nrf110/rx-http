@@ -9,6 +9,12 @@ const STATE = {
   DONE: 4
 }
 
+/**
+ * Internal class used to construct and XMLHttpRequest
+ * @class
+ * @name XHRBuilder
+ * @private
+ */
 export default class XHRBuilder {
   constructor() {
     this.headersReceived = noop;

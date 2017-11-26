@@ -1,7 +1,7 @@
 {
-  "coverage": "33.33%",
-  "expectCount": 51,
-  "actualCount": 17,
+  "coverage": "62.06%",
+  "expectCount": 29,
+  "actualCount": 18,
   "files": {
     "src/interceptors.js": {
       "expectCount": 3,
@@ -40,48 +40,18 @@
         26
       ]
     },
-    "src/xhr-builder.js": {
-      "expectCount": 21,
-      "actualCount": 0,
-      "undocumentLines": [
-        12,
-        20,
-        65,
-        17,
-        13,
-        15,
-        19,
-        14,
-        21,
-        22,
-        45,
-        30,
-        40,
-        25,
-        50,
-        55,
-        35,
-        18,
-        61,
-        60,
-        16
-      ]
-    },
     "src/xhr-provider.js": {
       "expectCount": 1,
-      "actualCount": 0,
-      "undocumentLines": [
-        7
-      ]
+      "actualCount": 1,
+      "undocumentLines": []
     },
     "src/utilities.js": {
-      "expectCount": 4,
+      "expectCount": 3,
       "actualCount": 0,
       "undocumentLines": [
+        13,
         9,
-        1,
-        5,
-        17
+        21
       ]
     }
   }
