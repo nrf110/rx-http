@@ -41,6 +41,7 @@ gulp.task('karma', ['build'], (done) => {
 gulp.task('default', () => {
   gulp.start('clean');
   gulp.start('karma');
+  gulp.start('docs');
 });
 
 gulp.task('dev', () => {

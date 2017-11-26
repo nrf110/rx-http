@@ -4,24 +4,38 @@ import Path from './path';
 import Url from './url';
 import { parseUri } from './utilities';
 
+let _method = new WeakMap();
+let _headers = new WeakMap();
+let _body = new WeakMap();
+let _url = new WeakMap();
+let _retries = new WeakMap();
+let _interceptors = new WeakMap();
+let _xsrfCookieName = new WeakMap();
+let _xsrfHeaderName = new WeakMap();
+let _withCredentials = new WeakMap();
+let _username = new WeakMap();
+let _password = new WeakMap();
+let _provider = new WeakMap();
+
 /**
  * A Request should only ever be created by an instance of {@link Http}
  * @class
  * @param {Object} config - Override default settings for this Request only.
- * @private
  */
-export default function Request(config) {
-  const self = this;
-
-  function property(key, transformIn = identity, transformOut = identity) {
-    self[key] = function (value) {
-      if (isUndefined(value)) {
-        return transformOut(config[key]);
-      }
-
-      config[key] = transformIn(value);
-      return self;
-    };
+export default class Request {
+  constructor(config) {
+    _method.set(this, config.method || null);
+    _headers.set(this, config.headers || {});
+    _body.set(this, config.body || null);
+    _url.set(this, config.url || null);
+    _retries.set(this, config.retries || 0);
+    _interceptors.set(this, config.interceptors || {})
+    _xsrfCookieName.set(this, config.xsrfCookieName);
+    _xsrfHeaderName.set(this, config.xsrfHeaderName);
+    _withCredentials.set(this, !!config.withCredentials);
+    _username.set(this, config.username || null);
+    _password.set(this, config.password || null);
+    _provider.set(this, config.provider);
   }
 
   /** @method
@@ -31,7 +45,14 @@ export default function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current HTTP method
    */
-  property('method');
+  method(value) {
+    if (isUndefined(value)) {
+     return _method.get(this);
+    }
+
+    _method.set(this, value);
+    return this;
+  }
 
   /** @method
    * @name header
@@ -41,14 +62,15 @@ export default function Request(config) {
    * and returns the current Request.  If value is ommitted, returns the
    * value for the header.
    */
-  this.header = function (name, value) {
-    config.headers = config.headers || {};
+  header(name, value) {
+    let headers = _headers.get(this);
     if (isUndefined(value)) {
-      return config.headers[name];
+      return headers[name];
     }
-    config.headers[name] = value.toString();
+    headers[name] = value.toString();
+    _headers.set(this, headers);
     return this;
-  };
+  }
 
   /** @method
    * @name headers
@@ -58,7 +80,14 @@ export default function Request(config) {
    * and returns the current Request.  If value is ommitted, returns a copy
    * of the current headers.
    */
-  property('headers', identity, (headers) => assign({}, headers));
+  headers(value) {
+    if (isUndefined(value)) {
+      return assign({}, _headers.get(this));
+    }
+
+    _headers.set(this, value);
+    return this;
+  }
 
   /** @method
    * @name body
@@ -67,7 +96,14 @@ export default function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current body
    */
-  property('body');
+  body(value) {
+    if (isUndefined(value)) {
+     return _body.get(this);
+    }
+
+    _body.set(this, value);
+    return this;
+  }
 
   /** @method
    * @name url
@@ -76,29 +112,27 @@ export default function Request(config) {
    * this request and returns the current Request.  If value is ommitted,
    * returns the current {@link Url}.
    */
-  property('url', (url) => {
-    if (url instanceof Url) {
-      return url;
-    } else if (isString(url) || isObject(url)) {
+  url(value) {
+    if (isUndefined(value)) {
+      return _url.get(this);
+    }
+
+    if (value instanceof Url) {
+      _url.set(this, value);
+      return this;
+    } else if (isString(value) || isObject(value)) {
       const newUrl = new Url(url);
       if (newUrl.isAbsolute()) {
-        return newUrl;
-      } else if (config.url && config.url.isAbsolute()) {
-        return config.url.merge(newUrl);
+        _url.set(this, newUrl);
+        return this;
+      } else if (_url.get(this) && _url.get().isAbsolute()) {
+        _url.set(this, _url.get(this).merge(newUrl));
+        return this;
       }
     }
 
     throw new PropertyValidationException('url', url);
-  });
-
-  /** @method
-   * @name timeout
-   * @param {number} [value] - The number of milliseconds to wait before the request times out.
-   * @returns {number|Request} - If value is specified, sets the timeout
-   * for this request and returns the current Request.  If value is ommitted,
-   * returns the current timeout.
-   */
-  property('timeout');
+  }
 
   /** @method
    * @name retries
@@ -107,73 +141,114 @@ export default function Request(config) {
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current number of retries.
    */
-  property('retries');
+  retries(value) {
+    if (isUndefined(value)) {
+      return _retries.get(this);
+    }
+    _retries.set(this, value);
+    return this;
+  }
 
   /** @method
-  * @name interceptors
-  * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response
-  * @returns {Object|Request} - If value is specified, overrides the current set of interceptors
-  * for this Request and/or Response and returns the current Request.  If value is ommitted,
-  * returns the current set of interceptors.
-  */
-  property('interceptors');
+   * @name interceptors
+   * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response
+   * @returns {Object|Request} - If value is specified, overrides the current set of interceptors
+   * for this Request and/or Response and returns the current Request.  If value is ommitted,
+   * returns the current set of interceptors.
+   */
+  interceptors(value) {
+    if (isUndefined(value)) {
+      return _interceptors.get(this);
+    }
+    _interceptors.set(this, value);
+    return this;
+  }
 
   /** @method
-  * @name xsrfCookieName
-  * @param {string} [value] - The name of the XSRF cookie
-  * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie
-  * and returns the current Request.  If value is ommitted, returns the current name.
-  */
-  property('xsrfCookieName');
+   * @name xsrfCookieName
+   * @param {string} [value] - The name of the XSRF cookie
+   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie
+   * and returns the current Request.  If value is ommitted, returns the current name.
+   */
+  xsrfCookieName(value) {
+    if (isUndefined(value)) {
+      return _xsrfCookieName.get(this);
+    }
+    _xsrfCookieName.set(this, value);
+    return this;
+  }
 
   /** @method
-  * @name xsrfHeaderName
-  * @param {string} [value] - The name of the XSRF header
-  * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header
-  * and returns the current Request.  If value is ommitted, returns the current name.
-  */
-  property('xsrfHeaderName');
+   * @name xsrfHeaderName
+   * @param {string} [value] - The name of the XSRF header
+   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header
+   * and returns the current Request.  If value is ommitted, returns the current name.
+   */
+  xsrfHeaderName(value) {
+    if (isUndefined(value)) {
+      return _xsrfHeaderName.get(this);
+    }
+    _xsrfHeaderName.set(this, value);
+    return this;
+  }
 
   /** @method
-  * @name withCredentials
-  * @param {boolean} [value] - Flag indicating whether cross-site AccessControl
-  * requests should be made using cookies, authorization headers, or TLS client
-  * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
-  * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag
-  * and returns the current Request.  If value is ommitted, returns the current
-  * value of the flag.
-  */
-  property('withCredentials');
+   * @name withCredentials
+   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl
+   * requests should be made using cookies, authorization headers, or TLS client
+   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
+   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag
+   * and returns the current Request.  If value is ommitted, returns the current
+   * value of the flag.
+   */
+  withCredentials(value) {
+    if (isUndefined(value)) {
+      return this.config.withCredentials = value;
+    }
+    this.config.withCredentials = value;
+    return this;
+  }
 
   /** @method
-  * @name username
-  * @param {string} [value] - Basic auth username
-  * @param {string|Request} - If the value is specified, sets the username and returns
-  * the current Request.  If value is ommitted, retursn the current username.
-  */
-  property('username');
+   * @name username
+   * @param {string} [value] - Basic auth username
+   * @param {string|Request} - If the value is specified, sets the username and returns
+   * the current Request.  If value is ommitted, retursn the current username.
+   */
+  username(value) {
+    if (isUndefined(value)) {
+      return _username.get(this);
+    }
+    _username.set(this, value);
+    return this;
+  }
 
   /** @method
-  * @name password
-  * @param {string} [value] - Basic auth password
-  * @param {string|Request} - If the value is specified, sets the password and returns
-  * the current Request.  If value is ommitted, retursn the current password.
-  */
-  property('password');
+   * @name password
+   * @param {string} [value] - Basic auth password
+   * @param {string|Request} - If the value is specified, sets the password and returns
+   * the current Request.  If value is ommitted, retursn the current password.
+   */
+  password(value) {
+    if (isUndefined(value)) {
+      return _password.get(this);
+    }
+    _password.set(this, value);
+    return this;
+  }
 
   /** @method
    * @name execute
    * @returns {Object} - Executes the request and returns an object containing
    * the response, uploadProgress, and downloadProgress streams.
    * @example
-   * {{
-   *    var streams = request.execute();
-   *    streams.response.forEach((response) => console.log(response));
-   *    streams.uploadProgress.forEach((event) => console.log(event));
-   *    streams.downloadProgress.forEach((event) => console.log(event));
-   * }}
+   * var streams = request.execute();
+   * streams.flatMap(response => response.body()).forEach((body) => console.log(body));
+   * streams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));
+   * streams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));
    */
-  this.execute = function () {
-    return config.provider(this);
+  execute() {
+    const provider = _provider.get(this);
+    return provider(this);
   };
 }

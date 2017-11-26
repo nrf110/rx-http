@@ -1,4 +1,4 @@
-export class PropertyValidationException {
+export default class PropertyValidationException {
   constructor(property, value) {
     this.property = property;
     this.value = value;

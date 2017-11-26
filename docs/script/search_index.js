@@ -12,6 +12,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "rx-http/src/request.js~request",
+    "class/src/request.js~Request.html",
+    "<span>Request</span> <span class=\"search-result-import-path\">rx-http/src/request.js</span>",
+    "class"
+  ],
+  [
     "rx-http/src/interceptors.js~requestinterceptorchain",
     "function/index.html#static-function-RequestInterceptorChain",
     "<span>RequestInterceptorChain</span> <span class=\"search-result-import-path\">rx-http/src/interceptors.js</span>",
@@ -466,6 +472,90 @@ window.esdocSearchIndex = [
     "file/src/request.js.html",
     "src/request.js",
     "file"
+  ],
+  [
+    "src/request.js~request#body",
+    "class/src/request.js~Request.html#instance-method-body",
+    "src/request.js~Request#body",
+    "method"
+  ],
+  [
+    "src/request.js~request#constructor",
+    "class/src/request.js~Request.html#instance-constructor-constructor",
+    "src/request.js~Request#constructor",
+    "method"
+  ],
+  [
+    "src/request.js~request#execute",
+    "class/src/request.js~Request.html#instance-method-execute",
+    "src/request.js~Request#execute",
+    "method"
+  ],
+  [
+    "src/request.js~request#header",
+    "class/src/request.js~Request.html#instance-method-header",
+    "src/request.js~Request#header",
+    "method"
+  ],
+  [
+    "src/request.js~request#headers",
+    "class/src/request.js~Request.html#instance-method-headers",
+    "src/request.js~Request#headers",
+    "method"
+  ],
+  [
+    "src/request.js~request#interceptors",
+    "class/src/request.js~Request.html#instance-method-interceptors",
+    "src/request.js~Request#interceptors",
+    "method"
+  ],
+  [
+    "src/request.js~request#method",
+    "class/src/request.js~Request.html#instance-method-method",
+    "src/request.js~Request#method",
+    "method"
+  ],
+  [
+    "src/request.js~request#password",
+    "class/src/request.js~Request.html#instance-method-password",
+    "src/request.js~Request#password",
+    "method"
+  ],
+  [
+    "src/request.js~request#retries",
+    "class/src/request.js~Request.html#instance-method-retries",
+    "src/request.js~Request#retries",
+    "method"
+  ],
+  [
+    "src/request.js~request#url",
+    "class/src/request.js~Request.html#instance-method-url",
+    "src/request.js~Request#url",
+    "method"
+  ],
+  [
+    "src/request.js~request#username",
+    "class/src/request.js~Request.html#instance-method-username",
+    "src/request.js~Request#username",
+    "method"
+  ],
+  [
+    "src/request.js~request#withcredentials",
+    "class/src/request.js~Request.html#instance-method-withCredentials",
+    "src/request.js~Request#withCredentials",
+    "method"
+  ],
+  [
+    "src/request.js~request#xsrfcookiename",
+    "class/src/request.js~Request.html#instance-method-xsrfCookieName",
+    "src/request.js~Request#xsrfCookieName",
+    "method"
+  ],
+  [
+    "src/request.js~request#xsrfheadername",
+    "class/src/request.js~Request.html#instance-method-xsrfHeaderName",
+    "src/request.js~Request#xsrfHeaderName",
+    "method"
   ],
   [
     "src/response.js",

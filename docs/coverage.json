@@ -1,7 +1,7 @@
 {
-  "coverage": "8.33%",
-  "expectCount": 36,
-  "actualCount": 3,
+  "coverage": "33.33%",
+  "expectCount": 51,
+  "actualCount": 17,
   "files": {
     "src/interceptors.js": {
       "expectCount": 3,
@@ -19,6 +19,13 @@
         3,
         7,
         4
+      ]
+    },
+    "src/request.js": {
+      "expectCount": 15,
+      "actualCount": 14,
+      "undocumentLines": [
+        26
       ]
     },
     "src/response.js": {

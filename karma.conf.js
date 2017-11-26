@@ -3,7 +3,7 @@ import path from 'path';
 module.exports = function(config) {
   config.set({
     exclude: [],
-    browsers: ['PhantomJS'],
+    browsers: ['Electron'],
     browserDisconnectTimeout: 10000,
     browserDisconnectTolerance: 2,
     concurrency: 1,
