@@ -9,12 +9,12 @@ let _uploadProgress = new WeakMap();
 let _downloadProgress = new WeakMap();
 let _isChunked = new WeakMap();
 
-const evaluateLazy = (context, property) => {
-  const value = property.get(context);
+function evaluateLazy(property) {
+  const value = property.get(this);
   if (!isUndefined(value) && isFunction(value)) {
-    property.set(context, value());
+    property.set(this, value());
   }
-  return property.get(context);
+  return property.get(this);
 }
 
 /**
@@ -43,7 +43,7 @@ export default class Response {
    * @returns {Observable<Object>} - an Observable stream of upload progress events
    */
   uploadProgress() {
-    return evaluateLazy(this, _uploadProgress);
+    return evaluateLazy.call(this, _uploadProgress);
   }
 
   /**
@@ -52,7 +52,7 @@ export default class Response {
    * @returns {Observable<Object>} - an Observable stream of download progress events
    */
   downloadProgress() {
-    return evaluateLazy(this, _downloadProgress);
+    return evaluateLazy.call(this, _downloadProgress);
   }
 
   /**
@@ -61,7 +61,7 @@ export default class Response {
    * @returns {Observable<string>} - An Observable stream of the response body/entity contents
    */
   body() {
-    return evaluateLazy(this, _body);
+    return evaluateLazy.call(this, _body);
   }
 
   /**

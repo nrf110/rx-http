@@ -1,3 +1,9 @@
+/**
+ * @class
+ * @name PropertyValidationException
+ * @param {string} - property
+ * @param value
+ */
 export default class PropertyValidationException {
   constructor(property, value) {
     this.property = property;

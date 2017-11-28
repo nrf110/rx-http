@@ -35,7 +35,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
 </ul>
@@ -68,40 +68,84 @@ function encode(val) {
     .replace(/%5D/gi, &apos;]&apos;);
 }
 
-export default function Url(url) {
-  const self = this;
-  let parts = {};
-
-  if (isObject(url)) {
-    assign(parts, url);
-  } else if (isString(url)) {
-    parts = parseUri(url);
+function property(member, value) {
+  if (isUndefined(value)) {
+    member.get(this);
   }
 
-  function property(key) {
-    return function (value) {
-      if (isUndefined(value)) {
-        return parts[key];
-      }
-      parts[key] = value;
-      return self;
-    };
+  member.set(this);
+  return this;
+}
+
+const _protocol = new WeakMap();
+const _user = new WeakMap();
+const _password = new WeakMap();
+const _host = new WeakMap();
+const _port = new WeakMap();
+const _directory = new WeakMap();
+const _file = new WeakMap();
+const _fragment = new WeakMap();
+const _query = new WeakMap();
+
+/**
+ * @class
+ * @name Url
+ * @param {Object} parts
+ */
+class Url {
+  constructor(parts) {
+    if (parts.protocol) _protocol.set(this, parts.protocol);
+    if (parts.user) _user.set(this, parts.user);
+    if (parts.password) _password.set(this, parts.password);
+    if (parts.host) _host.set(this, parts.host);
+    if (parts.port) _port.set(this, parts.port);
+    if (parts.directory) _directory.set(this, parts.directory);
+    if (parts.file) _file.set(this, parts.file);
+    if (parts.fragment) _fragment.set(this, parts.fragment);
   }
 
-  const protocol = this.protocol = property(&apos;protocol&apos;);
-  const user = this.user = property(&apos;user&apos;);
-  const password = this.password = property(&apos;password&apos;);
-  const host = this.host = property(&apos;host&apos;);
-  const port = this.port = property(&apos;port&apos;);
-  const directory = this.directory = property(&apos;directory&apos;);
-  const file = this.file = property(&apos;file&apos;);
-  const fragment = this.fragment = property(&apos;fragment&apos;);
+  protocol(value) {
+    return property.call(this, _protocol, value);
+  }
 
-  const isAbsolute = this.isAbsolute = () =&gt; !!host;
+  user(value) {
+    return property.call(this, _user, value);
+  }
 
-  const isRelative = this.isRelative = () =&gt; !isAbsolute();
+  password(value) {
+    return property.call(this, _password, value);
+  }
 
-  /** @method
+  host(value) {
+    return property.call(this, _host, value);
+  }
+
+  port(value) {
+    return property.call(this, _port, value);
+  }
+
+  directory(value) {
+    return property.call(this, _directory, value);
+  }
+
+  file(value) {
+    return property.call(this, _file, value);
+  }
+
+  fragment(value) {
+    return property.call(this, _fragment, value);
+  }
+
+  isAbsolute() {
+    return !!this.host();
+  }
+
+  isRelative() {
+    return !this.isAbsolute();
+  }
+
+  /**
+   * @method
    * @name query
    * @param {string|object} [name] - The name of the query-string parameter
    * @param [value] - The value of the query-string parameter
@@ -129,44 +173,48 @@ export default function Url(url) {
    *   request.query(&quot;foo&quot;, &quot;bar&quot;).execute()
    * }}
    */
-  const query = this.query = function (name, value) {
-    if (isUndefined(name)) {
+  query(name, value) {
+    if (!isUndefined(name)) {
       if (isUndefined(value)) {
         if (isObject(name)) {
-          parts.query = name;
-          return self;
+          _query.set(this, name);
+          return this;
         }
-        return parts.query[name];
+        return _query.get(this)[name];
       }
-      parts.query[name] = value;
-      return self;
+      const existing = _query.get(this);
+      existing[name] = value;
+      _query.set(this, existing);
+      return this;
     }
-    return assign({}, parts.query);
-  };
 
-  const userInfo = this.userInfo = function () {
-    const u = user();
-    const p = password();
+    return assign({}, _query.get(this));
+  }
+
+  userInfo() {
+    const u = _user.get(this);
+    const p = _password.get(this);
 
     if (isString(u) &amp;&amp; !isEmpty(u.trim()) &amp;&amp; isString(p) &amp;&amp; isEmpty(p.trim())) {
       return `${u}:${p}`;
     }
 
     return null;
-  };
+  }
 
-  const authority = this.authority = function () {
-    const pr = protocol() ? `${protocol()}://` : &apos;&apos;;
-    const ui = userInfo() ? `${userInfo()}@` : &apos;&apos;;
-    const h = host() || &apos;&apos;;
-    const p = port() ? `:${port()}` : &apos;&apos;;
+  authority() {
+    const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : &apos;&apos;;
+    const ui = this.userInfo() ? `${this.userInfo()}@` : &apos;&apos;;
+    const h = _host.get(this) || &apos;&apos;;
+    const p = _port.get(this) ? `:${_port.get(this)}` : &apos;&apos;;
 
     return pr + ui + h + p;
-  };
+    return &apos;&apos;;
+  }
 
-  const path = this.path = function () {
-    let dir = directory() || &apos;&apos;;
-    let f = file() || &apos;&apos;;
+  path() {
+    const dir = _directory.get(this) || &apos;&apos;;
+    const f = _file.get(this) || &apos;&apos;;
 
     if (endsWith(dir, &apos;/&apos;)) {
       if (startsWith(f, &apos;/&apos;)) {
@@ -179,9 +227,10 @@ export default function Url(url) {
     }
 
     return `${dir}/${f}`;
-  };
+    return &apos;&apos;;
+  }
 
-  this.merge = function(other) {
+  merge(other) {
     const copied = cloneDeep(parts);
     const otherParts = parseUri(other.toString());
     const propertiesToMerge = [&apos;directory&apos;, &apos;file&apos;, &apos;fragment&apos;, &apos;path&apos;, &apos;query&apos;];
@@ -196,15 +245,16 @@ export default function Url(url) {
     return new Url(copied);
   }
 
-  /** @method
+  /**
+   * @method
    * @name toString
    */
-  this.toString = function (serializeQuery) {
-    const auth = authority();
-    const p = path();
-    const f = fragment();
+  toString(serializeQuery) {
+    const auth = this.authority();
+    const p = this.path();
+    const f = this.fragment();
     const querySerializer = serializeQuery || identity;
-    const q = querySerializer(query());
+    const q = querySerializer(this.query());
 
     const fullyQualified = (() =&gt; {
       if (endsWith(auth, &apos;/&apos;)) {
@@ -240,8 +290,17 @@ export default function Url(url) {
     }
 
     return fullyQualifiedWithQuery;
-  };
+  }
 }
+
+Url.factory = (value) =&gt; {
+  if (isString(value)) {
+    return new Url(parseUri(value));
+  }
+  return new Url(value);
+}
+
+export default Url;
 </code></pre>
 
 </div>

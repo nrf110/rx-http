@@ -35,7 +35,7 @@
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Url">Url</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
 </ul>
@@ -352,7 +352,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/request.js~Request.html#instance-method-url">url</a></span></span><span data-ice="signature">(value: <span><a href="function/index.html#static-function-Url">Url</a></span>): <span><a href="function/index.html#static-function-Url">Url</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
+          <span data-ice="name"><span><a href="class/src/request.js~Request.html#instance-method-url">url</a></span></span><span data-ice="signature">(value: <span><a href="class/src/url.js~Url.html">Url</a></span>): <span><a href="class/src/url.js~Url.html">Url</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
         </p>
       </div>
       <div>
@@ -634,7 +634,7 @@ returns the current body</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber265">source</a></span></span>
     </span>
   </h3>
 
@@ -859,7 +859,7 @@ of the current headers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber166">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber168">source</a></span></span>
     </span>
   </h3>
 
@@ -1009,7 +1009,7 @@ returns the current HTTP method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
@@ -1083,7 +1083,7 @@ the current Request.  If value is ommitted, retursn the current password.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -1154,7 +1154,7 @@ returns the current number of retries.</p>
     
     
     
-    <span data-ice="name">url</span><span data-ice="signature">(value: <span><a href="function/index.html#static-function-Url">Url</a></span>): <span><a href="function/index.html#static-function-Url">Url</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
+    <span data-ice="name">url</span><span data-ice="signature">(value: <span><a href="class/src/url.js~Url.html">Url</a></span>): <span><a href="class/src/url.js~Url.html">Url</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
     <span class="right-info">
       
       
@@ -1179,9 +1179,9 @@ returns the current number of retries.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">value</td>
-      <td data-ice="type"><span><a href="function/index.html#static-function-Url">Url</a></span></td>
+      <td data-ice="type"><span><a href="class/src/url.js~Url.html">Url</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The <span><a href="function/index.html#static-function-Url">Url</a></span> for this request.</p>
+      <td data-ice="description"><p>The <span><a href="class/src/url.js~Url.html">Url</a></span> for this request.</p>
 </td>
     </tr>
 </tbody>
@@ -1194,10 +1194,10 @@ returns the current number of retries.</p>
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span><a href="function/index.html#static-function-Url">Url</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>If value is specified, sets the <span><a href="function/index.html#static-function-Url">Url</a></span> for
+          <td class="return-type" data-ice="returnType"><span><a href="class/src/url.js~Url.html">Url</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>If value is specified, sets the <span><a href="class/src/url.js~Url.html">Url</a></span> for
 this request and returns the current Request.  If value is ommitted,
-returns the current <span><a href="function/index.html#static-function-Url">Url</a></span>.</p>
+returns the current <span><a href="class/src/url.js~Url.html">Url</a></span>.</p>
 </td>
         </tr>
       </tbody>
@@ -1233,7 +1233,7 @@ returns the current <span><a href="function/index.html#static-function-Url">Url<
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -1307,7 +1307,7 @@ the current Request.  If value is ommitted, retursn the current username.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber214">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber216">source</a></span></span>
     </span>
   </h3>
 
@@ -1384,7 +1384,7 @@ value of the flag.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
@@ -1458,7 +1458,7 @@ and returns the current Request.  If value is ommitted, returns the current name
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber198">source</a></span></span>
     </span>
   </h3>
 

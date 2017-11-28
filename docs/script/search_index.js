@@ -25,9 +25,9 @@ window.esdocSearchIndex = [
   ],
   [
     "rx-http/src/url.js~url",
-    "function/index.html#static-function-Url",
+    "class/src/url.js~Url.html",
     "<span>Url</span> <span class=\"search-result-import-path\">rx-http/src/url.js</span>",
-    "function"
+    "class"
   ],
   [
     "rx-http/src/xhr-provider.js~xhrprovider",
@@ -580,6 +580,108 @@ window.esdocSearchIndex = [
     "file/src/url.js.html",
     "src/url.js",
     "file"
+  ],
+  [
+    "src/url.js~url#authority",
+    "class/src/url.js~Url.html#instance-method-authority",
+    "src/url.js~Url#authority",
+    "method"
+  ],
+  [
+    "src/url.js~url#constructor",
+    "class/src/url.js~Url.html#instance-constructor-constructor",
+    "src/url.js~Url#constructor",
+    "method"
+  ],
+  [
+    "src/url.js~url#directory",
+    "class/src/url.js~Url.html#instance-method-directory",
+    "src/url.js~Url#directory",
+    "method"
+  ],
+  [
+    "src/url.js~url#file",
+    "class/src/url.js~Url.html#instance-method-file",
+    "src/url.js~Url#file",
+    "method"
+  ],
+  [
+    "src/url.js~url#fragment",
+    "class/src/url.js~Url.html#instance-method-fragment",
+    "src/url.js~Url#fragment",
+    "method"
+  ],
+  [
+    "src/url.js~url#host",
+    "class/src/url.js~Url.html#instance-method-host",
+    "src/url.js~Url#host",
+    "method"
+  ],
+  [
+    "src/url.js~url#isabsolute",
+    "class/src/url.js~Url.html#instance-method-isAbsolute",
+    "src/url.js~Url#isAbsolute",
+    "method"
+  ],
+  [
+    "src/url.js~url#isrelative",
+    "class/src/url.js~Url.html#instance-method-isRelative",
+    "src/url.js~Url#isRelative",
+    "method"
+  ],
+  [
+    "src/url.js~url#merge",
+    "class/src/url.js~Url.html#instance-method-merge",
+    "src/url.js~Url#merge",
+    "method"
+  ],
+  [
+    "src/url.js~url#password",
+    "class/src/url.js~Url.html#instance-method-password",
+    "src/url.js~Url#password",
+    "method"
+  ],
+  [
+    "src/url.js~url#path",
+    "class/src/url.js~Url.html#instance-method-path",
+    "src/url.js~Url#path",
+    "method"
+  ],
+  [
+    "src/url.js~url#port",
+    "class/src/url.js~Url.html#instance-method-port",
+    "src/url.js~Url#port",
+    "method"
+  ],
+  [
+    "src/url.js~url#protocol",
+    "class/src/url.js~Url.html#instance-method-protocol",
+    "src/url.js~Url#protocol",
+    "method"
+  ],
+  [
+    "src/url.js~url#query",
+    "class/src/url.js~Url.html#instance-method-query",
+    "src/url.js~Url#query",
+    "method"
+  ],
+  [
+    "src/url.js~url#tostring",
+    "class/src/url.js~Url.html#instance-method-toString",
+    "src/url.js~Url#toString",
+    "method"
+  ],
+  [
+    "src/url.js~url#user",
+    "class/src/url.js~Url.html#instance-method-user",
+    "src/url.js~Url#user",
+    "method"
+  ],
+  [
+    "src/url.js~url#userinfo",
+    "class/src/url.js~Url.html#instance-method-userInfo",
+    "src/url.js~Url#userInfo",
+    "method"
   ],
   [
     "src/utilities.js",

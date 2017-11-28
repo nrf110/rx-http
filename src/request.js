@@ -125,8 +125,10 @@ export default class Request {
     if (value instanceof Url) {
       _url.set(this, value);
       return this;
-    } else if (isString(value) || isObject(value)) {
-      const newUrl = new Url(url);
+    }
+
+    if (isString(value) || isObject(value)) {
+      const newUrl = Url.factory(url);
       if (newUrl.isAbsolute()) {
         _url.set(this, newUrl);
         return this;

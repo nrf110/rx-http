@@ -23,40 +23,84 @@ function encode(val) {
     .replace(/%5D/gi, ']');
 }
 
-export default function Url(url) {
-  const self = this;
-  let parts = {};
-
-  if (isObject(url)) {
-    assign(parts, url);
-  } else if (isString(url)) {
-    parts = parseUri(url);
+function property(member, value) {
+  if (isUndefined(value)) {
+    member.get(this);
   }
 
-  function property(key) {
-    return function (value) {
-      if (isUndefined(value)) {
-        return parts[key];
-      }
-      parts[key] = value;
-      return self;
-    };
+  member.set(this);
+  return this;
+}
+
+const _protocol = new WeakMap();
+const _user = new WeakMap();
+const _password = new WeakMap();
+const _host = new WeakMap();
+const _port = new WeakMap();
+const _directory = new WeakMap();
+const _file = new WeakMap();
+const _fragment = new WeakMap();
+const _query = new WeakMap();
+
+/**
+ * @class
+ * @name Url
+ * @param {Object} parts
+ */
+class Url {
+  constructor(parts) {
+    if (parts.protocol) _protocol.set(this, parts.protocol);
+    if (parts.user) _user.set(this, parts.user);
+    if (parts.password) _password.set(this, parts.password);
+    if (parts.host) _host.set(this, parts.host);
+    if (parts.port) _port.set(this, parts.port);
+    if (parts.directory) _directory.set(this, parts.directory);
+    if (parts.file) _file.set(this, parts.file);
+    if (parts.fragment) _fragment.set(this, parts.fragment);
   }
 
-  const protocol = this.protocol = property('protocol');
-  const user = this.user = property('user');
-  const password = this.password = property('password');
-  const host = this.host = property('host');
-  const port = this.port = property('port');
-  const directory = this.directory = property('directory');
-  const file = this.file = property('file');
-  const fragment = this.fragment = property('fragment');
+  protocol(value) {
+    return property.call(this, _protocol, value);
+  }
 
-  const isAbsolute = this.isAbsolute = () => !!host;
+  user(value) {
+    return property.call(this, _user, value);
+  }
 
-  const isRelative = this.isRelative = () => !isAbsolute();
+  password(value) {
+    return property.call(this, _password, value);
+  }
 
-  /** @method
+  host(value) {
+    return property.call(this, _host, value);
+  }
+
+  port(value) {
+    return property.call(this, _port, value);
+  }
+
+  directory(value) {
+    return property.call(this, _directory, value);
+  }
+
+  file(value) {
+    return property.call(this, _file, value);
+  }
+
+  fragment(value) {
+    return property.call(this, _fragment, value);
+  }
+
+  isAbsolute() {
+    return !!this.host();
+  }
+
+  isRelative() {
+    return !this.isAbsolute();
+  }
+
+  /**
+   * @method
    * @name query
    * @param {string|object} [name] - The name of the query-string parameter
    * @param [value] - The value of the query-string parameter
@@ -84,44 +128,48 @@ export default function Url(url) {
    *   request.query("foo", "bar").execute()
    * }}
    */
-  const query = this.query = function (name, value) {
-    if (isUndefined(name)) {
+  query(name, value) {
+    if (!isUndefined(name)) {
       if (isUndefined(value)) {
         if (isObject(name)) {
-          parts.query = name;
-          return self;
+          _query.set(this, name);
+          return this;
         }
-        return parts.query[name];
+        return _query.get(this)[name];
       }
-      parts.query[name] = value;
-      return self;
+      const existing = _query.get(this);
+      existing[name] = value;
+      _query.set(this, existing);
+      return this;
     }
-    return assign({}, parts.query);
-  };
 
-  const userInfo = this.userInfo = function () {
-    const u = user();
-    const p = password();
+    return assign({}, _query.get(this));
+  }
+
+  userInfo() {
+    const u = _user.get(this);
+    const p = _password.get(this);
 
     if (isString(u) && !isEmpty(u.trim()) && isString(p) && isEmpty(p.trim())) {
       return `${u}:${p}`;
     }
 
     return null;
-  };
+  }
 
-  const authority = this.authority = function () {
-    const pr = protocol() ? `${protocol()}://` : '';
-    const ui = userInfo() ? `${userInfo()}@` : '';
-    const h = host() || '';
-    const p = port() ? `:${port()}` : '';
+  authority() {
+    const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : '';
+    const ui = this.userInfo() ? `${this.userInfo()}@` : '';
+    const h = _host.get(this) || '';
+    const p = _port.get(this) ? `:${_port.get(this)}` : '';
 
     return pr + ui + h + p;
-  };
+    return '';
+  }
 
-  const path = this.path = function () {
-    let dir = directory() || '';
-    let f = file() || '';
+  path() {
+    const dir = _directory.get(this) || '';
+    const f = _file.get(this) || '';
 
     if (endsWith(dir, '/')) {
       if (startsWith(f, '/')) {
@@ -134,9 +182,10 @@ export default function Url(url) {
     }
 
     return `${dir}/${f}`;
-  };
+    return '';
+  }
 
-  this.merge = function(other) {
+  merge(other) {
     const copied = cloneDeep(parts);
     const otherParts = parseUri(other.toString());
     const propertiesToMerge = ['directory', 'file', 'fragment', 'path', 'query'];
@@ -151,15 +200,16 @@ export default function Url(url) {
     return new Url(copied);
   }
 
-  /** @method
+  /**
+   * @method
    * @name toString
    */
-  this.toString = function (serializeQuery) {
-    const auth = authority();
-    const p = path();
-    const f = fragment();
+  toString(serializeQuery) {
+    const auth = this.authority();
+    const p = this.path();
+    const f = this.fragment();
     const querySerializer = serializeQuery || identity;
-    const q = querySerializer(query());
+    const q = querySerializer(this.query());
 
     const fullyQualified = (() => {
       if (endsWith(auth, '/')) {
@@ -195,5 +245,14 @@ export default function Url(url) {
     }
 
     return fullyQualifiedWithQuery;
-  };
+  }
 }
+
+Url.factory = (value) => {
+  if (isString(value)) {
+    return new Url(parseUri(value));
+  }
+  return new Url(value);
+}
+
+export default Url;
