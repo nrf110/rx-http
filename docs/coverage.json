@@ -1,13 +1,41 @@
 {
-  "coverage": "56%",
-  "expectCount": 50,
-  "actualCount": 28,
+  "coverage": "53.22%",
+  "expectCount": 62,
+  "actualCount": 33,
   "files": {
-    "src/interceptors.js": {
-      "expectCount": 1,
+    "src/interceptors/body-transformer.js": {
+      "expectCount": 2,
       "actualCount": 0,
       "undocumentLines": [
-        7
+        5,
+        6
+      ]
+    },
+    "src/interceptors/error-handling.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4
+      ]
+    },
+    "src/interceptor.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        6,
+        10,
+        14
+      ]
+    },
+    "src/interceptors/method-override.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        5,
+        6
       ]
     },
     "src/exceptions.js": {
@@ -36,29 +64,32 @@
     },
     "src/url.js": {
       "expectCount": 18,
-      "actualCount": 3,
+      "actualCount": 8,
       "undocumentLines": [
-        160,
         51,
-        82,
-        86,
-        90,
-        74,
-        94,
-        98,
-        188,
-        70,
-        170,
-        78,
-        62,
-        66,
-        149
+        88,
+        92,
+        96,
+        80,
+        100,
+        104,
+        76,
+        84,
+        72
       ]
     },
     "src/xhr-provider.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
+    },
+    "src/interceptors/xsrf.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        5,
+        6
+      ]
     }
   }
 }

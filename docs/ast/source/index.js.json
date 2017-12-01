@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 186,
+  "end": 238,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 12,
+      "line": 14,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 186,
+    "end": 238,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 12,
+        "line": 14,
         "column": 0
       }
     },
@@ -238,7 +238,7 @@
       {
         "type": "ImportDeclaration",
         "start": 85,
-        "end": 131,
+        "end": 125,
         "loc": {
           "start": {
             "line": 4,
@@ -246,53 +246,105 @@
           },
           "end": {
             "line": 4,
-            "column": 46
+            "column": 40
           }
         },
         "specifiers": [
           {
-            "type": "ImportSpecifier",
-            "start": 94,
-            "end": 106,
+            "type": "ImportDefaultSpecifier",
+            "start": 92,
+            "end": 103,
             "loc": {
               "start": {
                 "line": 4,
-                "column": 9
+                "column": 7
               },
               "end": {
                 "line": 4,
-                "column": 21
+                "column": 18
               }
-            },
-            "imported": {
-              "type": "Identifier",
-              "start": 94,
-              "end": 106,
-              "loc": {
-                "start": {
-                  "line": 4,
-                  "column": 9
-                },
-                "end": {
-                  "line": 4,
-                  "column": 21
-                },
-                "identifierName": "Interceptors"
-              },
-              "name": "Interceptors"
             },
             "local": {
               "type": "Identifier",
-              "start": 94,
-              "end": 106,
+              "start": 92,
+              "end": 103,
               "loc": {
                 "start": {
                   "line": 4,
-                  "column": 9
+                  "column": 7
                 },
                 "end": {
                   "line": 4,
-                  "column": 21
+                  "column": 18
+                },
+                "identifierName": "Interceptor"
+              },
+              "name": "Interceptor"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 109,
+          "end": 124,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 24
+            },
+            "end": {
+              "line": 4,
+              "column": 39
+            }
+          },
+          "extra": {
+            "rawValue": "./interceptor",
+            "raw": "'./interceptor'"
+          },
+          "value": "./interceptor"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 126,
+        "end": 168,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 42
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 133,
+            "end": 145,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 7
+              },
+              "end": {
+                "line": 5,
+                "column": 19
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 133,
+              "end": 145,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 7
+                },
+                "end": {
+                  "line": 5,
+                  "column": 19
                 },
                 "identifierName": "Interceptors"
               },
@@ -302,16 +354,16 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 114,
-          "end": 130,
+          "start": 151,
+          "end": 167,
           "loc": {
             "start": {
-              "line": 4,
-              "column": 29
+              "line": 5,
+              "column": 25
             },
             "end": {
-              "line": 4,
-              "column": 45
+              "line": 5,
+              "column": 41
             }
           },
           "extra": {
@@ -323,15 +375,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 133,
-        "end": 185,
+        "start": 170,
+        "end": 237,
         "loc": {
           "start": {
-            "line": 6,
+            "line": 7,
             "column": 0
           },
           "end": {
-            "line": 11,
+            "line": 13,
             "column": 2
           }
         },
@@ -339,29 +391,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 144,
-            "end": 147,
+            "start": 181,
+            "end": 184,
             "loc": {
               "start": {
-                "line": 7,
+                "line": 8,
                 "column": 2
               },
               "end": {
-                "line": 7,
+                "line": 8,
                 "column": 5
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 144,
-              "end": 147,
+              "start": 181,
+              "end": 184,
               "loc": {
                 "start": {
-                  "line": 7,
+                  "line": 8,
                   "column": 2
                 },
                 "end": {
-                  "line": 7,
+                  "line": 8,
                   "column": 5
                 },
                 "identifierName": "Url"
@@ -370,15 +422,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 144,
-              "end": 147,
+              "start": 181,
+              "end": 184,
               "loc": {
                 "start": {
-                  "line": 7,
+                  "line": 8,
                   "column": 2
                 },
                 "end": {
-                  "line": 7,
+                  "line": 8,
                   "column": 5
                 },
                 "identifierName": "Url"
@@ -388,29 +440,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 151,
-            "end": 155,
+            "start": 188,
+            "end": 192,
             "loc": {
               "start": {
-                "line": 8,
+                "line": 9,
                 "column": 2
               },
               "end": {
-                "line": 8,
+                "line": 9,
                 "column": 6
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 151,
-              "end": 155,
+              "start": 188,
+              "end": 192,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 9,
                   "column": 2
                 },
                 "end": {
-                  "line": 8,
+                  "line": 9,
                   "column": 6
                 },
                 "identifierName": "Http"
@@ -419,15 +471,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 151,
-              "end": 155,
+              "start": 188,
+              "end": 192,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 9,
                   "column": 2
                 },
                 "end": {
-                  "line": 8,
+                  "line": 9,
                   "column": 6
                 },
                 "identifierName": "Http"
@@ -437,29 +489,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 159,
-            "end": 166,
+            "start": 196,
+            "end": 203,
             "loc": {
               "start": {
-                "line": 9,
+                "line": 10,
                 "column": 2
               },
               "end": {
-                "line": 9,
+                "line": 10,
                 "column": 9
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 159,
-              "end": 166,
+              "start": 196,
+              "end": 203,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 10,
                   "column": 2
                 },
                 "end": {
-                  "line": 9,
+                  "line": 10,
                   "column": 9
                 },
                 "identifierName": "Headers"
@@ -468,15 +520,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 159,
-              "end": 166,
+              "start": 196,
+              "end": 203,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 10,
                   "column": 2
                 },
                 "end": {
-                  "line": 9,
+                  "line": 10,
                   "column": 9
                 },
                 "identifierName": "Headers"
@@ -486,29 +538,78 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 170,
-            "end": 182,
+            "start": 207,
+            "end": 218,
             "loc": {
               "start": {
-                "line": 10,
+                "line": 11,
                 "column": 2
               },
               "end": {
-                "line": 10,
+                "line": 11,
+                "column": 13
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 207,
+              "end": 218,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 2
+                },
+                "end": {
+                  "line": 11,
+                  "column": 13
+                },
+                "identifierName": "Interceptor"
+              },
+              "name": "Interceptor"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 207,
+              "end": 218,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 2
+                },
+                "end": {
+                  "line": 11,
+                  "column": 13
+                },
+                "identifierName": "Interceptor"
+              },
+              "name": "Interceptor"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 222,
+            "end": 234,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 2
+              },
+              "end": {
+                "line": 12,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 170,
-              "end": 182,
+              "start": 222,
+              "end": 234,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 12,
                   "column": 2
                 },
                 "end": {
-                  "line": 10,
+                  "line": 12,
                   "column": 14
                 },
                 "identifierName": "Interceptors"
@@ -517,15 +618,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 170,
-              "end": 182,
+              "start": 222,
+              "end": 234,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 12,
                   "column": 2
                 },
                 "end": {
-                  "line": 10,
+                  "line": 12,
                   "column": 14
                 },
                 "identifierName": "Interceptors"
@@ -970,31 +1071,6 @@
     },
     {
       "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 92,
-      "end": 93,
-      "loc": {
-        "start": {
-          "line": 4,
-          "column": 7
-        },
-        "end": {
-          "line": 4,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
         "label": "name",
         "beforeExpr": false,
         "startsExpr": true,
@@ -1005,42 +1081,17 @@
         "postfix": false,
         "binop": null
       },
-      "value": "Interceptors",
-      "start": 94,
-      "end": 106,
+      "value": "Interceptor",
+      "start": 92,
+      "end": 103,
       "loc": {
         "start": {
           "line": 4,
-          "column": 9
+          "column": 7
         },
         "end": {
           "line": 4,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 107,
-      "end": 108,
-      "loc": {
-        "start": {
-          "line": 4,
-          "column": 22
-        },
-        "end": {
-          "line": 4,
-          "column": 23
+          "column": 18
         }
       }
     },
@@ -1057,8 +1108,35 @@
         "binop": null
       },
       "value": "from",
+      "start": 104,
+      "end": 108,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 19
+        },
+        "end": {
+          "line": 4,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./interceptor",
       "start": 109,
-      "end": 113,
+      "end": 124,
       "loc": {
         "start": {
           "line": 4,
@@ -1066,7 +1144,113 @@
         },
         "end": {
           "line": 4,
-          "column": 28
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 124,
+      "end": 125,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 39
+        },
+        "end": {
+          "line": 4,
+          "column": 40
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "import",
+        "keyword": "import",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "import",
+      "start": 126,
+      "end": 132,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Interceptors",
+      "start": 133,
+      "end": 145,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 7
+        },
+        "end": {
+          "line": 5,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 146,
+      "end": 150,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 20
+        },
+        "end": {
+          "line": 5,
+          "column": 24
         }
       }
     },
@@ -1084,16 +1268,16 @@
         "updateContext": null
       },
       "value": "./interceptors",
-      "start": 114,
-      "end": 130,
+      "start": 151,
+      "end": 167,
       "loc": {
         "start": {
-          "line": 4,
-          "column": 29
+          "line": 5,
+          "column": 25
         },
         "end": {
-          "line": 4,
-          "column": 45
+          "line": 5,
+          "column": 41
         }
       }
     },
@@ -1110,16 +1294,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 130,
-      "end": 131,
+      "start": 167,
+      "end": 168,
       "loc": {
         "start": {
-          "line": 4,
-          "column": 45
+          "line": 5,
+          "column": 41
         },
         "end": {
-          "line": 4,
-          "column": 46
+          "line": 5,
+          "column": 42
         }
       }
     },
@@ -1138,15 +1322,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 133,
-      "end": 139,
+      "start": 170,
+      "end": 176,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 0
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 6
         }
       }
@@ -1163,15 +1347,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 140,
-      "end": 141,
+      "start": 177,
+      "end": 178,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 7
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 8
         }
       }
@@ -1189,15 +1373,15 @@
         "binop": null
       },
       "value": "Url",
-      "start": 144,
-      "end": 147,
+      "start": 181,
+      "end": 184,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 2
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 5
         }
       }
@@ -1215,15 +1399,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 147,
-      "end": 148,
+      "start": 184,
+      "end": 185,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 5
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 6
         }
       }
@@ -1241,15 +1425,15 @@
         "binop": null
       },
       "value": "Http",
-      "start": 151,
-      "end": 155,
+      "start": 188,
+      "end": 192,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 9,
           "column": 2
         },
         "end": {
-          "line": 8,
+          "line": 9,
           "column": 6
         }
       }
@@ -1267,15 +1451,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 155,
-      "end": 156,
+      "start": 192,
+      "end": 193,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 9,
           "column": 6
         },
         "end": {
-          "line": 8,
+          "line": 9,
           "column": 7
         }
       }
@@ -1293,15 +1477,15 @@
         "binop": null
       },
       "value": "Headers",
-      "start": 159,
-      "end": 166,
+      "start": 196,
+      "end": 203,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 2
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 9
         }
       }
@@ -1319,15 +1503,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 166,
-      "end": 167,
+      "start": 203,
+      "end": 204,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 9
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 10
         }
       }
@@ -1344,16 +1528,68 @@
         "postfix": false,
         "binop": null
       },
-      "value": "Interceptors",
-      "start": 170,
-      "end": 182,
+      "value": "Interceptor",
+      "start": 207,
+      "end": 218,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 11,
           "column": 2
         },
         "end": {
-          "line": 10,
+          "line": 11,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 218,
+      "end": 219,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 13
+        },
+        "end": {
+          "line": 11,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Interceptors",
+      "start": 222,
+      "end": 234,
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 2
+        },
+        "end": {
+          "line": 12,
           "column": 14
         }
       }
@@ -1370,15 +1606,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 183,
-      "end": 184,
+      "start": 235,
+      "end": 236,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 13,
           "column": 0
         },
         "end": {
-          "line": 11,
+          "line": 13,
           "column": 1
         }
       }
@@ -1396,15 +1632,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 184,
-      "end": 185,
+      "start": 236,
+      "end": 237,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 13,
           "column": 1
         },
         "end": {
-          "line": 11,
+          "line": 13,
           "column": 2
         }
       }
@@ -1422,15 +1658,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 186,
-      "end": 186,
+      "start": 238,
+      "end": 238,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 14,
           "column": 0
         },
         "end": {
-          "line": 12,
+          "line": 14,
           "column": 0
         }
       }

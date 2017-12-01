@@ -33,16 +33,20 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
 </ul>
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">28/50</span></h1>
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">33/62</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -77,25 +81,65 @@
       <td data-ice="filePath"><span><a href="file/src/http.js.html">src/http.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">8288 byte</td>
-      <td style="display: none;" data-ice="lines">269</td>
-      <td style="display: none;" data-ice="updated">2017-11-03 04:24:31 (UTC)</td>
+      <td style="display: none;" data-ice="size">8306 byte</td>
+      <td style="display: none;" data-ice="lines">271</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:36:07 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/index.js.html">src/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">186 byte</td>
-      <td style="display: none;" data-ice="lines">11</td>
-      <td style="display: none;" data-ice="updated">2017-05-02 22:57:10 (UTC)</td>
+      <td style="display: none;" data-ice="size">238 byte</td>
+      <td style="display: none;" data-ice="lines">13</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:57:59 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/interceptors.js.html#errorLines=7">src/interceptors.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></td>
-      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/1</span></td>
-      <td style="display: none;" data-ice="size">5543 byte</td>
-      <td style="display: none;" data-ice="lines">203</td>
-      <td style="display: none;" data-ice="updated">2017-11-01 05:42:13 (UTC)</td>
+      <td data-ice="filePath"><span><a href="file/src/interceptor.js.html#errorLines=1,10,14,2,6">src/interceptor.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/5</span></td>
+      <td style="display: none;" data-ice="size">294 byte</td>
+      <td style="display: none;" data-ice="lines">17</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:41:56 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interceptors/body-transformer.js.html#errorLines=5,6">src/interceptors/body-transformer.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/2</span></td>
+      <td style="display: none;" data-ice="size">450 byte</td>
+      <td style="display: none;" data-ice="lines">17</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:58:12 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interceptors/error-handling.js.html#errorLines=3,4">src/interceptors/error-handling.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/2</span></td>
+      <td style="display: none;" data-ice="size">253 byte</td>
+      <td style="display: none;" data-ice="lines">11</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:58:28 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interceptors/index.js.html">src/interceptors/index.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">331 byte</td>
+      <td style="display: none;" data-ice="lines">11</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 02:02:04 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interceptors/method-override.js.html#errorLines=5,6">src/interceptors/method-override.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/2</span></td>
+      <td style="display: none;" data-ice="size">418 byte</td>
+      <td style="display: none;" data-ice="lines">17</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:58:46 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/interceptors/xsrf.js.html#errorLines=5,6">src/interceptors/xsrf.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/2</span></td>
+      <td style="display: none;" data-ice="size">417 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:59:05 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/path.js.html">src/path.js</a></span></td>
@@ -106,12 +150,28 @@
       <td style="display: none;" data-ice="updated">2017-05-02 17:11:40 (UTC)</td>
     </tr>
 <tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/request-interceptor-chain.js.html">src/request-interceptor-chain.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">2180 byte</td>
+      <td style="display: none;" data-ice="lines">74</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:20:17 (UTC)</td>
+    </tr>
+<tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/request.js.html#errorLines=26">src/request.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/request.js~Request.html">Request</a></span></td>
       <td class="coverage"><span data-ice="coverage">93 %</span><span data-ice="coverageCount" class="coverage-count">14/15</span></td>
-      <td style="display: none;" data-ice="size">8264 byte</td>
+      <td style="display: none;" data-ice="size">8278 byte</td>
       <td style="display: none;" data-ice="lines">269</td>
-      <td style="display: none;" data-ice="updated">2017-11-03 04:33:23 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:09:07 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/response-interceptor-chain.js.html">src/response-interceptor-chain.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">1891 byte</td>
+      <td style="display: none;" data-ice="lines">60</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:14:39 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/response.js.html#errorLines=31">src/response.js</a></span></td>
@@ -122,12 +182,12 @@
       <td style="display: none;" data-ice="updated">2017-11-03 04:02:44 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/url.js.html#errorLines=149,160,170,188,51,62,66,70,74,78,82,86,90,94,98">src/url.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/url.js.html#errorLines=100,104,51,72,76,80,84,88,92,96">src/url.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/url.js~Url.html">Url</a></span></td>
-      <td class="coverage"><span data-ice="coverage">16 %</span><span data-ice="coverageCount" class="coverage-count">3/18</span></td>
-      <td style="display: none;" data-ice="size">5890 byte</td>
-      <td style="display: none;" data-ice="lines">258</td>
-      <td style="display: none;" data-ice="updated">2017-11-03 04:42:02 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">44 %</span><span data-ice="coverageCount" class="coverage-count">8/18</span></td>
+      <td style="display: none;" data-ice="size">7087 byte</td>
+      <td style="display: none;" data-ice="lines">298</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 00:07:47 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/utilities.js.html">src/utilities.js</a></span></td>
@@ -141,17 +201,17 @@
       <td data-ice="filePath"><span><a href="file/src/xhr-builder.js.html">src/xhr-builder.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">2388 byte</td>
-      <td style="display: none;" data-ice="lines">117</td>
-      <td style="display: none;" data-ice="updated">2017-11-01 05:43:08 (UTC)</td>
+      <td style="display: none;" data-ice="size">2330 byte</td>
+      <td style="display: none;" data-ice="lines">116</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:11:23 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/xhr-provider.js.html">src/xhr-provider.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
-      <td style="display: none;" data-ice="size">2751 byte</td>
-      <td style="display: none;" data-ice="lines">104</td>
-      <td style="display: none;" data-ice="updated">2017-11-01 04:49:19 (UTC)</td>
+      <td style="display: none;" data-ice="size">2648 byte</td>
+      <td style="display: none;" data-ice="lines">100</td>
+      <td style="display: none;" data-ice="updated">2017-12-06 01:21:06 (UTC)</td>
     </tr>
 </tbody>
 </table>

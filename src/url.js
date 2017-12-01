@@ -59,6 +59,12 @@ class Url {
     if (parts.fragment) _fragment.set(this, parts.fragment);
   }
 
+  /**
+   * @method
+   * @name protocol
+   * @param {string} [value] -
+   * @returns {Url|string} -
+   */
   protocol(value) {
     return property.call(this, _protocol, value);
   }
@@ -146,6 +152,12 @@ class Url {
     return assign({}, _query.get(this));
   }
 
+  /**
+   * @method
+   * @name userInfo
+   * @returns {string} - returns basic auth credentials in the format
+   * user:password, if both user and password are set.
+   */
   userInfo() {
     const u = _user.get(this);
     const p = _password.get(this);
@@ -157,6 +169,11 @@ class Url {
     return null;
   }
 
+  /**
+   * @method
+   * @name authority
+   * @returns {string} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])
+   */
   authority() {
     const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : '';
     const ui = this.userInfo() ? `${this.userInfo()}@` : '';
@@ -164,9 +181,13 @@ class Url {
     const p = _port.get(this) ? `:${_port.get(this)}` : '';
 
     return pr + ui + h + p;
-    return '';
   }
 
+  /**
+   * @method
+   * @name path
+   * @returns {string} - returns the path portion of the url
+   */
   path() {
     const dir = _directory.get(this) || '';
     const f = _file.get(this) || '';
@@ -185,6 +206,15 @@ class Url {
     return '';
   }
 
+  /**
+   * @method
+   * @name merge
+   * @param {Url} other - the {@link Url} to merge into this one
+   * @returns {Url} - returns a copy of this {@link Url} with the directory,
+   * file, gragment, path, and query portions from taken from other.  If
+   * any of those properties do not exist in other, they will be removed
+   * from the copy.
+   */
   merge(other) {
     const copied = cloneDeep(parts);
     const otherParts = parseUri(other.toString());
@@ -203,6 +233,9 @@ class Url {
   /**
    * @method
    * @name toString
+   * @param {Function<Object, String>} serializeQuery - a function that can customize
+   * how the query-string hash is rendered in the resulting url
+   * @returns {string}
    */
   toString(serializeQuery) {
     const auth = this.authority();
@@ -248,6 +281,13 @@ class Url {
   }
 }
 
+/**
+ * @function
+ * @name factory
+ * @param {Object|string} value - A hash containing the Url parts, or a string
+ * representation of a Url
+ * @returns {Url}
+ */
 Url.factory = (value) => {
   if (isString(value)) {
     return new Url(parseUri(value));

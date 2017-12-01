@@ -33,11 +33,15 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -324,7 +328,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-merge">merge</a></span></span><span data-ice="signature">(other: <span>*</span>): <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-merge">merge</a></span></span><span data-ice="signature">(other: <span><a href="class/src/url.js~Url.html">Url</a></span>): <span><a href="class/src/url.js~Url.html">Url</a></span></span>
         </p>
       </div>
       <div>
@@ -432,7 +436,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-protocol">protocol</a></span></span><span data-ice="signature">(value: <span>*</span>): <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-protocol">protocol</a></span></span><span data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="class/src/url.js~Url.html">Url</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
@@ -486,7 +490,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-toString">toString</a></span></span><span data-ice="signature">(serializeQuery: <span>*</span>): <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-toString">toString</a></span></span><span data-ice="signature">(serializeQuery: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>&gt;): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
@@ -540,7 +544,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-userInfo">userInfo</a></span></span><span data-ice="signature">(): <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/url.js~Url.html#instance-method-userInfo">userInfo</a></span></span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
@@ -639,7 +643,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber160">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber177">source</a></span></span>
     </span>
   </h3>
 
@@ -659,7 +663,8 @@
       <tbody>
         <tr>
           <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
-          
+          <td class="return-desc" data-ice="returnDescription"><p>returns the authority portion of the url ([protocol]://[userInfo@]host[:port])</p>
+</td>
         </tr>
       </tbody>
     </table>
@@ -694,7 +699,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber88">source</a></span></span>
     </span>
   </h3>
 
@@ -765,7 +770,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber86">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -836,7 +841,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber90">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber96">source</a></span></span>
     </span>
   </h3>
 
@@ -907,7 +912,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber74">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -978,7 +983,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber94">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber100">source</a></span></span>
     </span>
   </h3>
 
@@ -1033,7 +1038,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
@@ -1084,11 +1089,11 @@
     
     
     
-    <span data-ice="name">merge</span><span data-ice="signature">(other: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">merge</span><span data-ice="signature">(other: <span><a href="class/src/url.js~Url.html">Url</a></span>): <span><a href="class/src/url.js~Url.html">Url</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber188">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber218">source</a></span></span>
     </span>
   </h3>
 
@@ -1109,9 +1114,10 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">other</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="class/src/url.js~Url.html">Url</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>the <span><a href="class/src/url.js~Url.html">Url</a></span> to merge into this one</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1123,8 +1129,12 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type" data-ice="returnType"><span><a href="class/src/url.js~Url.html">Url</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>returns a copy of this <span><a href="class/src/url.js~Url.html">Url</a></span> with the directory,
+file, gragment, path, and query portions from taken from other.  If
+any of those properties do not exist in other, they will be removed
+from the copy.</p>
+</td>
         </tr>
       </tbody>
     </table>
@@ -1159,7 +1169,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber76">source</a></span></span>
     </span>
   </h3>
 
@@ -1230,7 +1240,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber170">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber191">source</a></span></span>
     </span>
   </h3>
 
@@ -1250,7 +1260,8 @@
       <tbody>
         <tr>
           <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
-          
+          <td class="return-desc" data-ice="returnDescription"><p>returns the path portion of the url</p>
+</td>
         </tr>
       </tbody>
     </table>
@@ -1285,7 +1296,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -1352,11 +1363,11 @@
     
     
     
-    <span data-ice="name">protocol</span><span data-ice="signature">(value: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">protocol</span><span data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>): <span><a href="class/src/url.js~Url.html">Url</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -1377,8 +1388,8 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">value</td>
-      <td data-ice="type"><span>*</span></td>
-      <td data-ice="appendix"></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"></td>
     </tr>
 </tbody>
@@ -1391,7 +1402,7 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span>*</span></td>
+          <td class="return-type" data-ice="returnType"><span><a href="class/src/url.js~Url.html">Url</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
           
         </tr>
       </tbody>
@@ -1427,7 +1438,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber131">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber137">source</a></span></span>
     </span>
   </h3>
 
@@ -1535,11 +1546,11 @@ and returns the current Request.</code></pre>
     
     
     
-    <span data-ice="name">toString</span><span data-ice="signature">(serializeQuery: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">toString</span><span data-ice="signature">(serializeQuery: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>&gt;): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber240">source</a></span></span>
     </span>
   </h3>
 
@@ -1560,9 +1571,11 @@ and returns the current Request.</code></pre>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">serializeQuery</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>&gt;</td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>a function that can customize
+how the query-string hash is rendered in the resulting url</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -1574,7 +1587,7 @@ and returns the current Request.</code></pre>
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span>*</span></td>
+          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
           
         </tr>
       </tbody>
@@ -1610,7 +1623,7 @@ and returns the current Request.</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber72">source</a></span></span>
     </span>
   </h3>
 
@@ -1677,11 +1690,11 @@ and returns the current Request.</code></pre>
     
     
     
-    <span data-ice="name">userInfo</span><span data-ice="signature">(): <span>*</span></span>
+    <span data-ice="name">userInfo</span><span data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber149">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/url.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
@@ -1700,8 +1713,10 @@ and returns the current Request.</code></pre>
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>returns basic auth credentials in the format
+user:password, if both user and password are set.</p>
+</td>
         </tr>
       </tbody>
     </table>

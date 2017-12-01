@@ -1,9 +1,27 @@
 window.esdocSearchIndex = [
   [
-    "rx-http/src/interceptors.js~interceptors",
-    "variable/index.html#static-variable-Interceptors",
-    "<span>Interceptors</span> <span class=\"search-result-import-path\">rx-http/src/interceptors.js</span>",
-    "variable"
+    "rx-http/src/interceptors/body-transformer.js~bodytransformer",
+    "class/src/interceptors/body-transformer.js~BodyTransformer.html",
+    "<span>BodyTransformer</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/body-transformer.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/interceptors/error-handling.js~errorhandling",
+    "class/src/interceptors/error-handling.js~ErrorHandling.html",
+    "<span>ErrorHandling</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/error-handling.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/interceptor.js~interceptor",
+    "class/src/interceptor.js~Interceptor.html",
+    "<span>Interceptor</span> <span class=\"search-result-import-path\">rx-http/src/interceptor.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/interceptors/method-override.js~methodoverride",
+    "class/src/interceptors/method-override.js~MethodOverride.html",
+    "<span>MethodOverride</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/method-override.js</span>",
+    "class"
   ],
   [
     "rx-http/src/exceptions.js~propertyvalidationexception",
@@ -34,6 +52,12 @@ window.esdocSearchIndex = [
     "function/index.html#static-function-XHRProvider",
     "<span>XHRProvider</span> <span class=\"search-result-import-path\">rx-http/src/xhr-provider.js</span>",
     "function"
+  ],
+  [
+    "rx-http/src/interceptors/xsrf.js~xsrf",
+    "class/src/interceptors/xsrf.js~XSRF.html",
+    "<span>XSRF</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/xsrf.js</span>",
+    "class"
   ],
   [
     "builtinexternal/ecmascriptexternal.js~array",
@@ -414,15 +438,99 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/interceptors.js",
-    "file/src/interceptors.js.html",
-    "src/interceptors.js",
+    "src/interceptor.js",
+    "file/src/interceptor.js.html",
+    "src/interceptor.js",
     "file"
+  ],
+  [
+    "src/interceptor.js~interceptor#request",
+    "class/src/interceptor.js~Interceptor.html#instance-method-request",
+    "src/interceptor.js~Interceptor#request",
+    "method"
+  ],
+  [
+    "src/interceptor.js~interceptor#requesterror",
+    "class/src/interceptor.js~Interceptor.html#instance-method-requestError",
+    "src/interceptor.js~Interceptor#requestError",
+    "method"
+  ],
+  [
+    "src/interceptor.js~interceptor#response",
+    "class/src/interceptor.js~Interceptor.html#instance-method-response",
+    "src/interceptor.js~Interceptor#response",
+    "method"
+  ],
+  [
+    "src/interceptor.js~interceptor#responseerror",
+    "class/src/interceptor.js~Interceptor.html#instance-method-responseError",
+    "src/interceptor.js~Interceptor#responseError",
+    "method"
+  ],
+  [
+    "src/interceptors/body-transformer.js",
+    "file/src/interceptors/body-transformer.js.html",
+    "src/interceptors/body-transformer.js",
+    "file"
+  ],
+  [
+    "src/interceptors/body-transformer.js~bodytransformer#request",
+    "class/src/interceptors/body-transformer.js~BodyTransformer.html#instance-method-request",
+    "src/interceptors/body-transformer.js~BodyTransformer#request",
+    "method"
+  ],
+  [
+    "src/interceptors/error-handling.js",
+    "file/src/interceptors/error-handling.js.html",
+    "src/interceptors/error-handling.js",
+    "file"
+  ],
+  [
+    "src/interceptors/error-handling.js~errorhandling#response",
+    "class/src/interceptors/error-handling.js~ErrorHandling.html#instance-method-response",
+    "src/interceptors/error-handling.js~ErrorHandling#response",
+    "method"
+  ],
+  [
+    "src/interceptors/index.js",
+    "file/src/interceptors/index.js.html",
+    "src/interceptors/index.js",
+    "file"
+  ],
+  [
+    "src/interceptors/method-override.js",
+    "file/src/interceptors/method-override.js.html",
+    "src/interceptors/method-override.js",
+    "file"
+  ],
+  [
+    "src/interceptors/method-override.js~methodoverride#request",
+    "class/src/interceptors/method-override.js~MethodOverride.html#instance-method-request",
+    "src/interceptors/method-override.js~MethodOverride#request",
+    "method"
+  ],
+  [
+    "src/interceptors/xsrf.js",
+    "file/src/interceptors/xsrf.js.html",
+    "src/interceptors/xsrf.js",
+    "file"
+  ],
+  [
+    "src/interceptors/xsrf.js~xsrf#request",
+    "class/src/interceptors/xsrf.js~XSRF.html#instance-method-request",
+    "src/interceptors/xsrf.js~XSRF#request",
+    "method"
   ],
   [
     "src/path.js",
     "file/src/path.js.html",
     "src/path.js",
+    "file"
+  ],
+  [
+    "src/request-interceptor-chain.js",
+    "file/src/request-interceptor-chain.js.html",
+    "src/request-interceptor-chain.js",
     "file"
   ],
   [
@@ -514,6 +622,12 @@ window.esdocSearchIndex = [
     "class/src/request.js~Request.html#instance-method-xsrfHeaderName",
     "src/request.js~Request#xsrfHeaderName",
     "method"
+  ],
+  [
+    "src/response-interceptor-chain.js",
+    "file/src/response-interceptor-chain.js.html",
+    "src/response-interceptor-chain.js",
+    "file"
   ],
   [
     "src/response.js",

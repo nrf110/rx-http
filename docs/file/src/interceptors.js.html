@@ -33,219 +33,101 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors.js~Interceptor.html">Interceptor</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors.js~MethodOverride.html">MethodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors.js~XSRF.html">XSRF</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/interceptors.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isObject, isString, isEmpty, head, tail, partial } from &apos;lodash&apos;;
-import Cookies from &apos;js-cookie&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isObject, isString } from &apos;lodash&apos;;
 import { isFile, isFormData, isBlob } from &apos;./utilities&apos;;
+import Cookies from &apos;js-cookie&apos;;
 
 const BROWSER_METHODS = [&apos;GET&apos;, &apos;POST&apos;];
 
-export const Interceptors = {
+class Interceptor {
+  request(request, accept, reject) {
+    accept(request);
+  }
 
-  BodyTransformer: {
-    request: (request, accept, reject) =&gt; {
-      const body = request.body();
+  requestError(error, accept, reject) {
+    reject(error);
+  }
 
-      if (isObject(body) &amp;&amp; !isFile(body) &amp;&amp; !isFormData(body) &amp;&amp; !isBlob(body)) {
-        const json = JSON.stringify(body);
+  response(response, accept, reject) {
+    accept(response);
+  }
 
-        request.body(json);
-      }
+  responseError(error, accept, reject) {
+    reject(error);
+  }
+}
 
-      accept(request);
+class BodyTransformer extends Interceptor {
+  request(request, accept, reject) {
+    const body = request.body();
+
+    if (isObject(body) &amp;&amp; !isFile(body) &amp;&amp; !isFormData(body) &amp;&amp; !isBlob(body)) {
+      const json = JSON.stringify(body);
+
+      request.body(json);
     }
-  },
 
-  XSRF: {
-    request: (request, accept, reject) =&gt; {
-      const xsrfToken = Cookies.get(request.xsrfCookieName());
-      const xsrfHeader = request.xsrfHeaderName();
+    accept(request);
+  }
+}
 
-      if (isString(xsrfToken)) {
-        request.header(xsrfHeader, xsrfToken);
-      }
+class XSRF extends Interceptor {
+  request(request, accept, reject) {
+    const xsrfToken = Cookies.get(request.xsrfCookieName());
+    const xsrfHeader = request.xsrfHeaderName();
 
-      accept(request);
+    if (isString(xsrfToken)) {
+      request.header(xsrfHeader, xsrfToken);
     }
-  },
 
-  ErrorHandling: {
-    response: (response, accept, reject) =&gt; {
-      if (response.status() / 100 === 2) {
-        accept(response);
-      } else {
-        reject(response);
-      }
-    }
-  },
+    accept(request);
+  }
+}
 
-  MethodOverride: {
-    request: (request, accept, reject) =&gt; {
-      const originalMethod = request.method();
-
-      if (!BROWSER_METHODS.some(m =&gt; m === originalMethod)) {
-        request
-          .method(&apos;POST&apos;)
-          .header(&apos;X-HTTP-Method-Override&apos;, originalMethod);
-      }
-
-      accept(request);
+class ErrorHandling extends Interceptor {
+  response(response, accept, reject) {
+    if (response.status() / 100 === 2) {
+      accept(response);
+    } else {
+      reject(response);
     }
   }
+}
+
+class MethodOverride extends Interceptor {
+  request (request, accept, reject) {
+    const originalMethod = request.method();
+
+    if (!BROWSER_METHODS.some(m =&gt; m === originalMethod)) {
+      request
+        .method(&apos;POST&apos;)
+        .header(&apos;X-HTTP-Method-Override&apos;, originalMethod);
+    }
+
+    accept(request);
+  }
+}
+
+export {
+  MethodOverride,
+  BodyTransformer,
+  XSRF,
+  ErrorHandling
 };
-
-/**
- * Runs the request interceptors, and requestError interceptors if necessary.
- * @private
- * @class
- * @param {Object[]} interceptors - The array of interceptors to be run
- * @param {Function} accept - Callback that is invoked with the final request
- * object after all interceptors have run successfully.
- * @param {Function} reject - Callback that is invoked with an error object
- * if all of the interceptors fail to recover from an error.
- */
-export function RequestInterceptorChain(interceptors, accept, reject) {
-  /**
-   * Pass-through accept for the request.
-   */
-  function defaultRequest(request, good) {
-    good(request);
-  }
-
-  /**
-   * Immediately rejects the error without trying to recover.
-   */
-  function defaultRequestError(error, good, bad) {
-    bad(error);
-  }
-
-  /**
-   * Handler for a rejected interceptor.  Runs requestError interceptor for
-   * all interceptors following the failure, in an attempt to recover.
-   * If one of the interceptors manages to recover, hop back into the next
-   * interceptor after the initial failure.
-   */
-  function failure(remaining, recover) {
-    return function (error) {
-      function step(rest, err) {
-        if (!isEmpty(rest)) {
-          const interceptor = head(rest);
-          const xs = tail(rest);
-          const transform = interceptor.requestError || defaultRequestError;
-          const next = partial(step, xs);
-
-          transform(err, recover, next);
-        } else {
-          reject(err);
-        }
-      }
-
-      step(remaining, error);
-    };
-  }
-
-  /** @method
-   * Runs the request through the chain of request interceptors
-   * @name run
-   */
-  this.run = function (request) {
-    function step(remaining, next) {
-      if (!isEmpty(remaining)) {
-        const interceptor = head(remaining);
-        const xs = tail(remaining);
-        const transform = interceptor.request || defaultRequest;
-        const success = partial(step, xs);
-
-        transform(request, success, failure(xs, success));
-      } else {
-        accept(request);
-      }
-    }
-
-    step(interceptors, request);
-  };
-}
-
-/**
- * Runs the response interceptors, and responseError interceptors if necessary.
- * @private
- * @class
- * @param {Object[]} interceptors - The array of interceptors to be run
- * @param {Function} accept - Callback that is invoked with the final response
- * object after all interceptors have run successfully.
- * @param {Function} reject - Callback that is invoked with an error object
- * if all of the interceptors fail to recover from an error.
- */
-export function ResponseInterceptorChain(interceptors, accept, reject) {
-  /**
-   * Pass-through accept for the response.
-   */
-  function defaultResponse(response, good) {
-    good(response);
-  }
-
-  /**
-   * Immediately rejects the error without trying to recover.
-   */
-  function defaultResponseError(error, good, bad) {
-    bad(error);
-  }
-
-  /**
-   * Handler for a rejected interceptor.  Runs responseError interceptor for
-   * all interceptors following the failure, in an attempt to recover.
-   * If one of the interceptors manages to recover, hop back into the next
-   * interceptor after the initial failure.
-   */
-  function failure(remaining, recover) {
-    return function (error) {
-      function step(rest, err) {
-        if (isEmpty(rest)) {
-          const interceptor = head(rest);
-          const xs = tail(rest);
-          const transform = interceptor.responseError || defaultResponseError;
-          const next = partial(step, xs);
-
-          transform(err, recover, next);
-        } else {
-          reject(err);
-        }
-      }
-
-      step(remaining, error);
-    };
-  }
-
-  /** @method
-   * Runs the response through the chain of response interceptors
-   * @name run
-   */
-  this.run = function (response) {
-    function step(remaining, next) {
-      if (!isEmpty(remaining)) {
-        const interceptor = head(remaining);
-        const xs = tail(remaining);
-        const transform = interceptor.response || defaultResponse;
-        const success = partial(step, xs);
-
-        transform(response, success, failure(xs, success));
-      } else {
-        accept(response);
-      }
-    }
-
-    step(interceptors, response);
-  };
-}
 </code></pre>
 
 </div>

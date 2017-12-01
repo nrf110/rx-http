@@ -33,11 +33,15 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -47,7 +51,8 @@
 import Rx from &apos;rxjs&apos;;
 import XHRBuilder from &apos;./xhr-builder&apos;;
 import Response from &apos;./response&apos;;
-import { RequestInterceptorChain, ResponseInterceptorChain } from &apos;./interceptors&apos;;
+import RequestInterceptorChain from &apos;./request-interceptor-chain&apos;;
+import ResponseInterceptorChain from &apos;./response-interceptor-chain&apos;;
 
 /** @function
  * Provider-implementation for browser-based clients.  Providers are simply
@@ -60,7 +65,7 @@ import { RequestInterceptorChain, ResponseInterceptorChain } from &apos;./interc
 export default function XHRProvider(request) {
   const interceptors = request.interceptors();
 
-  function attempt(observable, retries = request.retries()) {
+  function attempt(observable) {
     let response;
     let offset = 0;
     let body = new Rx.Subject();
@@ -74,11 +79,6 @@ export default function XHRProvider(request) {
 
     function completeAll() {
       all.forEach(o =&gt; o.complete());
-    }
-
-    function exceptionHandler(evt) {
-      if (retries &gt; 0) attempt(observable, retries - 1);
-      else errorAll(evt);
     }
 
     function nextChunk() {
@@ -100,7 +100,7 @@ export default function XHRProvider(request) {
         const responseChain = new ResponseInterceptorChain(
           interceptors,
           (transformedResponse) =&gt; observable.next(transformedResponse),
-          exceptionHandler
+          Rx.Observable.throw
         );
 
         responseChain.run(response);
@@ -123,8 +123,8 @@ export default function XHRProvider(request) {
           body.next(xhr.responseText);
         }
       })
-      .onError(exceptionHandler)
-      .onAbort(exceptionHandler)
+      .onError(Rx.Observable.throw)
+      .onAbort(errorAll)
       .onLoadEnd(completeAll)
       .build();
 
@@ -137,7 +137,7 @@ export default function XHRProvider(request) {
       interceptors,
       success,
       (err) =&gt; {
-        observable.error(err);
+        Rx.Observable.throw(err);
         completeAll();
       }
     );

@@ -1,5 +1,4 @@
 import { isInteger, partial, noop } from 'lodash';
-import { RequestInterceptorChain } from './interceptors';
 
 const STATE = {
   UNSENT: 0,

@@ -2,7 +2,8 @@ import { partial, isInteger } from 'lodash';
 import Rx from 'rxjs';
 import XHRBuilder from './xhr-builder';
 import Response from './response';
-import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptors';
+import RequestInterceptorChain from './request-interceptor-chain';
+import ResponseInterceptorChain from './response-interceptor-chain';
 
 /** @function
  * Provider-implementation for browser-based clients.  Providers are simply
@@ -15,7 +16,7 @@ import { RequestInterceptorChain, ResponseInterceptorChain } from './interceptor
 export default function XHRProvider(request) {
   const interceptors = request.interceptors();
 
-  function attempt(observable, retries = request.retries()) {
+  function attempt(observable) {
     let response;
     let offset = 0;
     let body = new Rx.Subject();
@@ -29,11 +30,6 @@ export default function XHRProvider(request) {
 
     function completeAll() {
       all.forEach(o => o.complete());
-    }
-
-    function exceptionHandler(evt) {
-      if (retries > 0) attempt(observable, retries - 1);
-      else errorAll(evt);
     }
 
     function nextChunk() {
@@ -55,7 +51,7 @@ export default function XHRProvider(request) {
         const responseChain = new ResponseInterceptorChain(
           interceptors,
           (transformedResponse) => observable.next(transformedResponse),
-          exceptionHandler
+          Rx.Observable.throw
         );
 
         responseChain.run(response);
@@ -78,8 +74,8 @@ export default function XHRProvider(request) {
           body.next(xhr.responseText);
         }
       })
-      .onError(exceptionHandler)
-      .onAbort(exceptionHandler)
+      .onError(Rx.Observable.throw)
+      .onAbort(errorAll)
       .onLoadEnd(completeAll)
       .build();
 
@@ -92,7 +88,7 @@ export default function XHRProvider(request) {
       interceptors,
       success,
       (err) => {
-        observable.error(err);
+        Rx.Observable.throw(err);
         completeAll();
       }
     );

@@ -1,15 +1,17 @@
 import { isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';
 import Request from './request';
-import { Interceptors } from './interceptors';
+import Interceptors from './interceptors';
 import XHRProvider from './xhr-provider';
 import Url from './url';
 import Path from './path';
 import { PropertyValidationException } from './exceptions';
 import { parseUri } from './utilities';
 
+console.log(Interceptors);
+
 /**
  * An HTTP client.
- * @constructor
+ * @class
  * @param {Object} [options] - A hash of settings for this client.
  */
 function Http(options = {}) {

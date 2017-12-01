@@ -160,8 +160,8 @@ export default class Request {
   /**
    * @method
    * @name interceptors
-   * @param {Object} [value] - The set of interceptors to be run against this Request and/or Response
-   * @returns {Object|Request} - If value is specified, overrides the current set of interceptors
+   * @param {Interceptor[]} [value] - The set of interceptors to be run against this Request and/or Response
+   * @returns {Interceptor[]|Request} - If value is specified, overrides the current set of interceptors
    * for this Request and/or Response and returns the current Request.  If value is ommitted,
    * returns the current set of interceptors.
    */

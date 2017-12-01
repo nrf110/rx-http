@@ -33,11 +33,15 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Interceptors">Interceptors</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -104,6 +108,12 @@ class Url {
     if (parts.fragment) _fragment.set(this, parts.fragment);
   }
 
+  /**
+   * @method
+   * @name protocol
+   * @param {string} [value] -
+   * @returns {Url|string} -
+   */
   protocol(value) {
     return property.call(this, _protocol, value);
   }
@@ -191,6 +201,12 @@ class Url {
     return assign({}, _query.get(this));
   }
 
+  /**
+   * @method
+   * @name userInfo
+   * @returns {string} - returns basic auth credentials in the format
+   * user:password, if both user and password are set.
+   */
   userInfo() {
     const u = _user.get(this);
     const p = _password.get(this);
@@ -202,6 +218,11 @@ class Url {
     return null;
   }
 
+  /**
+   * @method
+   * @name authority
+   * @returns {string} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])
+   */
   authority() {
     const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : &apos;&apos;;
     const ui = this.userInfo() ? `${this.userInfo()}@` : &apos;&apos;;
@@ -209,9 +230,13 @@ class Url {
     const p = _port.get(this) ? `:${_port.get(this)}` : &apos;&apos;;
 
     return pr + ui + h + p;
-    return &apos;&apos;;
   }
 
+  /**
+   * @method
+   * @name path
+   * @returns {string} - returns the path portion of the url
+   */
   path() {
     const dir = _directory.get(this) || &apos;&apos;;
     const f = _file.get(this) || &apos;&apos;;
@@ -230,6 +255,15 @@ class Url {
     return &apos;&apos;;
   }
 
+  /**
+   * @method
+   * @name merge
+   * @param {Url} other - the {@link Url} to merge into this one
+   * @returns {Url} - returns a copy of this {@link Url} with the directory,
+   * file, gragment, path, and query portions from taken from other.  If
+   * any of those properties do not exist in other, they will be removed
+   * from the copy.
+   */
   merge(other) {
     const copied = cloneDeep(parts);
     const otherParts = parseUri(other.toString());
@@ -248,6 +282,9 @@ class Url {
   /**
    * @method
    * @name toString
+   * @param {Function&lt;Object, String&gt;} serializeQuery - a function that can customize
+   * how the query-string hash is rendered in the resulting url
+   * @returns {string}
    */
   toString(serializeQuery) {
     const auth = this.authority();
@@ -293,6 +330,13 @@ class Url {
   }
 }
 
+/**
+ * @function
+ * @name factory
+ * @param {Object|string} value - A hash containing the Url parts, or a string
+ * representation of a Url
+ * @returns {Url}
+ */
 Url.factory = (value) =&gt; {
   if (isString(value)) {
     return new Url(parseUri(value));
