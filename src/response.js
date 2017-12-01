@@ -21,13 +21,15 @@ function evaluateLazy(property) {
  * Immutable response container.  Should only be created by executing a {@link Request}.
  * @class
  * @name Response
- * @param {XMLHttpRequest} xhr
- * @param {Observable<String>} body - An Observable representing the body/entity of the response
- * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events
- * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events
  */
 export default class Response {
 
+  /**
+   * @param {XMLHttpRequest} xhr
+   * @param {Observable<String>} body - An Observable representing the body/entity of the response
+   * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events
+   * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events
+   */
   constructor(xhr, body, uploadProgress, downloadProgress) {
     _status.set(this, xhr.status);
     _statusText.set(this, xhr.statusText);

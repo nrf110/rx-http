@@ -24,12 +24,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "rx-http/src/exceptions.js~propertyvalidationexception",
-    "class/src/exceptions.js~PropertyValidationException.html",
-    "<span>PropertyValidationException</span> <span class=\"search-result-import-path\">rx-http/src/exceptions.js</span>",
-    "class"
-  ],
-  [
     "rx-http/src/request.js~request",
     "class/src/request.js~Request.html",
     "<span>Request</span> <span class=\"search-result-import-path\">rx-http/src/request.js</span>",
@@ -394,30 +388,6 @@ window.esdocSearchIndex = [
     "file/src/exceptions.js.html",
     "src/exceptions.js",
     "file"
-  ],
-  [
-    "src/exceptions.js~propertyvalidationexception#constructor",
-    "class/src/exceptions.js~PropertyValidationException.html#instance-constructor-constructor",
-    "src/exceptions.js~PropertyValidationException#constructor",
-    "method"
-  ],
-  [
-    "src/exceptions.js~propertyvalidationexception#property",
-    "class/src/exceptions.js~PropertyValidationException.html#instance-member-property",
-    "src/exceptions.js~PropertyValidationException#property",
-    "member"
-  ],
-  [
-    "src/exceptions.js~propertyvalidationexception#tostring",
-    "class/src/exceptions.js~PropertyValidationException.html#instance-method-toString",
-    "src/exceptions.js~PropertyValidationException#toString",
-    "method"
-  ],
-  [
-    "src/exceptions.js~propertyvalidationexception#value",
-    "class/src/exceptions.js~PropertyValidationException.html#instance-member-value",
-    "src/exceptions.js~PropertyValidationException#value",
-    "member"
   ],
   [
     "src/headers.js",

@@ -32,8 +32,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
@@ -70,13 +69,15 @@ function evaluateLazy(property) {
  * Immutable response container.  Should only be created by executing a {@link Request}.
  * @class
  * @name Response
- * @param {XMLHttpRequest} xhr
- * @param {Observable&lt;String&gt;} body - An Observable representing the body/entity of the response
- * @param {Observable&lt;Object&gt;} uploadProgress - An Observable representing a stream of all upload progress events
- * @param {Observable&lt;Object&gt;} downloadProgress - An Observable representing a stram of all download progress events
  */
 export default class Response {
 
+  /**
+   * @param {XMLHttpRequest} xhr
+   * @param {Observable&lt;String&gt;} body - An Observable representing the body/entity of the response
+   * @param {Observable&lt;Object&gt;} uploadProgress - An Observable representing a stream of all upload progress events
+   * @param {Observable&lt;Object&gt;} downloadProgress - An Observable representing a stram of all download progress events
+   */
   constructor(xhr, body, uploadProgress, downloadProgress) {
     _status.set(this, xhr.status);
     _statusText.set(this, xhr.statusText);

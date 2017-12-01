@@ -2,9 +2,13 @@
  * @class
  * @name PropertyValidationException
  * @param {String} - property
- * @param value
  */
-export default class PropertyValidationException {
+class PropertyValidationException {
+  /**
+   * @constructor
+   * @param {String} - property name
+   * @param value
+   */
   constructor(property, value) {
     this.property = property;
     this.value = value;
@@ -14,3 +18,7 @@ export default class PropertyValidationException {
     return `Value ${this.value} is not valid for property ${this.property}`
   }
 }
+
+export default {
+  PropertyValidationException
+};

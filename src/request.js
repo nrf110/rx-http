@@ -1,5 +1,5 @@
 import { isUndefined, identity, assign, isString, isObject } from 'lodash';
-import PropertyValidationException from './exceptions';
+import { PropertyValidationException } from './exceptions';
 import Path from './path';
 import Url from './url';
 import { parseUri } from './utilities';
@@ -20,9 +20,12 @@ let _provider = new WeakMap();
 /**
  * A Request should only ever be created by an instance of {@link Http}
  * @class
- * @param {Object} config - Override default settings for this Request only.
  */
 export default class Request {
+  /**
+   * @constructor
+   * @param {Object} config - Override default settings for this Request only.
+   */
   constructor(config) {
     _method.set(this, config.method || null);
     _headers.set(this, config.headers || {});

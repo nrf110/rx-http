@@ -9,7 +9,7 @@ import { parseUri } from './utilities';
 
 /**
  * An HTTP client.
- * @constructor
+ * @class
  * @name Http
  * @param {Object} [options] - A hash of settings for this client.
  */

@@ -32,8 +32,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
@@ -99,7 +98,8 @@ raw body into the appropriate type.</p>
       <div>
         
         
-        
+        <div data-ice="description"><p>Rejects a response with a non-20x status-code.</p>
+</div>
       </div>
     </td>
     <td>
@@ -154,7 +154,10 @@ raw body into the appropriate type.</p>
       <div>
         
         
-        
+        <div data-ice="description"><p>If the HTTP verb is not one understood by Browsers, change the verb
+to a POST and send the X-HTTP-Method-Override header with the original
+method.</p>
+</div>
       </div>
     </td>
     <td>
@@ -175,34 +178,7 @@ raw body into the appropriate type.</p>
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span><span data-ice="signature">(-: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, value: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          <span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span><span data-ice="signature">(config: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+          <span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span>
         </p>
       </div>
       <div>
@@ -230,7 +206,7 @@ raw body into the appropriate type.</p>
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span><span data-ice="signature">(xhr: <span><a href="https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a></span>, body: <span>Observable</span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>&gt;, uploadProgress: <span>Observable</span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>&gt;, downloadProgress: <span>Observable</span>&lt;<span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>&gt;)</span>
+          <span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span>
         </p>
       </div>
       <div>
@@ -291,7 +267,9 @@ raw body into the appropriate type.</p>
       <div>
         
         
-        
+        <div data-ice="description"><p>Reads the value from the configured XSRF cookie and sends it back to the
+server and sends it back in the configured header.</p>
+</div>
       </div>
     </td>
     <td>

@@ -32,8 +32,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
@@ -48,7 +47,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/request.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isUndefined, identity, assign, isString, isObject } from &apos;lodash&apos;;
-import PropertyValidationException from &apos;./exceptions&apos;;
+import { PropertyValidationException } from &apos;./exceptions&apos;;
 import Path from &apos;./path&apos;;
 import Url from &apos;./url&apos;;
 import { parseUri } from &apos;./utilities&apos;;
@@ -69,9 +68,12 @@ let _provider = new WeakMap();
 /**
  * A Request should only ever be created by an instance of {@link Http}
  * @class
- * @param {Object} config - Override default settings for this Request only.
  */
 export default class Request {
+  /**
+   * @constructor
+   * @param {Object} config - Override default settings for this Request only.
+   */
   constructor(config) {
     _method.set(this, config.method || null);
     _headers.set(this, config.headers || {});

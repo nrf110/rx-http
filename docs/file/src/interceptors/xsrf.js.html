@@ -32,8 +32,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/exceptions.js~PropertyValidationException.html">PropertyValidationException</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
@@ -47,16 +46,22 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/interceptors/xsrf.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isString } from &apos;lodash&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isUndefined, isString } from &apos;lodash&apos;;
 import Cookies from &apos;js-cookie&apos;;
 import Interceptor from &apos;../interceptor&apos;;
 
+/**
+ * Reads the value from the configured XSRF cookie and sends it back to the
+ * server and sends it back in the configured header.
+ * @class
+ * @name XSRF
+ */
 export default class XSRF extends Interceptor {
   request(request, accept, reject) {
     const xsrfToken = Cookies.get(request.xsrfCookieName());
     const xsrfHeader = request.xsrfHeaderName();
 
-    if (isString(xsrfToken)) {
+    if (!isUndefined(xsrfToken) &amp;&amp; isString(xsrfToken)) {
       request.header(xsrfHeader, xsrfToken);
     }
 

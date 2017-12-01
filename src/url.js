@@ -48,6 +48,10 @@ const _query = new WeakMap();
  * @param {Object} parts
  */
 class Url {
+  /**
+   * @constructor
+   * @param {Object} parts
+   */
   constructor(parts) {
     if (parts.protocol) _protocol.set(this, parts.protocol);
     if (parts.user) _user.set(this, parts.user);
@@ -151,7 +155,7 @@ class Url {
   /**
    * @method
    * @name isAbsolute
-   * @returns {Booleean} - true if the url is absolute, false if it is relative.
+   * @returns {Boolean} - true if the url is absolute, false if it is relative.
    */
   isAbsolute() {
     return !!this.host();
@@ -160,7 +164,7 @@ class Url {
   /**
    * @method
    * @name isRelative
-   * @returns {Booleean} - true if the url is relative, false if it is absolute.
+   * @returns {Boolean} - true if the url is relative, false if it is absolute.
    */
   isRelative() {
     return !this.isAbsolute();

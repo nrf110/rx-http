@@ -6,7 +6,6 @@ import Interceptor from '../interceptor';
  * Tries to automatically detect the response content type and deserialize the
  * raw body into the appropriate type.
  * @class
- * @implements Interceptor
  * @name BodyTransformer
  */
 export default class BodyTransformer extends Interceptor {
