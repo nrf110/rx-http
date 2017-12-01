@@ -41,8 +41,8 @@ export default class Request {
   /**
    * @method
    * @name method
-   * @param {string} [value] - The HTTP method for this request
-   * @returns {string|Request} - If value is specified, sets the HTTP method
+   * @param {String} [value] - The HTTP method for this request
+   * @returns {String|Request} - If value is specified, sets the HTTP method
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current HTTP method
    */
@@ -58,9 +58,9 @@ export default class Request {
   /**
    * @method
    * @name header
-   * @param {string} name - The name of the header
-   * @param {string} [value] - The value to assign to the header
-   * @returns {string|Request} - If value is specified, sets the header
+   * @param {String} name - The name of the header
+   * @param {String} [value] - The value to assign to the header
+   * @returns {String|Request} - If value is specified, sets the header
    * and returns the current Request.  If value is ommitted, returns the
    * value for the header.
    */
@@ -79,7 +79,7 @@ export default class Request {
    * @name headers
    * @param {Object} [value] - The hash of headers to send with this request.
    * Replaces any existing headers
-   * @returns {object|Request} - If value is specified, sets the headers
+   * @returns {Object|Request} - If value is specified, sets the headers
    * and returns the current Request.  If value is ommitted, returns a copy
    * of the current headers.
    */
@@ -95,8 +95,8 @@ export default class Request {
   /**
    * @method
    * @name body
-   * @param {Object|FormData|Blob|File|string} [value] - The body for this request
-   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body
+   * @param {Object|FormData|Blob|File|String} [value] - The body for this request
+   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current body
    */
@@ -144,8 +144,8 @@ export default class Request {
   /**
    * @method
    * @name retries
-   * @param {number} [value] - The number of times this request will be retried on failure.
-   * @returns {number|Request} - If value is specified, sets the number of retries
+   * @param {Number} [value] - The number of times this request will be retried on failure.
+   * @returns {Number|Request} - If value is specified, sets the number of retries
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current number of retries.
    */
@@ -176,8 +176,8 @@ export default class Request {
   /**
    * @method
    * @name xsrfCookieName
-   * @param {string} [value] - The name of the XSRF cookie
-   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie
+   * @param {String} [value] - The name of the XSRF cookie
+   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfCookieName(value) {
@@ -191,8 +191,8 @@ export default class Request {
   /**
    * @method
    * @name xsrfHeaderName
-   * @param {string} [value] - The name of the XSRF header
-   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header
+   * @param {String} [value] - The name of the XSRF header
+   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfHeaderName(value) {
@@ -206,10 +206,10 @@ export default class Request {
   /**
    * @method
    * @name withCredentials
-   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl
+   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl
    * requests should be made using cookies, authorization headers, or TLS client
    * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
-   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag
+   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag
    * and returns the current Request.  If value is ommitted, returns the current
    * value of the flag.
    */
@@ -224,8 +224,8 @@ export default class Request {
   /**
    * @method
    * @name username
-   * @param {string} [value] - Basic auth username
-   * @returns {string|Request} - If the value is specified, sets the username and returns
+   * @param {String} [value] - Basic auth username
+   * @returns {String|Request} - If the value is specified, sets the username and returns
    * the current Request.  If value is ommitted, retursn the current username.
    */
   username(value) {
@@ -239,8 +239,8 @@ export default class Request {
   /**
    * @method
    * @name password
-   * @param {string} [value] - Basic auth password
-   * @returns {string|Request} - If the value is specified, sets the password and returns
+   * @param {String} [value] - Basic auth password
+   * @returns {String|Request} - If the value is specified, sets the password and returns
    * the current Request.  If value is ommitted, retursn the current password.
    */
   password(value) {

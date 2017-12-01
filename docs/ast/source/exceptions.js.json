@@ -628,7 +628,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * @class\n * @name PropertyValidationException\n * @param {string} - property\n * @param value\n ",
+              "value": "*\n * @class\n * @name PropertyValidationException\n * @param {String} - property\n * @param value\n ",
               "start": 0,
               "end": 100,
               "loc": {
@@ -648,7 +648,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * @class\n * @name PropertyValidationException\n * @param {string} - property\n * @param value\n ",
+            "value": "*\n * @class\n * @name PropertyValidationException\n * @param {String} - property\n * @param value\n ",
             "start": 0,
             "end": 100,
             "loc": {
@@ -670,7 +670,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @class\n * @name PropertyValidationException\n * @param {string} - property\n * @param value\n ",
+      "value": "*\n * @class\n * @name PropertyValidationException\n * @param {String} - property\n * @param value\n ",
       "start": 0,
       "end": 100,
       "loc": {
@@ -688,7 +688,7 @@
   "tokens": [
     {
       "type": "CommentBlock",
-      "value": "*\n * @class\n * @name PropertyValidationException\n * @param {string} - property\n * @param value\n ",
+      "value": "*\n * @class\n * @name PropertyValidationException\n * @param {String} - property\n * @param value\n ",
       "start": 0,
       "end": 100,
       "loc": {

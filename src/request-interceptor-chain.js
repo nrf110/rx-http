@@ -12,20 +12,6 @@ import { isEmpty, head, tail, partial } from 'lodash';
  */
 export default function RequestInterceptorChain(interceptors, accept, reject) {
   /**
-   * Pass-through accept for the request.
-   */
-  function defaultRequest(request, good) {
-    good(request);
-  }
-
-  /**
-   * Immediately rejects the error without trying to recover.
-   */
-  function defaultRequestError(error, good, bad) {
-    bad(error);
-  }
-
-  /**
    * Handler for a rejected interceptor.  Runs requestError interceptor for
    * all interceptors following the failure, in an attempt to recover.
    * If one of the interceptors manages to recover, hop back into the next
@@ -37,7 +23,7 @@ export default function RequestInterceptorChain(interceptors, accept, reject) {
         if (!isEmpty(rest)) {
           const interceptor = head(rest);
           const xs = tail(rest);
-          const transform = interceptor.requestError || defaultRequestError;
+          const transform = interceptor.requestError;
           const next = partial(step, xs);
 
           transform(err, recover, next);
@@ -60,7 +46,7 @@ export default function RequestInterceptorChain(interceptors, accept, reject) {
       if (!isEmpty(remaining)) {
         const interceptor = head(remaining);
         const xs = tail(remaining);
-        const transform = interceptor.request || defaultRequest;
+        const transform = interceptor.request;
         const success = partial(step, xs);
 
         transform(request, success, failure(xs, success));

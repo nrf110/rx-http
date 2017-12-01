@@ -1419,7 +1419,7 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<string>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
+            "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<String>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
             "start": 501,
             "end": 984,
             "loc": {
@@ -2846,7 +2846,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<string>} - An Observable stream of the response body/entity contents\n   ",
+                    "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<String>} - An Observable stream of the response body/entity contents\n   ",
                     "start": 1778,
                     "end": 1911,
                     "loc": {
@@ -3038,7 +3038,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<string>} - An Observable stream of the response body/entity contents\n   ",
+                    "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<String>} - An Observable stream of the response body/entity contents\n   ",
                     "start": 1778,
                     "end": 1911,
                     "loc": {
@@ -3056,7 +3056,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name status\n   * @returns {number} - The HTTP status code of the response\n   ",
+                    "value": "*\n   * @method\n   * @name status\n   * @returns {Number} - The HTTP status code of the response\n   ",
                     "start": 1973,
                     "end": 2075,
                     "loc": {
@@ -3231,7 +3231,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name status\n   * @returns {number} - The HTTP status code of the response\n   ",
+                    "value": "*\n   * @method\n   * @name status\n   * @returns {Number} - The HTTP status code of the response\n   ",
                     "start": 1973,
                     "end": 2075,
                     "loc": {
@@ -3249,7 +3249,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name statusText\n   * @returns {string} - The status text of the response\n   ",
+                    "value": "*\n   * @method\n   * @name statusText\n   * @returns {String} - The status text of the response\n   ",
                     "start": 2126,
                     "end": 2227,
                     "loc": {
@@ -3424,7 +3424,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name statusText\n   * @returns {string} - The status text of the response\n   ",
+                    "value": "*\n   * @method\n   * @name statusText\n   * @returns {String} - The status text of the response\n   ",
                     "start": 2126,
                     "end": 2227,
                     "loc": {
@@ -3635,7 +3635,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {string} name - The name of the header to lookup\n   * @returns {string} - The value of the header, or undefined if not found\n   ",
+                    "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {String} name - The name of the header to lookup\n   * @returns {String} - The value of the header, or undefined if not found\n   ",
                     "start": 2529,
                     "end": 2761,
                     "loc": {
@@ -3861,7 +3861,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {string} name - The name of the header to lookup\n   * @returns {string} - The value of the header, or undefined if not found\n   ",
+                    "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {String} name - The name of the header to lookup\n   * @returns {String} - The value of the header, or undefined if not found\n   ",
                     "start": 2529,
                     "end": 2761,
                     "loc": {
@@ -3879,7 +3879,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name isChunked\n   * @returns {boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
+                    "value": "*\n   * @method\n   * @name isChunked\n   * @returns {Boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
                     "start": 2823,
                     "end": 3094,
                     "loc": {
@@ -5739,7 +5739,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name isChunked\n   * @returns {boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
+                    "value": "*\n   * @method\n   * @name isChunked\n   * @returns {Boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
                     "start": 2823,
                     "end": 3094,
                     "loc": {
@@ -5760,7 +5760,7 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<string>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
+              "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<String>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
               "start": 501,
               "end": 984,
               "loc": {
@@ -5780,7 +5780,7 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<string>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
+            "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<String>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
             "start": 501,
             "end": 984,
             "loc": {
@@ -5802,7 +5802,7 @@
   "comments": [
     {
       "type": "CommentBlock",
-      "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<string>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
+      "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<String>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
       "start": 501,
       "end": 984,
       "loc": {
@@ -5850,7 +5850,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<string>} - An Observable stream of the response body/entity contents\n   ",
+      "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<String>} - An Observable stream of the response body/entity contents\n   ",
       "start": 1778,
       "end": 1911,
       "loc": {
@@ -5866,7 +5866,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name status\n   * @returns {number} - The HTTP status code of the response\n   ",
+      "value": "*\n   * @method\n   * @name status\n   * @returns {Number} - The HTTP status code of the response\n   ",
       "start": 1973,
       "end": 2075,
       "loc": {
@@ -5882,7 +5882,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name statusText\n   * @returns {string} - The status text of the response\n   ",
+      "value": "*\n   * @method\n   * @name statusText\n   * @returns {String} - The status text of the response\n   ",
       "start": 2126,
       "end": 2227,
       "loc": {
@@ -5914,7 +5914,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {string} name - The name of the header to lookup\n   * @returns {string} - The value of the header, or undefined if not found\n   ",
+      "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {String} name - The name of the header to lookup\n   * @returns {String} - The value of the header, or undefined if not found\n   ",
       "start": 2529,
       "end": 2761,
       "loc": {
@@ -5930,7 +5930,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name isChunked\n   * @returns {boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
+      "value": "*\n   * @method\n   * @name isChunked\n   * @returns {Boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
       "start": 2823,
       "end": 3094,
       "loc": {
@@ -9131,7 +9131,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<string>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
+      "value": "*\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n * @param {XMLHttpRequest} xhr\n * @param {Observable<String>} body - An Observable representing the body/entity of the response\n * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n ",
       "start": 501,
       "end": 984,
       "loc": {
@@ -12008,7 +12008,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<string>} - An Observable stream of the response body/entity contents\n   ",
+      "value": "*\n   * @method\n   * @name body\n   * @returns {Observable<String>} - An Observable stream of the response body/entity contents\n   ",
       "start": 1778,
       "end": 1911,
       "loc": {
@@ -12412,7 +12412,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name status\n   * @returns {number} - The HTTP status code of the response\n   ",
+      "value": "*\n   * @method\n   * @name status\n   * @returns {Number} - The HTTP status code of the response\n   ",
       "start": 1973,
       "end": 2075,
       "loc": {
@@ -12764,7 +12764,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name statusText\n   * @returns {string} - The status text of the response\n   ",
+      "value": "*\n   * @method\n   * @name statusText\n   * @returns {String} - The status text of the response\n   ",
       "start": 2126,
       "end": 2227,
       "loc": {
@@ -13468,7 +13468,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {string} name - The name of the header to lookup\n   * @returns {string} - The value of the header, or undefined if not found\n   ",
+      "value": "*\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {String} name - The name of the header to lookup\n   * @returns {String} - The value of the header, or undefined if not found\n   ",
       "start": 2529,
       "end": 2761,
       "loc": {
@@ -13924,7 +13924,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name isChunked\n   * @returns {boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
+      "value": "*\n   * @method\n   * @name isChunked\n   * @returns {Boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   ",
       "start": 2823,
       "end": 3094,
       "loc": {

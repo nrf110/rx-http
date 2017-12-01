@@ -62,45 +62,106 @@ class Url {
   /**
    * @method
    * @name protocol
-   * @param {string} [value] -
-   * @returns {Url|string} -
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the protocol for the url
+   * and returns the current instance.  If value is ommitted, returns the
+   * current protocol.
    */
   protocol(value) {
     return property.call(this, _protocol, value);
   }
 
+  /**
+   * @method
+   * @name user
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the user and returns
+   * the current instance.  If value is ommitted, returns the current user.
+   */
   user(value) {
     return property.call(this, _user, value);
   }
 
+  /**
+   * @method
+   * @name password
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the password and returns
+   * the current instance.  If value is ommitted, returns the current password.
+   */
   password(value) {
     return property.call(this, _password, value);
   }
 
+  /**
+   * @method
+   * @name host
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the host and returns
+   * the current instance.  If value is ommitted, returns the current host.
+   */
   host(value) {
     return property.call(this, _host, value);
   }
 
+  /**
+   * @method
+   * @name port
+   * @param {String|Number} [value]
+   * @returns {Url|String|Number} - If value is specified, sets the port and returns
+   * the current instance.  If value is ommitted, returns the current port.
+   */
   port(value) {
     return property.call(this, _port, value);
   }
 
+  /**
+   * @method
+   * @name directory
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the directory and returns
+   * the current instance.  If value is ommitted, returns the current directory.
+   */
   directory(value) {
     return property.call(this, _directory, value);
   }
 
+  /**
+   * @method
+   * @name file
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the file and returns
+   * the current instance.  If value is ommitted, returns the current file.
+   */
   file(value) {
     return property.call(this, _file, value);
   }
 
+  /**
+   * @method
+   * @name fragment
+   * @param {String} [value]
+   * @returns {Url|String} - If value is specified, sets the fragment and returns
+   * the current instance.  If value is ommitted, returns the current fragment.
+   */
   fragment(value) {
     return property.call(this, _fragment, value);
   }
 
+  /**
+   * @method
+   * @name isAbsolute
+   * @returns {Booleean} - true if the url is absolute, false if it is relative.
+   */
   isAbsolute() {
     return !!this.host();
   }
 
+  /**
+   * @method
+   * @name isRelative
+   * @returns {Booleean} - true if the url is relative, false if it is absolute.
+   */
   isRelative() {
     return !this.isAbsolute();
   }
@@ -108,31 +169,23 @@ class Url {
   /**
    * @method
    * @name query
-   * @param {string|object} [name] - The name of the query-string parameter
+   * @param {String|Object} [name] - The name of the query-string parameter
    * @param [value] - The value of the query-string parameter
-   * @returns {object|string|Request} -
+   * @returns {Object|String|Request} -
    * If no parameters are specified - returns a copy of the entire query hash.
    * @example
-   * {{
-   *   request.query() // returns { "foo": "bar" }
-   * }}
+   * request.query() // returns { "foo": "bar" }
    * If only name is specified, and name is a string - returns the value for the key in the query hash.
    * @example
-   * {{
-   *    request.query("foo") // returns "bar"
-   * }}
+   * request.query("foo") // returns "bar"
    * If only name is specified, and name is an object - replaces the entire query hash
    * and returns the current Request.
    * @example
-   * {{
-   *    request.query({ "foo": "bar", "baz": 1 }).execute()
-   * }}
+   * request.query({ "foo": "bar", "baz": 1 }).execute()
    * If name and value are specified - sets the value of name in the query hash
    * and returns the current Request.
    * @example
-   * {{
-   *   request.query("foo", "bar").execute()
-   * }}
+   * request.query("foo", "bar").execute()
    */
   query(name, value) {
     if (!isUndefined(name)) {
@@ -155,7 +208,7 @@ class Url {
   /**
    * @method
    * @name userInfo
-   * @returns {string} - returns basic auth credentials in the format
+   * @returns {String} - returns basic auth credentials in the format
    * user:password, if both user and password are set.
    */
   userInfo() {
@@ -172,7 +225,7 @@ class Url {
   /**
    * @method
    * @name authority
-   * @returns {string} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])
+   * @returns {String} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])
    */
   authority() {
     const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : '';
@@ -186,7 +239,7 @@ class Url {
   /**
    * @method
    * @name path
-   * @returns {string} - returns the path portion of the url
+   * @returns {String} - returns the path portion of the url
    */
   path() {
     const dir = _directory.get(this) || '';
@@ -235,7 +288,7 @@ class Url {
    * @name toString
    * @param {Function<Object, String>} serializeQuery - a function that can customize
    * how the query-string hash is rendered in the resulting url
-   * @returns {string}
+   * @returns {String}
    */
   toString(serializeQuery) {
     const auth = this.authority();
@@ -284,7 +337,7 @@ class Url {
 /**
  * @function
  * @name factory
- * @param {Object|string} value - A hash containing the Url parts, or a string
+ * @param {Object|String} value - A hash containing the Url parts, or a string
  * representation of a Url
  * @returns {Url}
  */

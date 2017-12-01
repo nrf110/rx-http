@@ -7,11 +7,10 @@ import Path from './path';
 import { PropertyValidationException } from './exceptions';
 import { parseUri } from './utilities';
 
-console.log(Interceptors);
-
 /**
  * An HTTP client.
- * @class
+ * @constructor
+ * @name Http
  * @param {Object} [options] - A hash of settings for this client.
  */
 function Http(options = {}) {
@@ -36,9 +35,9 @@ function Http(options = {}) {
   /**
    * @method
    * @name baseUrl
-   * @param {string|Http} [url] - the base URL applied by default to all
+   * @param {String|Http} [url] - the base URL applied by default to all
    * requests from this client.
-   * @returns {string|Http} - If url is specified, updates the default baseUrl
+   * @returns {String|Http} - If url is specified, updates the default baseUrl
    * for all requests created with this client, and returns the client instance.
    * If value is ommitted, returns the current baseUrl.
    */
@@ -47,8 +46,8 @@ function Http(options = {}) {
   /**
    * @method
    * @name timeout
-   * @param {number} [value] - The request timeout in milliseconds
-   * @returns {number|Http} - If value is specified, updates the default request
+   * @param {Number} [value] - The request timeout in milliseconds
+   * @returns {Number|Http} - If value is specified, updates the default request
    * timeout for all requests created with this client, and returns the client
    * instance.  If value is ommitted, returns the current timeout value.
    */
@@ -57,8 +56,8 @@ function Http(options = {}) {
   /**
    * @method
    * @name retries
-   * @param {number} [value] - The number of retries allowed
-   * @returns {number|Http} - If count is specified, sets the default number
+   * @param {Number} [value] - The number of retries allowed
+   * @returns {Number|Http} - If count is specified, sets the default number
    * of retries allowed for requests from this client, and returns the client
    * instance.  If count is ommitted, returns the current value.
    */
@@ -67,8 +66,8 @@ function Http(options = {}) {
   /**
    * @method
    * @name interceptors
-   * @param {Object[]} [values] - An array of interceptors.
-   * @returns {Object[]|Http} - If values is specified, replaces the default
+   * @param {Interceptor[]} [values] - An array of interceptors.
+   * @returns {Interceptor[]|Http} - If values is specified, replaces the default
    * interceptors for all requests from this client, and returns the client
    * instance.  If values is ommitted, returns the current array of
    * interceptors.
@@ -78,7 +77,7 @@ function Http(options = {}) {
   /**
    * @method
    * @name addInterceptor
-   * @param {Object} interceptor - Add the interceptor to the end of the
+   * @param {Interceptor} interceptor - Add the interceptor to the end of the
    * chain of interceptors.
    * @return {Http} - The current client instance.
    */
@@ -90,7 +89,7 @@ function Http(options = {}) {
   /**
    * @method
    * @name removeInterceptor
-   * @param interceptor - Remove the interceptor from the chain of interceptors.
+   * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.
    * @returns {Http} - The current client instance.
    */
   this.removeInterceptor = function (interceptor) {
@@ -101,9 +100,9 @@ function Http(options = {}) {
   /**
    * @method
    * @name request
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).request('/some/stuff', {
    *   method: 'POST',
@@ -138,7 +137,7 @@ function Http(options = {}) {
    * Helper method for request.  Automatically sets method to HEAD.
    * @param {string} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {
    *   retries: 2,
@@ -151,9 +150,9 @@ function Http(options = {}) {
    * @method
    * @name get
    * Helper method for request.  Automatically sets method to GET.
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).get('/some/stuff', {
    *   retries: 2
@@ -166,9 +165,9 @@ function Http(options = {}) {
    * @method
    * @name options
    * Helper method for request.  Automatically sets method to OPTIONS.
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {
    *   retries: 2,
@@ -181,9 +180,9 @@ function Http(options = {}) {
    * @method
    * @name delete
    * Helper method for request.  Automatically sets method to DELETE.
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).delete('/some/stuff', {
    *   retries: 2,
@@ -196,9 +195,9 @@ function Http(options = {}) {
    * @method
    * @name trace
    * Helper method for request.  Automatically sets method to TRACE.
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).trace('/some/stuff', {
    *   retries: 2,
@@ -211,9 +210,9 @@ function Http(options = {}) {
    * @method
    * @name post
    * Helper method for request.  Automatically sets method to POST.
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).post('/some/stuff', {
    *   body: { foo: "bar", baz: 1 },
@@ -225,9 +224,9 @@ function Http(options = {}) {
   /** @method
   * @name put
   * Helper method for request.  Automatically sets method to PUT.
-  * @param {string} url - the URL where the request will be sent.
+  * @param {String} url - the URL where the request will be sent.
   * @param {Object} [options] - add/override settings for this request.
-  * @return {@link Request}
+  * @return {Request}
   * @example
   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).put('/some/stuff', {
   *   body: { foo: "bar", baz: 1 },
@@ -240,9 +239,9 @@ function Http(options = {}) {
    * @method
    * @name patch
    * Helper method for request.  Automatically sets method to PATCH.
-   * @param {string} url - the URL where the request will be sent.
+   * @param {String} url - the URL where the request will be sent.
    * @param {Object} [options] - add/override settings for this request.
-   * @return {@link Request}
+   * @return {Request}
    * @example
    * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).patch('/some/stuff', {
    *   body: { foo: "bar", baz: 1 },

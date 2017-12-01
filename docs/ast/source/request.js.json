@@ -3817,7 +3817,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name method\n   * @param {string} [value] - The HTTP method for this request\n   * @returns {string|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
+                    "value": "*\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
                     "start": 1419,
                     "end": 1715,
                     "loc": {
@@ -4239,7 +4239,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name method\n   * @param {string} [value] - The HTTP method for this request\n   * @returns {string|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
+                    "value": "*\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
                     "start": 1419,
                     "end": 1715,
                     "loc": {
@@ -4257,7 +4257,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name header\n   * @param {string} name - The name of the header\n   * @param {string} [value] - The value to assign to the header\n   * @returns {string|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
+                    "value": "*\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
                     "start": 1856,
                     "end": 2184,
                     "loc": {
@@ -4943,7 +4943,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name header\n   * @param {string} name - The name of the header\n   * @param {string} [value] - The value to assign to the header\n   * @returns {string|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
+                    "value": "*\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
                     "start": 1856,
                     "end": 2184,
                     "loc": {
@@ -4961,7 +4961,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
+                    "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
                     "start": 2406,
                     "end": 2738,
                     "loc": {
@@ -5433,7 +5433,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
+                    "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
                     "start": 2406,
                     "end": 2738,
                     "loc": {
@@ -5451,7 +5451,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|string} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
+                    "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
                     "start": 2895,
                     "end": 3220,
                     "loc": {
@@ -5873,7 +5873,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|string} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
+                    "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
                     "start": 2895,
                     "end": 3220,
                     "loc": {
@@ -7553,7 +7553,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name retries\n   * @param {number} [value] - The number of times this request will be retried on failure.\n   * @returns {number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
+                    "value": "*\n   * @method\n   * @name retries\n   * @param {Number} [value] - The number of times this request will be retried on failure.\n   * @returns {Number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
                     "start": 4198,
                     "end": 4536,
                     "loc": {
@@ -7975,7 +7975,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name retries\n   * @param {number} [value] - The number of times this request will be retried on failure.\n   * @returns {number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
+                    "value": "*\n   * @method\n   * @name retries\n   * @param {Number} [value] - The number of times this request will be retried on failure.\n   * @returns {Number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
                     "start": 4198,
                     "end": 4536,
                     "loc": {
@@ -8433,7 +8433,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {string} [value] - The name of the XSRF cookie\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+                    "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
                     "start": 5239,
                     "end": 5526,
                     "loc": {
@@ -8855,7 +8855,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {string} [value] - The name of the XSRF cookie\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+                    "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
                     "start": 5239,
                     "end": 5526,
                     "loc": {
@@ -8873,7 +8873,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {string} [value] - The name of the XSRF header\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+                    "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
                     "start": 5691,
                     "end": 5978,
                     "loc": {
@@ -9295,7 +9295,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {string} [value] - The name of the XSRF header\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+                    "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
                     "start": 5691,
                     "end": 5978,
                     "loc": {
@@ -9313,7 +9313,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name withCredentials\n   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
+                    "value": "*\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
                     "start": 6143,
                     "end": 6663,
                     "loc": {
@@ -9782,7 +9782,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name withCredentials\n   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
+                    "value": "*\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
                     "start": 6143,
                     "end": 6663,
                     "loc": {
@@ -9800,7 +9800,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name username\n   * @param {string} [value] - Basic auth username\n   * @returns {string|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
+                    "value": "*\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
                     "start": 6842,
                     "end": 7104,
                     "loc": {
@@ -10222,7 +10222,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name username\n   * @param {string} [value] - Basic auth username\n   * @returns {string|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
+                    "value": "*\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
                     "start": 6842,
                     "end": 7104,
                     "loc": {
@@ -10240,7 +10240,7 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name password\n   * @param {string} [value] - Basic auth password\n   * @returns {string|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
+                    "value": "*\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
                     "start": 7251,
                     "end": 7513,
                     "loc": {
@@ -10662,7 +10662,7 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\n   * @method\n   * @name password\n   * @param {string} [value] - Basic auth password\n   * @returns {string|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
+                    "value": "*\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
                     "start": 7251,
                     "end": 7513,
                     "loc": {
@@ -11032,7 +11032,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name method\n   * @param {string} [value] - The HTTP method for this request\n   * @returns {string|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
+      "value": "*\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
       "start": 1419,
       "end": 1715,
       "loc": {
@@ -11048,7 +11048,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name header\n   * @param {string} name - The name of the header\n   * @param {string} [value] - The value to assign to the header\n   * @returns {string|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
+      "value": "*\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
       "start": 1856,
       "end": 2184,
       "loc": {
@@ -11064,7 +11064,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
+      "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
       "start": 2406,
       "end": 2738,
       "loc": {
@@ -11080,7 +11080,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|string} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
+      "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
       "start": 2895,
       "end": 3220,
       "loc": {
@@ -11112,7 +11112,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name retries\n   * @param {number} [value] - The number of times this request will be retried on failure.\n   * @returns {number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
+      "value": "*\n   * @method\n   * @name retries\n   * @param {Number} [value] - The number of times this request will be retried on failure.\n   * @returns {Number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
       "start": 4198,
       "end": 4536,
       "loc": {
@@ -11144,7 +11144,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {string} [value] - The name of the XSRF cookie\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+      "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
       "start": 5239,
       "end": 5526,
       "loc": {
@@ -11160,7 +11160,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {string} [value] - The name of the XSRF header\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+      "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
       "start": 5691,
       "end": 5978,
       "loc": {
@@ -11176,7 +11176,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name withCredentials\n   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
+      "value": "*\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
       "start": 6143,
       "end": 6663,
       "loc": {
@@ -11192,7 +11192,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name username\n   * @param {string} [value] - Basic auth username\n   * @returns {string|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
+      "value": "*\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
       "start": 6842,
       "end": 7104,
       "loc": {
@@ -11208,7 +11208,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name password\n   * @param {string} [value] - Basic auth password\n   * @returns {string|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
+      "value": "*\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
       "start": 7251,
       "end": 7513,
       "loc": {
@@ -18993,7 +18993,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name method\n   * @param {string} [value] - The HTTP method for this request\n   * @returns {string|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
+      "value": "*\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   ",
       "start": 1419,
       "end": 1715,
       "loc": {
@@ -19917,7 +19917,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name header\n   * @param {string} name - The name of the header\n   * @param {string} [value] - The value to assign to the header\n   * @returns {string|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
+      "value": "*\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   ",
       "start": 1856,
       "end": 2184,
       "loc": {
@@ -21389,7 +21389,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
+      "value": "*\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   ",
       "start": 2406,
       "end": 2738,
       "loc": {
@@ -22465,7 +22465,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|string} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|string|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
+      "value": "*\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   ",
       "start": 2895,
       "end": 3220,
       "loc": {
@@ -27093,7 +27093,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name retries\n   * @param {number} [value] - The number of times this request will be retried on failure.\n   * @returns {number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
+      "value": "*\n   * @method\n   * @name retries\n   * @param {Number} [value] - The number of times this request will be retried on failure.\n   * @returns {Number|Request} - If value is specified, sets the number of retries\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current number of retries.\n   ",
       "start": 4198,
       "end": 4536,
       "loc": {
@@ -28941,7 +28941,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {string} [value] - The name of the XSRF cookie\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+      "value": "*\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
       "start": 5239,
       "end": 5526,
       "loc": {
@@ -29865,7 +29865,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {string} [value] - The name of the XSRF header\n   * @returns {string|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
+      "value": "*\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   ",
       "start": 5691,
       "end": 5978,
       "loc": {
@@ -30789,7 +30789,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name withCredentials\n   * @param {boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
+      "value": "*\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   ",
       "start": 6143,
       "end": 6663,
       "loc": {
@@ -31719,7 +31719,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name username\n   * @param {string} [value] - Basic auth username\n   * @returns {string|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
+      "value": "*\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   ",
       "start": 6842,
       "end": 7104,
       "loc": {
@@ -32643,7 +32643,7 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\n   * @method\n   * @name password\n   * @param {string} [value] - Basic auth password\n   * @returns {string|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
+      "value": "*\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   ",
       "start": 7251,
       "end": 7513,
       "loc": {

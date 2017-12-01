@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 294,
+  "end": 1618,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 18,
+      "line": 55,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 294,
+    "end": 1618,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 18,
+        "line": 55,
         "column": 0
       }
     },
@@ -30,96 +30,98 @@
     "body": [
       {
         "type": "ExportDefaultDeclaration",
-        "start": 0,
-        "end": 293,
+        "start": 85,
+        "end": 1617,
         "loc": {
           "start": {
-            "line": 1,
+            "line": 6,
             "column": 0
           },
           "end": {
-            "line": 17,
+            "line": 54,
             "column": 1
           }
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 15,
-          "end": 293,
+          "start": 100,
+          "end": 1617,
           "loc": {
             "start": {
-              "line": 1,
+              "line": 6,
               "column": 15
             },
             "end": {
-              "line": 17,
+              "line": 54,
               "column": 1
             }
           },
           "id": {
             "type": "Identifier",
-            "start": 21,
-            "end": 32,
+            "start": 106,
+            "end": 117,
             "loc": {
               "start": {
-                "line": 1,
+                "line": 6,
                 "column": 21
               },
               "end": {
-                "line": 1,
+                "line": 6,
                 "column": 32
               },
               "identifierName": "Interceptor"
             },
-            "name": "Interceptor"
+            "name": "Interceptor",
+            "leadingComments": null
           },
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 33,
-            "end": 293,
+            "start": 118,
+            "end": 1617,
             "loc": {
               "start": {
-                "line": 1,
+                "line": 6,
                 "column": 33
               },
               "end": {
-                "line": 17,
+                "line": 54,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 37,
-                "end": 96,
+                "start": 455,
+                "end": 514,
                 "loc": {
                   "start": {
-                    "line": 2,
+                    "line": 15,
                     "column": 2
                   },
                   "end": {
-                    "line": 4,
+                    "line": 17,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 37,
-                  "end": 44,
+                  "start": 455,
+                  "end": 462,
                   "loc": {
                     "start": {
-                      "line": 2,
+                      "line": 15,
                       "column": 2
                     },
                     "end": {
-                      "line": 2,
+                      "line": 15,
                       "column": 9
                     },
                     "identifierName": "request"
                   },
-                  "name": "request"
+                  "name": "request",
+                  "leadingComments": null
                 },
                 "static": false,
                 "kind": "method",
@@ -130,15 +132,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 45,
-                    "end": 52,
+                    "start": 463,
+                    "end": 470,
                     "loc": {
                       "start": {
-                        "line": 2,
+                        "line": 15,
                         "column": 10
                       },
                       "end": {
-                        "line": 2,
+                        "line": 15,
                         "column": 17
                       },
                       "identifierName": "request"
@@ -147,15 +149,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 54,
-                    "end": 60,
+                    "start": 472,
+                    "end": 478,
                     "loc": {
                       "start": {
-                        "line": 2,
+                        "line": 15,
                         "column": 19
                       },
                       "end": {
-                        "line": 2,
+                        "line": 15,
                         "column": 25
                       },
                       "identifierName": "accept"
@@ -164,15 +166,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 62,
-                    "end": 68,
+                    "start": 480,
+                    "end": 486,
                     "loc": {
                       "start": {
-                        "line": 2,
+                        "line": 15,
                         "column": 27
                       },
                       "end": {
-                        "line": 2,
+                        "line": 15,
                         "column": 33
                       },
                       "identifierName": "reject"
@@ -182,58 +184,58 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 70,
-                  "end": 96,
+                  "start": 488,
+                  "end": 514,
                   "loc": {
                     "start": {
-                      "line": 2,
+                      "line": 15,
                       "column": 35
                     },
                     "end": {
-                      "line": 4,
+                      "line": 17,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 76,
-                      "end": 92,
+                      "start": 494,
+                      "end": 510,
                       "loc": {
                         "start": {
-                          "line": 3,
+                          "line": 16,
                           "column": 4
                         },
                         "end": {
-                          "line": 3,
+                          "line": 16,
                           "column": 20
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 76,
-                        "end": 91,
+                        "start": 494,
+                        "end": 509,
                         "loc": {
                           "start": {
-                            "line": 3,
+                            "line": 16,
                             "column": 4
                           },
                           "end": {
-                            "line": 3,
+                            "line": 16,
                             "column": 19
                           }
                         },
                         "callee": {
                           "type": "Identifier",
-                          "start": 76,
-                          "end": 82,
+                          "start": 494,
+                          "end": 500,
                           "loc": {
                             "start": {
-                              "line": 3,
+                              "line": 16,
                               "column": 4
                             },
                             "end": {
-                              "line": 3,
+                              "line": 16,
                               "column": 10
                             },
                             "identifierName": "accept"
@@ -243,15 +245,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 83,
-                            "end": 90,
+                            "start": 501,
+                            "end": 508,
                             "loc": {
                               "start": {
-                                "line": 3,
+                                "line": 16,
                                 "column": 11
                               },
                               "end": {
-                                "line": 3,
+                                "line": 16,
                                 "column": 18
                               },
                               "identifierName": "request"
@@ -262,40 +264,78 @@
                       }
                     }
                   ],
-                  "directives": []
-                }
+                  "directives": [],
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 122,
+                    "end": 452,
+                    "loc": {
+                      "start": {
+                        "line": 7,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 5
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * Try to recover from a request error so processing can resume.\n   * @method\n   * @name requestError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 519,
+                    "end": 822,
+                    "loc": {
+                      "start": {
+                        "line": 20,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 27,
+                        "column": 5
+                      }
+                    }
+                  }
+                ]
               },
               {
                 "type": "ClassMethod",
-                "start": 100,
-                "end": 160,
+                "start": 825,
+                "end": 885,
                 "loc": {
                   "start": {
-                    "line": 6,
+                    "line": 28,
                     "column": 2
                   },
                   "end": {
-                    "line": 8,
+                    "line": 30,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 100,
-                  "end": 112,
+                  "start": 825,
+                  "end": 837,
                   "loc": {
                     "start": {
-                      "line": 6,
+                      "line": 28,
                       "column": 2
                     },
                     "end": {
-                      "line": 6,
+                      "line": 28,
                       "column": 14
                     },
                     "identifierName": "requestError"
                   },
-                  "name": "requestError"
+                  "name": "requestError",
+                  "leadingComments": null
                 },
                 "static": false,
                 "kind": "method",
@@ -306,15 +346,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 113,
-                    "end": 118,
+                    "start": 838,
+                    "end": 843,
                     "loc": {
                       "start": {
-                        "line": 6,
+                        "line": 28,
                         "column": 15
                       },
                       "end": {
-                        "line": 6,
+                        "line": 28,
                         "column": 20
                       },
                       "identifierName": "error"
@@ -323,15 +363,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 120,
-                    "end": 126,
+                    "start": 845,
+                    "end": 851,
                     "loc": {
                       "start": {
-                        "line": 6,
+                        "line": 28,
                         "column": 22
                       },
                       "end": {
-                        "line": 6,
+                        "line": 28,
                         "column": 28
                       },
                       "identifierName": "accept"
@@ -340,15 +380,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 128,
-                    "end": 134,
+                    "start": 853,
+                    "end": 859,
                     "loc": {
                       "start": {
-                        "line": 6,
+                        "line": 28,
                         "column": 30
                       },
                       "end": {
-                        "line": 6,
+                        "line": 28,
                         "column": 36
                       },
                       "identifierName": "reject"
@@ -358,58 +398,58 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 136,
-                  "end": 160,
+                  "start": 861,
+                  "end": 885,
                   "loc": {
                     "start": {
-                      "line": 6,
+                      "line": 28,
                       "column": 38
                     },
                     "end": {
-                      "line": 8,
+                      "line": 30,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 142,
-                      "end": 156,
+                      "start": 867,
+                      "end": 881,
                       "loc": {
                         "start": {
-                          "line": 7,
+                          "line": 29,
                           "column": 4
                         },
                         "end": {
-                          "line": 7,
+                          "line": 29,
                           "column": 18
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 142,
-                        "end": 155,
+                        "start": 867,
+                        "end": 880,
                         "loc": {
                           "start": {
-                            "line": 7,
+                            "line": 29,
                             "column": 4
                           },
                           "end": {
-                            "line": 7,
+                            "line": 29,
                             "column": 17
                           }
                         },
                         "callee": {
                           "type": "Identifier",
-                          "start": 142,
-                          "end": 148,
+                          "start": 867,
+                          "end": 873,
                           "loc": {
                             "start": {
-                              "line": 7,
+                              "line": 29,
                               "column": 4
                             },
                             "end": {
-                              "line": 7,
+                              "line": 29,
                               "column": 10
                             },
                             "identifierName": "reject"
@@ -419,15 +459,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 149,
-                            "end": 154,
+                            "start": 874,
+                            "end": 879,
                             "loc": {
                               "start": {
-                                "line": 7,
+                                "line": 29,
                                 "column": 11
                               },
                               "end": {
-                                "line": 7,
+                                "line": 29,
                                 "column": 16
                               },
                               "identifierName": "error"
@@ -438,40 +478,78 @@
                       }
                     }
                   ],
-                  "directives": []
-                }
+                  "directives": [],
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * Try to recover from a request error so processing can resume.\n   * @method\n   * @name requestError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 519,
+                    "end": 822,
+                    "loc": {
+                      "start": {
+                        "line": 20,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 27,
+                        "column": 5
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 889,
+                    "end": 1177,
+                    "loc": {
+                      "start": {
+                        "line": 32,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 38,
+                        "column": 5
+                      }
+                    }
+                  }
+                ]
               },
               {
                 "type": "ClassMethod",
-                "start": 164,
-                "end": 226,
+                "start": 1180,
+                "end": 1242,
                 "loc": {
                   "start": {
-                    "line": 10,
+                    "line": 39,
                     "column": 2
                   },
                   "end": {
-                    "line": 12,
+                    "line": 41,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 164,
-                  "end": 172,
+                  "start": 1180,
+                  "end": 1188,
                   "loc": {
                     "start": {
-                      "line": 10,
+                      "line": 39,
                       "column": 2
                     },
                     "end": {
-                      "line": 10,
+                      "line": 39,
                       "column": 10
                     },
                     "identifierName": "response"
                   },
-                  "name": "response"
+                  "name": "response",
+                  "leadingComments": null
                 },
                 "static": false,
                 "kind": "method",
@@ -482,15 +560,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 173,
-                    "end": 181,
+                    "start": 1189,
+                    "end": 1197,
                     "loc": {
                       "start": {
-                        "line": 10,
+                        "line": 39,
                         "column": 11
                       },
                       "end": {
-                        "line": 10,
+                        "line": 39,
                         "column": 19
                       },
                       "identifierName": "response"
@@ -499,15 +577,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 183,
-                    "end": 189,
+                    "start": 1199,
+                    "end": 1205,
                     "loc": {
                       "start": {
-                        "line": 10,
+                        "line": 39,
                         "column": 21
                       },
                       "end": {
-                        "line": 10,
+                        "line": 39,
                         "column": 27
                       },
                       "identifierName": "accept"
@@ -516,15 +594,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 191,
-                    "end": 197,
+                    "start": 1207,
+                    "end": 1213,
                     "loc": {
                       "start": {
-                        "line": 10,
+                        "line": 39,
                         "column": 29
                       },
                       "end": {
-                        "line": 10,
+                        "line": 39,
                         "column": 35
                       },
                       "identifierName": "reject"
@@ -534,58 +612,58 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 199,
-                  "end": 226,
+                  "start": 1215,
+                  "end": 1242,
                   "loc": {
                     "start": {
-                      "line": 10,
+                      "line": 39,
                       "column": 37
                     },
                     "end": {
-                      "line": 12,
+                      "line": 41,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 205,
-                      "end": 222,
+                      "start": 1221,
+                      "end": 1238,
                       "loc": {
                         "start": {
-                          "line": 11,
+                          "line": 40,
                           "column": 4
                         },
                         "end": {
-                          "line": 11,
+                          "line": 40,
                           "column": 21
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 205,
-                        "end": 221,
+                        "start": 1221,
+                        "end": 1237,
                         "loc": {
                           "start": {
-                            "line": 11,
+                            "line": 40,
                             "column": 4
                           },
                           "end": {
-                            "line": 11,
+                            "line": 40,
                             "column": 20
                           }
                         },
                         "callee": {
                           "type": "Identifier",
-                          "start": 205,
-                          "end": 211,
+                          "start": 1221,
+                          "end": 1227,
                           "loc": {
                             "start": {
-                              "line": 11,
+                              "line": 40,
                               "column": 4
                             },
                             "end": {
-                              "line": 11,
+                              "line": 40,
                               "column": 10
                             },
                             "identifierName": "accept"
@@ -595,15 +673,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 212,
-                            "end": 220,
+                            "start": 1228,
+                            "end": 1236,
                             "loc": {
                               "start": {
-                                "line": 11,
+                                "line": 40,
                                 "column": 11
                               },
                               "end": {
-                                "line": 11,
+                                "line": 40,
                                 "column": 19
                               },
                               "identifierName": "response"
@@ -614,40 +692,78 @@
                       }
                     }
                   ],
-                  "directives": []
-                }
+                  "directives": [],
+                  "trailingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 889,
+                    "end": 1177,
+                    "loc": {
+                      "start": {
+                        "line": 32,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 38,
+                        "column": 5
+                      }
+                    }
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * Try to recover from a response error so processing can resume.\n   * @method\n   * @name responseError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 1246,
+                    "end": 1551,
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 50,
+                        "column": 5
+                      }
+                    }
+                  }
+                ]
               },
               {
                 "type": "ClassMethod",
-                "start": 230,
-                "end": 291,
+                "start": 1554,
+                "end": 1615,
                 "loc": {
                   "start": {
-                    "line": 14,
+                    "line": 51,
                     "column": 2
                   },
                   "end": {
-                    "line": 16,
+                    "line": 53,
                     "column": 3
                   }
                 },
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 230,
-                  "end": 243,
+                  "start": 1554,
+                  "end": 1567,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 51,
                       "column": 2
                     },
                     "end": {
-                      "line": 14,
+                      "line": 51,
                       "column": 15
                     },
                     "identifierName": "responseError"
                   },
-                  "name": "responseError"
+                  "name": "responseError",
+                  "leadingComments": null
                 },
                 "static": false,
                 "kind": "method",
@@ -658,15 +774,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 244,
-                    "end": 249,
+                    "start": 1568,
+                    "end": 1573,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 51,
                         "column": 16
                       },
                       "end": {
-                        "line": 14,
+                        "line": 51,
                         "column": 21
                       },
                       "identifierName": "error"
@@ -675,15 +791,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 251,
-                    "end": 257,
+                    "start": 1575,
+                    "end": 1581,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 51,
                         "column": 23
                       },
                       "end": {
-                        "line": 14,
+                        "line": 51,
                         "column": 29
                       },
                       "identifierName": "accept"
@@ -692,15 +808,15 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 259,
-                    "end": 265,
+                    "start": 1583,
+                    "end": 1589,
                     "loc": {
                       "start": {
-                        "line": 14,
+                        "line": 51,
                         "column": 31
                       },
                       "end": {
-                        "line": 14,
+                        "line": 51,
                         "column": 37
                       },
                       "identifierName": "reject"
@@ -710,58 +826,58 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 267,
-                  "end": 291,
+                  "start": 1591,
+                  "end": 1615,
                   "loc": {
                     "start": {
-                      "line": 14,
+                      "line": 51,
                       "column": 39
                     },
                     "end": {
-                      "line": 16,
+                      "line": 53,
                       "column": 3
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 273,
-                      "end": 287,
+                      "start": 1597,
+                      "end": 1611,
                       "loc": {
                         "start": {
-                          "line": 15,
+                          "line": 52,
                           "column": 4
                         },
                         "end": {
-                          "line": 15,
+                          "line": 52,
                           "column": 18
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 273,
-                        "end": 286,
+                        "start": 1597,
+                        "end": 1610,
                         "loc": {
                           "start": {
-                            "line": 15,
+                            "line": 52,
                             "column": 4
                           },
                           "end": {
-                            "line": 15,
+                            "line": 52,
                             "column": 17
                           }
                         },
                         "callee": {
                           "type": "Identifier",
-                          "start": 273,
-                          "end": 279,
+                          "start": 1597,
+                          "end": 1603,
                           "loc": {
                             "start": {
-                              "line": 15,
+                              "line": 52,
                               "column": 4
                             },
                             "end": {
-                              "line": 15,
+                              "line": 52,
                               "column": 10
                             },
                             "identifierName": "reject"
@@ -771,15 +887,15 @@
                         "arguments": [
                           {
                             "type": "Identifier",
-                            "start": 280,
-                            "end": 285,
+                            "start": 1604,
+                            "end": 1609,
                             "loc": {
                               "start": {
-                                "line": 15,
+                                "line": 52,
                                 "column": 11
                               },
                               "end": {
-                                "line": 15,
+                                "line": 52,
                                 "column": 16
                               },
                               "identifierName": "error"
@@ -791,19 +907,169 @@
                     }
                   ],
                   "directives": []
-                }
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n   * Try to recover from a response error so processing can resume.\n   * @method\n   * @name responseError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+                    "start": 1246,
+                    "end": 1551,
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 50,
+                        "column": 5
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
-          "leadingComments": [],
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "*\n * Base class to be inherited by Interceptors\n * @class\n * @name Interceptor\n ",
+              "start": 0,
+              "end": 84,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 5,
+                  "column": 3
+                }
+              }
+            }
+          ],
           "trailingComments": []
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * Base class to be inherited by Interceptors\n * @class\n * @name Interceptor\n ",
+            "start": 0,
+            "end": 84,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 3
+              }
+            }
+          }
+        ]
       }
     ],
     "directives": []
   },
-  "comments": [],
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * Base class to be inherited by Interceptors\n * @class\n * @name Interceptor\n ",
+      "start": 0,
+      "end": 84,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 122,
+      "end": 452,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 2
+        },
+        "end": {
+          "line": 14,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * Try to recover from a request error so processing can resume.\n   * @method\n   * @name requestError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 519,
+      "end": 822,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 2
+        },
+        "end": {
+          "line": 27,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 889,
+      "end": 1177,
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 2
+        },
+        "end": {
+          "line": 38,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * Try to recover from a response error so processing can resume.\n   * @method\n   * @name responseError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 1246,
+      "end": 1551,
+      "loc": {
+        "start": {
+          "line": 43,
+          "column": 2
+        },
+        "end": {
+          "line": 50,
+          "column": 5
+        }
+      }
+    }
+  ],
   "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * Base class to be inherited by Interceptors\n * @class\n * @name Interceptor\n ",
+      "start": 0,
+      "end": 84,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
     {
       "type": {
         "label": "export",
@@ -819,15 +1085,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 0,
-      "end": 6,
+      "start": 85,
+      "end": 91,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 6,
           "column": 0
         },
         "end": {
-          "line": 1,
+          "line": 6,
           "column": 6
         }
       }
@@ -847,15 +1113,15 @@
         "updateContext": null
       },
       "value": "default",
-      "start": 7,
-      "end": 14,
+      "start": 92,
+      "end": 99,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 6,
           "column": 7
         },
         "end": {
-          "line": 1,
+          "line": 6,
           "column": 14
         }
       }
@@ -875,15 +1141,15 @@
         "updateContext": null
       },
       "value": "class",
-      "start": 15,
-      "end": 20,
+      "start": 100,
+      "end": 105,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 6,
           "column": 15
         },
         "end": {
-          "line": 1,
+          "line": 6,
           "column": 20
         }
       }
@@ -901,15 +1167,15 @@
         "binop": null
       },
       "value": "Interceptor",
-      "start": 21,
-      "end": 32,
+      "start": 106,
+      "end": 117,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 6,
           "column": 21
         },
         "end": {
-          "line": 1,
+          "line": 6,
           "column": 32
         }
       }
@@ -926,16 +1192,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 33,
-      "end": 34,
+      "start": 118,
+      "end": 119,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 6,
           "column": 33
         },
         "end": {
-          "line": 1,
+          "line": 6,
           "column": 34
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 122,
+      "end": 452,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 2
+        },
+        "end": {
+          "line": 14,
+          "column": 5
         }
       }
     },
@@ -952,15 +1234,15 @@
         "binop": null
       },
       "value": "request",
-      "start": 37,
-      "end": 44,
+      "start": 455,
+      "end": 462,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 2
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 9
         }
       }
@@ -977,15 +1259,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 44,
-      "end": 45,
+      "start": 462,
+      "end": 463,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 9
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 10
         }
       }
@@ -1003,15 +1285,15 @@
         "binop": null
       },
       "value": "request",
-      "start": 45,
-      "end": 52,
+      "start": 463,
+      "end": 470,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 10
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 17
         }
       }
@@ -1029,15 +1311,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 52,
-      "end": 53,
+      "start": 470,
+      "end": 471,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 17
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 18
         }
       }
@@ -1055,15 +1337,15 @@
         "binop": null
       },
       "value": "accept",
-      "start": 54,
-      "end": 60,
+      "start": 472,
+      "end": 478,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 19
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 25
         }
       }
@@ -1081,15 +1363,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 60,
-      "end": 61,
+      "start": 478,
+      "end": 479,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 25
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 26
         }
       }
@@ -1107,15 +1389,15 @@
         "binop": null
       },
       "value": "reject",
-      "start": 62,
-      "end": 68,
+      "start": 480,
+      "end": 486,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 27
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 33
         }
       }
@@ -1132,15 +1414,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 68,
-      "end": 69,
+      "start": 486,
+      "end": 487,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 33
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 34
         }
       }
@@ -1157,15 +1439,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 70,
-      "end": 71,
+      "start": 488,
+      "end": 489,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 15,
           "column": 35
         },
         "end": {
-          "line": 2,
+          "line": 15,
           "column": 36
         }
       }
@@ -1183,15 +1465,15 @@
         "binop": null
       },
       "value": "accept",
-      "start": 76,
-      "end": 82,
+      "start": 494,
+      "end": 500,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 16,
           "column": 4
         },
         "end": {
-          "line": 3,
+          "line": 16,
           "column": 10
         }
       }
@@ -1208,15 +1490,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 82,
-      "end": 83,
+      "start": 500,
+      "end": 501,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 16,
           "column": 10
         },
         "end": {
-          "line": 3,
+          "line": 16,
           "column": 11
         }
       }
@@ -1234,15 +1516,15 @@
         "binop": null
       },
       "value": "request",
-      "start": 83,
-      "end": 90,
+      "start": 501,
+      "end": 508,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 16,
           "column": 11
         },
         "end": {
-          "line": 3,
+          "line": 16,
           "column": 18
         }
       }
@@ -1259,15 +1541,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 90,
-      "end": 91,
+      "start": 508,
+      "end": 509,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 16,
           "column": 18
         },
         "end": {
-          "line": 3,
+          "line": 16,
           "column": 19
         }
       }
@@ -1285,15 +1567,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 91,
-      "end": 92,
+      "start": 509,
+      "end": 510,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 16,
           "column": 19
         },
         "end": {
-          "line": 3,
+          "line": 16,
           "column": 20
         }
       }
@@ -1310,16 +1592,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 95,
-      "end": 96,
+      "start": 513,
+      "end": 514,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 17,
           "column": 2
         },
         "end": {
-          "line": 4,
+          "line": 17,
           "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * Try to recover from a request error so processing can resume.\n   * @method\n   * @name requestError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 519,
+      "end": 822,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 2
+        },
+        "end": {
+          "line": 27,
+          "column": 5
         }
       }
     },
@@ -1336,15 +1634,15 @@
         "binop": null
       },
       "value": "requestError",
-      "start": 100,
-      "end": 112,
+      "start": 825,
+      "end": 837,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 2
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 14
         }
       }
@@ -1361,15 +1659,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 112,
-      "end": 113,
+      "start": 837,
+      "end": 838,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 14
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 15
         }
       }
@@ -1387,15 +1685,15 @@
         "binop": null
       },
       "value": "error",
-      "start": 113,
-      "end": 118,
+      "start": 838,
+      "end": 843,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 15
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 20
         }
       }
@@ -1413,15 +1711,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 118,
-      "end": 119,
+      "start": 843,
+      "end": 844,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 20
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 21
         }
       }
@@ -1439,15 +1737,15 @@
         "binop": null
       },
       "value": "accept",
-      "start": 120,
-      "end": 126,
+      "start": 845,
+      "end": 851,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 22
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 28
         }
       }
@@ -1465,15 +1763,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 126,
-      "end": 127,
+      "start": 851,
+      "end": 852,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 28
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 29
         }
       }
@@ -1491,15 +1789,15 @@
         "binop": null
       },
       "value": "reject",
-      "start": 128,
-      "end": 134,
+      "start": 853,
+      "end": 859,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 30
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 36
         }
       }
@@ -1516,15 +1814,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 134,
-      "end": 135,
+      "start": 859,
+      "end": 860,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 36
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 37
         }
       }
@@ -1541,15 +1839,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 136,
-      "end": 137,
+      "start": 861,
+      "end": 862,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 28,
           "column": 38
         },
         "end": {
-          "line": 6,
+          "line": 28,
           "column": 39
         }
       }
@@ -1567,15 +1865,15 @@
         "binop": null
       },
       "value": "reject",
-      "start": 142,
-      "end": 148,
+      "start": 867,
+      "end": 873,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 29,
           "column": 4
         },
         "end": {
-          "line": 7,
+          "line": 29,
           "column": 10
         }
       }
@@ -1592,15 +1890,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 148,
-      "end": 149,
+      "start": 873,
+      "end": 874,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 29,
           "column": 10
         },
         "end": {
-          "line": 7,
+          "line": 29,
           "column": 11
         }
       }
@@ -1618,15 +1916,15 @@
         "binop": null
       },
       "value": "error",
-      "start": 149,
-      "end": 154,
+      "start": 874,
+      "end": 879,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 29,
           "column": 11
         },
         "end": {
-          "line": 7,
+          "line": 29,
           "column": 16
         }
       }
@@ -1643,15 +1941,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 154,
-      "end": 155,
+      "start": 879,
+      "end": 880,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 29,
           "column": 16
         },
         "end": {
-          "line": 7,
+          "line": 29,
           "column": 17
         }
       }
@@ -1669,15 +1967,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 155,
-      "end": 156,
+      "start": 880,
+      "end": 881,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 29,
           "column": 17
         },
         "end": {
-          "line": 7,
+          "line": 29,
           "column": 18
         }
       }
@@ -1694,16 +1992,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 159,
-      "end": 160,
+      "start": 884,
+      "end": 885,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 30,
           "column": 2
         },
         "end": {
-          "line": 8,
+          "line": 30,
           "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 889,
+      "end": 1177,
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 2
+        },
+        "end": {
+          "line": 38,
+          "column": 5
         }
       }
     },
@@ -1720,15 +2034,15 @@
         "binop": null
       },
       "value": "response",
-      "start": 164,
-      "end": 172,
+      "start": 1180,
+      "end": 1188,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 2
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 10
         }
       }
@@ -1745,15 +2059,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 172,
-      "end": 173,
+      "start": 1188,
+      "end": 1189,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 10
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 11
         }
       }
@@ -1771,15 +2085,15 @@
         "binop": null
       },
       "value": "response",
-      "start": 173,
-      "end": 181,
+      "start": 1189,
+      "end": 1197,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 11
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 19
         }
       }
@@ -1797,15 +2111,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 181,
-      "end": 182,
+      "start": 1197,
+      "end": 1198,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 19
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 20
         }
       }
@@ -1823,15 +2137,15 @@
         "binop": null
       },
       "value": "accept",
-      "start": 183,
-      "end": 189,
+      "start": 1199,
+      "end": 1205,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 21
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 27
         }
       }
@@ -1849,15 +2163,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 189,
-      "end": 190,
+      "start": 1205,
+      "end": 1206,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 27
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 28
         }
       }
@@ -1875,15 +2189,15 @@
         "binop": null
       },
       "value": "reject",
-      "start": 191,
-      "end": 197,
+      "start": 1207,
+      "end": 1213,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 29
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 35
         }
       }
@@ -1900,15 +2214,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 197,
-      "end": 198,
+      "start": 1213,
+      "end": 1214,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 35
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 36
         }
       }
@@ -1925,15 +2239,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 199,
-      "end": 200,
+      "start": 1215,
+      "end": 1216,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 39,
           "column": 37
         },
         "end": {
-          "line": 10,
+          "line": 39,
           "column": 38
         }
       }
@@ -1951,15 +2265,15 @@
         "binop": null
       },
       "value": "accept",
-      "start": 205,
-      "end": 211,
+      "start": 1221,
+      "end": 1227,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 40,
           "column": 4
         },
         "end": {
-          "line": 11,
+          "line": 40,
           "column": 10
         }
       }
@@ -1976,15 +2290,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 211,
-      "end": 212,
+      "start": 1227,
+      "end": 1228,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 40,
           "column": 10
         },
         "end": {
-          "line": 11,
+          "line": 40,
           "column": 11
         }
       }
@@ -2002,15 +2316,15 @@
         "binop": null
       },
       "value": "response",
-      "start": 212,
-      "end": 220,
+      "start": 1228,
+      "end": 1236,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 40,
           "column": 11
         },
         "end": {
-          "line": 11,
+          "line": 40,
           "column": 19
         }
       }
@@ -2027,15 +2341,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 220,
-      "end": 221,
+      "start": 1236,
+      "end": 1237,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 40,
           "column": 19
         },
         "end": {
-          "line": 11,
+          "line": 40,
           "column": 20
         }
       }
@@ -2053,15 +2367,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 221,
-      "end": 222,
+      "start": 1237,
+      "end": 1238,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 40,
           "column": 20
         },
         "end": {
-          "line": 11,
+          "line": 40,
           "column": 21
         }
       }
@@ -2078,16 +2392,32 @@
         "postfix": false,
         "binop": null
       },
-      "start": 225,
-      "end": 226,
+      "start": 1241,
+      "end": 1242,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 41,
           "column": 2
         },
         "end": {
-          "line": 12,
+          "line": 41,
           "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n   * Try to recover from a response error so processing can resume.\n   * @method\n   * @name responseError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   ",
+      "start": 1246,
+      "end": 1551,
+      "loc": {
+        "start": {
+          "line": 43,
+          "column": 2
+        },
+        "end": {
+          "line": 50,
+          "column": 5
         }
       }
     },
@@ -2104,15 +2434,15 @@
         "binop": null
       },
       "value": "responseError",
-      "start": 230,
-      "end": 243,
+      "start": 1554,
+      "end": 1567,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 2
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 15
         }
       }
@@ -2129,15 +2459,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 243,
-      "end": 244,
+      "start": 1567,
+      "end": 1568,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 15
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 16
         }
       }
@@ -2155,15 +2485,15 @@
         "binop": null
       },
       "value": "error",
-      "start": 244,
-      "end": 249,
+      "start": 1568,
+      "end": 1573,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 16
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 21
         }
       }
@@ -2181,15 +2511,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 249,
-      "end": 250,
+      "start": 1573,
+      "end": 1574,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 21
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 22
         }
       }
@@ -2207,15 +2537,15 @@
         "binop": null
       },
       "value": "accept",
-      "start": 251,
-      "end": 257,
+      "start": 1575,
+      "end": 1581,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 23
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 29
         }
       }
@@ -2233,15 +2563,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 257,
-      "end": 258,
+      "start": 1581,
+      "end": 1582,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 29
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 30
         }
       }
@@ -2259,15 +2589,15 @@
         "binop": null
       },
       "value": "reject",
-      "start": 259,
-      "end": 265,
+      "start": 1583,
+      "end": 1589,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 31
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 37
         }
       }
@@ -2284,15 +2614,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 265,
-      "end": 266,
+      "start": 1589,
+      "end": 1590,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 37
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 38
         }
       }
@@ -2309,15 +2639,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 267,
-      "end": 268,
+      "start": 1591,
+      "end": 1592,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 51,
           "column": 39
         },
         "end": {
-          "line": 14,
+          "line": 51,
           "column": 40
         }
       }
@@ -2335,15 +2665,15 @@
         "binop": null
       },
       "value": "reject",
-      "start": 273,
-      "end": 279,
+      "start": 1597,
+      "end": 1603,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 52,
           "column": 4
         },
         "end": {
-          "line": 15,
+          "line": 52,
           "column": 10
         }
       }
@@ -2360,15 +2690,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 279,
-      "end": 280,
+      "start": 1603,
+      "end": 1604,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 52,
           "column": 10
         },
         "end": {
-          "line": 15,
+          "line": 52,
           "column": 11
         }
       }
@@ -2386,15 +2716,15 @@
         "binop": null
       },
       "value": "error",
-      "start": 280,
-      "end": 285,
+      "start": 1604,
+      "end": 1609,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 52,
           "column": 11
         },
         "end": {
-          "line": 15,
+          "line": 52,
           "column": 16
         }
       }
@@ -2411,15 +2741,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 285,
-      "end": 286,
+      "start": 1609,
+      "end": 1610,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 52,
           "column": 16
         },
         "end": {
-          "line": 15,
+          "line": 52,
           "column": 17
         }
       }
@@ -2437,15 +2767,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 286,
-      "end": 287,
+      "start": 1610,
+      "end": 1611,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 52,
           "column": 17
         },
         "end": {
-          "line": 15,
+          "line": 52,
           "column": 18
         }
       }
@@ -2462,15 +2792,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 290,
-      "end": 291,
+      "start": 1614,
+      "end": 1615,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 53,
           "column": 2
         },
         "end": {
-          "line": 16,
+          "line": 53,
           "column": 3
         }
       }
@@ -2487,15 +2817,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 292,
-      "end": 293,
+      "start": 1616,
+      "end": 1617,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 54,
           "column": 0
         },
         "end": {
-          "line": 17,
+          "line": 54,
           "column": 1
         }
       }
@@ -2513,15 +2843,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 294,
-      "end": 294,
+      "start": 1618,
+      "end": 1618,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 55,
           "column": 0
         },
         "end": {
-          "line": 18,
+          "line": 55,
           "column": 0
         }
       }

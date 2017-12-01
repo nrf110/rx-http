@@ -22,7 +22,7 @@ function evaluateLazy(property) {
  * @class
  * @name Response
  * @param {XMLHttpRequest} xhr
- * @param {Observable<string>} body - An Observable representing the body/entity of the response
+ * @param {Observable<String>} body - An Observable representing the body/entity of the response
  * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events
  * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events
  */
@@ -58,7 +58,7 @@ export default class Response {
   /**
    * @method
    * @name body
-   * @returns {Observable<string>} - An Observable stream of the response body/entity contents
+   * @returns {Observable<String>} - An Observable stream of the response body/entity contents
    */
   body() {
     return evaluateLazy.call(this, _body);
@@ -67,7 +67,7 @@ export default class Response {
   /**
    * @method
    * @name status
-   * @returns {number} - The HTTP status code of the response
+   * @returns {Number} - The HTTP status code of the response
    */
   status() {
     return _status.get(this);
@@ -76,7 +76,7 @@ export default class Response {
   /**
    * @method
    * @name statusText
-   * @returns {string} - The status text of the response
+   * @returns {String} - The status text of the response
    */
   statusText() {
     return _statusText.get(this);
@@ -97,8 +97,8 @@ export default class Response {
    * Look-up the value of an individual resonse header
    * @method
    * @name header
-   * @param {string} name - The name of the header to lookup
-   * @returns {string} - The value of the header, or undefined if not found
+   * @param {String} name - The name of the header to lookup
+   * @returns {String} - The value of the header, or undefined if not found
    */
   header(name) {
     return _headers.get(this)[name];
@@ -107,7 +107,7 @@ export default class Response {
   /**
    * @method
    * @name isChunked
-   * @returns {boolean} - Determines if this is a chunked response.  A chunked
+   * @returns {Boolean} - Determines if this is a chunked response.  A chunked
    * response will send each chunk through the {@link body} stream.  A non-chunked
    * response will only push the final result through the stream.
    */

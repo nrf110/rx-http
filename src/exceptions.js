@@ -1,7 +1,7 @@
 /**
  * @class
  * @name PropertyValidationException
- * @param {string} - property
+ * @param {String} - property
  * @param value
  */
 export default class PropertyValidationException {

@@ -47,13 +47,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Interceptor from &apos;<span><a href="file/src/interceptor.js.html#lineNumber1">rx-http/src/interceptor.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Interceptor from &apos;<span><a href="file/src/interceptor.js.html#lineNumber6">rx-http/src/interceptor.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/interceptor.js.html#lineNumber1">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/interceptor.js.html#lineNumber6">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -73,7 +73,8 @@
 
   
   
-  
+  <div class="description" data-ice="description"><p>Base class to be inherited by Interceptors</p>
+</div>
   
 
   
@@ -106,7 +107,63 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-request">request</a></span></span><span data-ice="signature">(request: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-request">request</a></span></span><span data-ice="signature">(request: <span><a href="class/src/request.js~Request.html">Request</a></span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/request.js~Request.html">Request</a></span>&gt;, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Transforms (or fails) an outgoing request.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-requestError">requestError</a></span></span><span data-ice="signature">(error: <span>*</span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Try to recover from a request error so processing can resume.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-response">response</a></span></span><span data-ice="signature">(response: <span><a href="class/src/response.js~Response.html">Response</a></span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/response.js~Response.html">Response</a></span>&gt;, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
         </p>
       </div>
       <div>
@@ -133,67 +190,14 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-requestError">requestError</a></span></span><span data-ice="signature">(error: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-responseError">responseError</a></span></span><span data-ice="signature">(error: <span>*</span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-response">response</a></span></span><span data-ice="signature">(response: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          <span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html#instance-method-responseError">responseError</a></span></span><span data-ice="signature">(error: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Try to recover from a response error so processing can resume.</p>
+</div>
       </div>
     </td>
     <td>
@@ -221,18 +225,19 @@
     
     
     
-    <span data-ice="name">request</span><span data-ice="signature">(request: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+    <span data-ice="name">request</span><span data-ice="signature">(request: <span><a href="class/src/request.js~Request.html">Request</a></span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/request.js~Request.html">Request</a></span>&gt;, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber2">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber15">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Transforms (or fails) an outgoing request.</p>
+</div>
 
   
 
@@ -246,21 +251,24 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">request</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="class/src/request.js~Request.html">Request</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The request to be processed</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">accept</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/request.js~Request.html">Request</a></span>&gt;</td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on success to process a (potentially transformed) <span><a href="class/src/request.js~Request.html">Request</a></span></p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">reject</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on failure to pass an error</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -292,18 +300,19 @@
     
     
     
-    <span data-ice="name">requestError</span><span data-ice="signature">(error: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+    <span data-ice="name">requestError</span><span data-ice="signature">(error: <span>*</span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber6">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Try to recover from a request error so processing can resume.</p>
+</div>
 
   
 
@@ -319,19 +328,22 @@
       <td data-ice="name" data-depth="0">error</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The error to be processed</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">accept</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on success if we were able to recover</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">reject</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on failure to pass an error</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -363,11 +375,11 @@
     
     
     
-    <span data-ice="name">response</span><span data-ice="signature">(response: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+    <span data-ice="name">response</span><span data-ice="signature">(response: <span><a href="class/src/response.js~Response.html">Response</a></span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/response.js~Response.html">Response</a></span>&gt;, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber10">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -388,21 +400,24 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">response</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="class/src/response.js~Response.html">Response</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The response to be processed</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">accept</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/response.js~Response.html">Response</a></span>&gt;</td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on success to process a (potentially transformed) <span><a href="class/src/response.js~Response.html">Response</a></span></p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">reject</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on failure to pass an error</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -434,18 +449,19 @@
     
     
     
-    <span data-ice="name">responseError</span><span data-ice="signature">(error: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+    <span data-ice="name">responseError</span><span data-ice="signature">(error: <span>*</span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber14">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/interceptor.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Try to recover from a response error so processing can resume.</p>
+</div>
 
   
 
@@ -461,19 +477,22 @@
       <td data-ice="name" data-depth="0">error</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The error to be processed</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">accept</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on success if we were able to recover</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">reject</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on failure to pass an error</p>
+</td>
     </tr>
 </tbody>
   </table>
