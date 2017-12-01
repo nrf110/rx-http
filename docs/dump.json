@@ -171,7 +171,7 @@
     "__docId__": 7,
     "kind": "file",
     "name": "src/http.js",
-    "content": "import { isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';\nimport Request from './request';\nimport Interceptors from './interceptors';\nimport XHRProvider from './xhr-provider';\nimport Url from './url';\nimport Path from './path';\nimport { PropertyValidationException } from './exceptions';\nimport { parseUri } from './utilities';\n\n/**\n * An HTTP client.\n * @class\n * @name Http\n * @param {Object} [options] - A hash of settings for this client.\n */\nfunction Http(options = {}) {\n  const self = this;\n  const settings = assign({}, Http.defaults, options);\n\n  function property(key, isValid) {\n    return function(value) {\n      if (isUndefined(value)) {\n        return settings[key];\n      }\n\n      if (isValid(value)) {\n        settings[key] = value;\n        return self;\n      }\n\n      throw new PropertyValidationException(key, value);\n    };\n  }\n\n  /**\n   * @method\n   * @name baseUrl\n   * @param {String|Http} [url] - the base URL applied by default to all\n   * requests from this client.\n   * @returns {String|Http} - If url is specified, updates the default baseUrl\n   * for all requests created with this client, and returns the client instance.\n   * If value is ommitted, returns the current baseUrl.\n   */\n  this.baseUrl = property('baseUrl', isString);\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Http} - If value is specified, updates the default request\n   * timeout for all requests created with this client, and returns the client\n   * instance.  If value is ommitted, returns the current timeout value.\n   */\n  this.timeout = property('timeout', isInteger);\n\n  /**\n   * @method\n   * @name retries\n   * @param {Number} [value] - The number of retries allowed\n   * @returns {Number|Http} - If count is specified, sets the default number\n   * of retries allowed for requests from this client, and returns the client\n   * instance.  If count is ommitted, returns the current value.\n   */\n  this.retries = property('retries', isInteger);\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [values] - An array of interceptors.\n   * @returns {Interceptor[]|Http} - If values is specified, replaces the default\n   * interceptors for all requests from this client, and returns the client\n   * instance.  If values is ommitted, returns the current array of\n   * interceptors.\n   */\n  this.interceptors = property('interceptors', isArray);\n\n  /**\n   * @method\n   * @name addInterceptor\n   * @param {Interceptor} interceptor - Add the interceptor to the end of the\n   * chain of interceptors.\n   * @return {Http} - The current client instance.\n   */\n  this.addInterceptor = function (interceptor) {\n    settings.interceptors.push(interceptor);\n    return this;\n  };\n\n  /**\n   * @method\n   * @name removeInterceptor\n   * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.\n   * @returns {Http} - The current client instance.\n   */\n  this.removeInterceptor = function (interceptor) {\n    settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);\n    return this;\n  };\n\n  /**\n   * @method\n   * @name request\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).request('/some/stuff', {\n   *   method: 'POST',\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  const request = this.request = function (url, options = {}) {\n    let fullUrl = url;\n    if (settings.baseUrl) {\n      fullUrl = Path.join(settings.baseUrl, url);\n    }\n\n    const parsed = parseUri(fullUrl);\n    const config = defaults(options, settings);\n\n    assign(parsed.query, options.query);\n    assign(config, { url: new Url(parsed) });\n\n    return new Request(config);\n  };\n\n  function generateRequestMethod(method) {\n    return function (url, options = {}) {\n      return request(url, assign({ method }, options));\n    };\n  }\n\n  /**\n   * @method\n   * @name head\n   * Helper method for request.  Automatically sets method to HEAD.\n   * @param {string} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.head = generateRequestMethod('HEAD');\n\n  /**\n   * @method\n   * @name get\n   * Helper method for request.  Automatically sets method to GET.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).get('/some/stuff', {\n   *   retries: 2\n   *   timeout: 10000\n   * })\n   */\n  this.get = generateRequestMethod('GET');\n\n  /**\n   * @method\n   * @name options\n   * Helper method for request.  Automatically sets method to OPTIONS.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.options = generateRequestMethod('OPTIONS');\n\n  /**\n   * @method\n   * @name delete\n   * Helper method for request.  Automatically sets method to DELETE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).delete('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.delete = generateRequestMethod('DELETE');\n\n  /**\n   * @method\n   * @name trace\n   * Helper method for request.  Automatically sets method to TRACE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).trace('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.trace = generateRequestMethod('TRACE');\n\n  /**\n   * @method\n   * @name post\n   * Helper method for request.  Automatically sets method to POST.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).post('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  this.post = generateRequestMethod('POST');\n\n  /** @method\n  * @name put\n  * Helper method for request.  Automatically sets method to PUT.\n  * @param {String} url - the URL where the request will be sent.\n  * @param {Object} [options] - add/override settings for this request.\n  * @return {Request}\n  * @example\n  * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).put('/some/stuff', {\n  *   body: { foo: \"bar\", baz: 1 },\n  *   timeout: 10000\n  * })\n  **/\n  this.put = generateRequestMethod('PUT');\n\n  /**\n   * @method\n   * @name patch\n   * Helper method for request.  Automatically sets method to PATCH.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).patch('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  this.patch = generateRequestMethod('PATCH');\n}\n\nHttp.defaults = {\n  baseUrl: '',\n  retries: 0,\n  timeout: 30000,\n  xsrfCookieName: 'XSRF-TOKEN',\n  xsrfHeaderName: 'X-XSRF-TOKEN',\n  withCredentials: false,\n  interceptors: [\n    Interceptors.MethodOverride,\n    Interceptors.BodyTransformer,\n    Interceptors.XSRF,\n    Interceptors.ErrorHandling\n  ],\n  provider: XHRProvider\n};\n\nmodule.exports = Http;\n",
+    "content": "import { isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';\nimport Request from './request';\nimport Interceptors from './interceptors';\nimport XHRProvider from './xhr-provider';\nimport Url from './url';\nimport Path from './path';\nimport { PropertyValidationException } from './exceptions';\nimport { parseUri } from './utilities';\n\n/**\n * An HTTP client.\n * @function\n * @name Http\n * @param {Object} [options] - A hash of settings for this client.\n */\nfunction Http(options = {}) {\n  const self = this;\n  const settings = assign({}, Http.defaults, options);\n\n  function property(key, isValid) {\n    return function(value) {\n      if (isUndefined(value)) {\n        return settings[key];\n      }\n\n      if (isValid(value)) {\n        settings[key] = value;\n        return self;\n      }\n\n      throw new PropertyValidationException(key, value);\n    };\n  }\n\n  /**\n   * @method\n   * @name baseUrl\n   * @param {String|Http} [url] - the base URL applied by default to all\n   * requests from this client.\n   * @returns {String|Http} - If url is specified, updates the default baseUrl\n   * for all requests created with this client, and returns the client instance.\n   * If value is ommitted, returns the current baseUrl.\n   */\n  this.baseUrl = property('baseUrl', isString);\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Http} - If value is specified, updates the default request\n   * timeout for all requests created with this client, and returns the client\n   * instance.  If value is ommitted, returns the current timeout value.\n   */\n  this.timeout = property('timeout', isInteger);\n\n  /**\n   * @method\n   * @name retries\n   * @param {Number} [value] - The number of retries allowed\n   * @returns {Number|Http} - If count is specified, sets the default number\n   * of retries allowed for requests from this client, and returns the client\n   * instance.  If count is ommitted, returns the current value.\n   */\n  this.retries = property('retries', isInteger);\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [values] - An array of interceptors.\n   * @returns {Interceptor[]|Http} - If values is specified, replaces the default\n   * interceptors for all requests from this client, and returns the client\n   * instance.  If values is ommitted, returns the current array of\n   * interceptors.\n   */\n  this.interceptors = property('interceptors', isArray);\n\n  /**\n   * @method\n   * @name addInterceptor\n   * @param {Interceptor} interceptor - Add the interceptor to the end of the\n   * chain of interceptors.\n   * @return {Http} - The current client instance.\n   */\n  this.addInterceptor = function (interceptor) {\n    settings.interceptors.push(interceptor);\n    return this;\n  };\n\n  /**\n   * @method\n   * @name removeInterceptor\n   * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.\n   * @returns {Http} - The current client instance.\n   */\n  this.removeInterceptor = function (interceptor) {\n    settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);\n    return this;\n  };\n\n  /**\n   * @method\n   * @name request\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).request('/some/stuff', {\n   *   method: 'POST',\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  const request = this.request = function (url, options = {}) {\n    let fullUrl = url;\n    if (settings.baseUrl) {\n      fullUrl = Path.join(settings.baseUrl, url);\n    }\n\n    const parsed = parseUri(fullUrl);\n    const config = defaults(options, settings);\n\n    assign(parsed.query, options.query);\n    assign(config, { url: new Url(parsed) });\n\n    return new Request(config);\n  };\n\n  function generateRequestMethod(method) {\n    return function (url, options = {}) {\n      return request(url, assign({ method }, options));\n    };\n  }\n\n  /**\n   * @method\n   * @name head\n   * Helper method for request.  Automatically sets method to HEAD.\n   * @param {string} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.head = generateRequestMethod('HEAD');\n\n  /**\n   * @method\n   * @name get\n   * Helper method for request.  Automatically sets method to GET.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).get('/some/stuff', {\n   *   retries: 2\n   *   timeout: 10000\n   * })\n   */\n  this.get = generateRequestMethod('GET');\n\n  /**\n   * @method\n   * @name options\n   * Helper method for request.  Automatically sets method to OPTIONS.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.options = generateRequestMethod('OPTIONS');\n\n  /**\n   * @method\n   * @name delete\n   * Helper method for request.  Automatically sets method to DELETE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).delete('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.delete = generateRequestMethod('DELETE');\n\n  /**\n   * @method\n   * @name trace\n   * Helper method for request.  Automatically sets method to TRACE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).trace('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  this.trace = generateRequestMethod('TRACE');\n\n  /**\n   * @method\n   * @name post\n   * Helper method for request.  Automatically sets method to POST.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).post('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  this.post = generateRequestMethod('POST');\n\n  /** @method\n  * @name put\n  * Helper method for request.  Automatically sets method to PUT.\n  * @param {String} url - the URL where the request will be sent.\n  * @param {Object} [options] - add/override settings for this request.\n  * @return {Request}\n  * @example\n  * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).put('/some/stuff', {\n  *   body: { foo: \"bar\", baz: 1 },\n  *   timeout: 10000\n  * })\n  **/\n  this.put = generateRequestMethod('PUT');\n\n  /**\n   * @method\n   * @name patch\n   * Helper method for request.  Automatically sets method to PATCH.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).patch('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  this.patch = generateRequestMethod('PATCH');\n}\n\nHttp.defaults = {\n  baseUrl: '',\n  retries: 0,\n  timeout: 30000,\n  xsrfCookieName: 'XSRF-TOKEN',\n  xsrfHeaderName: 'X-XSRF-TOKEN',\n  withCredentials: false,\n  interceptors: [\n    Interceptors.MethodOverride,\n    Interceptors.BodyTransformer,\n    Interceptors.XSRF,\n    Interceptors.ErrorHandling\n  ],\n  provider: XHRProvider\n};\n\nmodule.exports = Http;\n",
     "static": true,
     "longname": "src/http.js",
     "access": null,
@@ -195,7 +195,7 @@
     "lineNumber": 16,
     "unknown": [
       {
-        "tagName": "@class",
+        "tagName": "@function",
         "tagValue": ""
       }
     ],
@@ -463,7 +463,7 @@
     "__docId__": 16,
     "kind": "file",
     "name": "src/interceptors/body-transformer.js",
-    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Interceptor from '../interceptor';\n\n/**\n * Tries to automatically detect the response content type and deserialize the\n * raw body into the appropriate type.\n * @class\n * @name BodyTransformer\n */\nexport default class BodyTransformer extends Interceptor {\n  request(request, accept, reject) {\n    const body = request.body();\n\n    if (isObject(body) && !isFile(body) && !isFormData(body) && !isBlob(body)) {\n      const json = JSON.stringify(body);\n\n      request.body(json);\n    }\n\n    accept(request);\n  }\n}\n",
+    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Interceptor from '../interceptor';\n\n/**\n * Tries to automatically detect the response content type and deserialize the\n * raw body into the appropriate type.\n * @class\n * @name BodyTransformer\n */\nexport default class BodyTransformer extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    const body = request.body();\n\n    if (isObject(body) && !isFile(body) && !isFormData(body) && !isBlob(body)) {\n      const json = JSON.stringify(body);\n\n      request.body(json);\n    }\n\n    accept(request);\n  }\n}\n",
     "static": true,
     "longname": "src/interceptors/body-transformer.js",
     "access": null,
@@ -504,33 +504,44 @@
     "static": false,
     "longname": "src/interceptors/body-transformer.js~BodyTransformer#request",
     "access": null,
-    "description": null,
-    "lineNumber": 12,
-    "undocument": true,
+    "description": "Transforms (or fails) an outgoing request.",
+    "lineNumber": 20,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
       }
     ],
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "Request"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "request",
-        "types": [
-          "*"
-        ]
+        "description": "The request to be processed"
       },
       {
+        "nullable": null,
+        "types": [
+          "Function<Request>"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "accept",
-        "types": [
-          "*"
-        ]
+        "description": "called on success to process a (potentially transformed) {@link Request}"
       },
       {
-        "name": "reject",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "reject",
+        "description": "called on failure to pass an error"
       }
     ]
   },
@@ -538,7 +549,7 @@
     "__docId__": 19,
     "kind": "file",
     "name": "src/interceptors/error-handling.js",
-    "content": "import Interceptor from '../interceptor';\n\n/**\n * Rejects a response with a non-20x status-code.\n * @class\n * @name ErrorHandling\n */\nexport default class ErrorHandling extends Interceptor {\n  response(response, accept, reject) {\n    if (response.status() / 100 === 2) {\n      accept(response);\n    } else {\n      reject(response);\n    }\n  }\n}\n",
+    "content": "import Interceptor from '../interceptor';\n\n/**\n * Rejects a response with a non-20x status-code.\n * @class\n * @name ErrorHandling\n */\nexport default class ErrorHandling extends Interceptor {\n  /**\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  response(response, accept, reject) {\n    if (response.status() / 100 === 2) {\n      accept(response);\n    } else {\n      reject(response);\n    }\n  }\n}\n",
     "static": true,
     "longname": "src/interceptors/error-handling.js",
     "access": null,
@@ -579,33 +590,44 @@
     "static": false,
     "longname": "src/interceptors/error-handling.js~ErrorHandling#response",
     "access": null,
-    "description": null,
-    "lineNumber": 9,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 16,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
       }
     ],
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "Response"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "response",
-        "types": [
-          "*"
-        ]
+        "description": "The response to be processed"
       },
       {
+        "nullable": null,
+        "types": [
+          "Function<Response>"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "accept",
-        "types": [
-          "*"
-        ]
+        "description": "called on success to process a (potentially transformed) {@link Response}"
       },
       {
-        "name": "reject",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "reject",
+        "description": "called on failure to pass an error"
       }
     ]
   },
@@ -624,7 +646,7 @@
     "__docId__": 23,
     "kind": "file",
     "name": "src/interceptors/method-override.js",
-    "content": "import Interceptor from '../interceptor';\n\nconst BROWSER_METHODS = ['GET', 'POST'];\n\n/**\n * If the HTTP verb is not one understood by Browsers, change the verb\n * to a POST and send the X-HTTP-Method-Override header with the original\n * method.  This should generally be understood by the routers of most\n * server backends.\n * @class\n * @name MethodOverride\n */\nexport default class MethodOverride extends Interceptor {\n  request (request, accept, reject) {\n    const originalMethod = request.method();\n\n    if (!BROWSER_METHODS.some(m => m === originalMethod)) {\n      request\n        .method('POST')\n        .header('X-HTTP-Method-Override', originalMethod);\n    }\n\n    accept(request);\n  }\n}\n",
+    "content": "import Interceptor from '../interceptor';\n\nconst BROWSER_METHODS = ['GET', 'POST'];\n\n/**\n * If the HTTP verb is not one understood by Browsers, change the verb\n * to a POST and send the X-HTTP-Method-Override header with the original\n * method.  This should generally be understood by the routers of most\n * server backends.\n * @class\n * @name MethodOverride\n */\nexport default class MethodOverride extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request (request, accept, reject) {\n    const originalMethod = request.method();\n\n    if (!BROWSER_METHODS.some(m => m === originalMethod)) {\n      request\n        .method('POST')\n        .header('X-HTTP-Method-Override', originalMethod);\n    }\n\n    accept(request);\n  }\n}\n",
     "static": true,
     "longname": "src/interceptors/method-override.js",
     "access": null,
@@ -691,33 +713,44 @@
     "static": false,
     "longname": "src/interceptors/method-override.js~MethodOverride#request",
     "access": null,
-    "description": null,
-    "lineNumber": 14,
-    "undocument": true,
+    "description": "Transforms (or fails) an outgoing request.",
+    "lineNumber": 22,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
       }
     ],
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "Request"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "request",
-        "types": [
-          "*"
-        ]
+        "description": "The request to be processed"
       },
       {
+        "nullable": null,
+        "types": [
+          "Function<Request>"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "accept",
-        "types": [
-          "*"
-        ]
+        "description": "called on success to process a (potentially transformed) {@link Request}"
       },
       {
-        "name": "reject",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "reject",
+        "description": "called on failure to pass an error"
       }
     ]
   },
@@ -725,7 +758,7 @@
     "__docId__": 27,
     "kind": "file",
     "name": "src/interceptors/xsrf.js",
-    "content": "import { isUndefined, isString } from 'lodash';\nimport Cookies from 'js-cookie';\nimport Interceptor from '../interceptor';\n\n/**\n * Reads the value from the configured XSRF cookie and sends it back to the\n * server and sends it back in the configured header.\n * @class\n * @name XSRF\n */\nexport default class XSRF extends Interceptor {\n  request(request, accept, reject) {\n    const xsrfToken = Cookies.get(request.xsrfCookieName());\n    const xsrfHeader = request.xsrfHeaderName();\n\n    if (!isUndefined(xsrfToken) && isString(xsrfToken)) {\n      request.header(xsrfHeader, xsrfToken);\n    }\n\n    accept(request);\n  }\n}\n",
+    "content": "import { isUndefined, isString } from 'lodash';\nimport Cookies from 'js-cookie';\nimport Interceptor from '../interceptor';\n\n/**\n * Reads the value from the configured XSRF cookie and sends it back to the\n * server and sends it back in the configured header.\n * @class\n * @name XSRF\n */\nexport default class XSRF extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    const xsrfToken = Cookies.get(request.xsrfCookieName());\n    const xsrfHeader = request.xsrfHeaderName();\n\n    if (!isUndefined(xsrfToken) && isString(xsrfToken)) {\n      request.header(xsrfHeader, xsrfToken);\n    }\n\n    accept(request);\n  }\n}\n",
     "static": true,
     "longname": "src/interceptors/xsrf.js",
     "access": null,
@@ -766,33 +799,44 @@
     "static": false,
     "longname": "src/interceptors/xsrf.js~XSRF#request",
     "access": null,
-    "description": null,
-    "lineNumber": 12,
-    "undocument": true,
+    "description": "Transforms (or fails) an outgoing request.",
+    "lineNumber": 20,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
       }
     ],
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "Request"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "request",
-        "types": [
-          "*"
-        ]
+        "description": "The request to be processed"
       },
       {
+        "nullable": null,
+        "types": [
+          "Function<Request>"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "accept",
-        "types": [
-          "*"
-        ]
+        "description": "called on success to process a (potentially transformed) {@link Request}"
       },
       {
-        "name": "reject",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "reject",
+        "description": "called on failure to pass an error"
       }
     ]
   },

@@ -109,13 +109,14 @@ server backends.</p>
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html#instance-method-request">request</a></span></span><span data-ice="signature">(request: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+          <span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html#instance-method-request">request</a></span></span><span data-ice="signature">(request: <span><a href="class/src/request.js~Request.html">Request</a></span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/request.js~Request.html">Request</a></span>&gt;, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        
+        <div data-ice="description"><p>Transforms (or fails) an outgoing request.</p>
+</div>
       </div>
     </td>
     <td>
@@ -260,11 +261,11 @@ server backends.</p>
     
     
     
-    <span data-ice="name">request</span><span data-ice="signature">(request: <span>*</span>, accept: <span>*</span>, reject: <span>*</span>)</span>
+    <span data-ice="name">request</span><span data-ice="signature">(request: <span><a href="class/src/request.js~Request.html">Request</a></span>, accept: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/request.js~Request.html">Request</a></span>&gt;, reject: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/interceptors/method-override.js.html#lineNumber14">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/interceptors/method-override.js.html#lineNumber22">source</a></span></span>
     </span>
   </h3>
 
@@ -286,21 +287,24 @@ server backends.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">request</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="class/src/request.js~Request.html">Request</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The request to be processed</p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">accept</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span>&lt;<span><a href="class/src/request.js~Request.html">Request</a></span>&gt;</td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on success to process a (potentially transformed) <span><a href="class/src/request.js~Request.html">Request</a></span></p>
+</td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">reject</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">Function</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>called on failure to pass an error</p>
+</td>
     </tr>
 </tbody>
   </table>

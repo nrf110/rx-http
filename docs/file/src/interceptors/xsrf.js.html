@@ -57,6 +57,14 @@ import Interceptor from &apos;../interceptor&apos;;
  * @name XSRF
  */
 export default class XSRF extends Interceptor {
+  /**
+   * Transforms (or fails) an outgoing request.
+   * @method
+   * @name request
+   * @param {Request} request - The request to be processed
+   * @param {Function&lt;Request&gt;} accept - called on success to process a (potentially transformed) {@link Request}
+   * @param {Function} reject - called on failure to pass an error
+   */
   request(request, accept, reject) {
     const xsrfToken = Cookies.get(request.xsrfCookieName());
     const xsrfHeader = request.xsrfHeaderName();
