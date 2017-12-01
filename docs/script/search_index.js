@@ -12,6 +12,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "rx-http/src/http.js~http",
+    "class/src/http.js~Http.html",
+    "<span>Http</span> <span class=\"search-result-import-path\">rx-http/src/http.js</span>",
+    "class"
+  ],
+  [
     "rx-http/src/interceptor.js~interceptor",
     "class/src/interceptor.js~Interceptor.html",
     "<span>Interceptor</span> <span class=\"search-result-import-path\">rx-http/src/interceptor.js</span>",
@@ -400,6 +406,102 @@ window.esdocSearchIndex = [
     "file/src/http.js.html",
     "src/http.js",
     "file"
+  ],
+  [
+    "src/http.js~http#addinterceptor",
+    "class/src/http.js~Http.html#instance-method-addInterceptor",
+    "src/http.js~Http#addInterceptor",
+    "method"
+  ],
+  [
+    "src/http.js~http#baseurl",
+    "class/src/http.js~Http.html#instance-method-baseUrl",
+    "src/http.js~Http#baseUrl",
+    "method"
+  ],
+  [
+    "src/http.js~http#constructor",
+    "class/src/http.js~Http.html#instance-constructor-constructor",
+    "src/http.js~Http#constructor",
+    "method"
+  ],
+  [
+    "src/http.js~http#delete",
+    "class/src/http.js~Http.html#instance-method-delete",
+    "src/http.js~Http#delete",
+    "method"
+  ],
+  [
+    "src/http.js~http#get",
+    "class/src/http.js~Http.html#instance-method-get",
+    "src/http.js~Http#get",
+    "method"
+  ],
+  [
+    "src/http.js~http#head",
+    "class/src/http.js~Http.html#instance-method-head",
+    "src/http.js~Http#head",
+    "method"
+  ],
+  [
+    "src/http.js~http#interceptors",
+    "class/src/http.js~Http.html#instance-method-interceptors",
+    "src/http.js~Http#interceptors",
+    "method"
+  ],
+  [
+    "src/http.js~http#options",
+    "class/src/http.js~Http.html#instance-method-options",
+    "src/http.js~Http#options",
+    "method"
+  ],
+  [
+    "src/http.js~http#patch",
+    "class/src/http.js~Http.html#instance-method-patch",
+    "src/http.js~Http#patch",
+    "method"
+  ],
+  [
+    "src/http.js~http#post",
+    "class/src/http.js~Http.html#instance-method-post",
+    "src/http.js~Http#post",
+    "method"
+  ],
+  [
+    "src/http.js~http#put",
+    "class/src/http.js~Http.html#instance-method-put",
+    "src/http.js~Http#put",
+    "method"
+  ],
+  [
+    "src/http.js~http#removeinterceptor",
+    "class/src/http.js~Http.html#instance-method-removeInterceptor",
+    "src/http.js~Http#removeInterceptor",
+    "method"
+  ],
+  [
+    "src/http.js~http#request",
+    "class/src/http.js~Http.html#instance-method-request",
+    "src/http.js~Http#request",
+    "method"
+  ],
+  [
+    "src/http.js~http#retries",
+    "class/src/http.js~Http.html#instance-method-retries",
+    "src/http.js~Http#retries",
+    "method"
+  ],
+  [
+    "src/http.js~http#timeout",
+    "class/src/http.js~Http.html#instance-method-timeout",
+    "src/http.js~Http#timeout",
+    "method"
+  ],
+  [
+    "src/http.js~http#trace",
+    "class/src/http.js~Http.html#instance-method-trace",
+    "src/http.js~Http#trace",
+    "method"
   ],
   [
     "src/index.js",

@@ -202,7 +202,6 @@ class Url {
       }
       const existing = _query.get(this);
       existing[name] = value;
-      _query.set(this, existing);
       return this;
     }
 

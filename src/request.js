@@ -73,7 +73,6 @@ export default class Request {
       return headers[name];
     }
     headers[name] = value.toString();
-    _headers.set(this, headers);
     return this;
   }
 

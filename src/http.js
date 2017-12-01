@@ -7,29 +7,44 @@ import Path from './path';
 import { PropertyValidationException } from './exceptions';
 import { parseUri } from './utilities';
 
+function property(key, isValid) {
+  return function(value) {
+    const settings = _settings.get(this);
+
+    if (isUndefined(value)) {
+      return settings[key];
+    }
+
+    if (isValid(value)) {
+      settings[key] = value;
+      return this;
+    }
+
+    throw new PropertyValidationException(key, value);
+  };
+}
+
+function generateRequestMethod(method) {
+  return function(url, options = {}) {
+    return this.request(url, assign({ method }, options));
+  };
+}
+
+const _settings = new WeakMap();
+
 /**
  * An HTTP client.
- * @function
+ * @class
  * @name Http
- * @param {Object} [options] - A hash of settings for this client.
  */
-function Http(options = {}) {
-  const self = this;
-  const settings = assign({}, Http.defaults, options);
-
-  function property(key, isValid) {
-    return function(value) {
-      if (isUndefined(value)) {
-        return settings[key];
-      }
-
-      if (isValid(value)) {
-        settings[key] = value;
-        return self;
-      }
-
-      throw new PropertyValidationException(key, value);
-    };
+class Http {
+  /**
+   * @constructor
+   * @param {Object} [options] - A hash of settings for this client.
+   */
+  constructor(options = {}) {
+    const initialSettings = assign({}, Http.defaults, options)
+    _settings.set(this, initialSettings);
   }
 
   /**
@@ -41,7 +56,9 @@ function Http(options = {}) {
    * for all requests created with this client, and returns the client instance.
    * If value is ommitted, returns the current baseUrl.
    */
-  this.baseUrl = property('baseUrl', isString);
+  baseUrl(url) {
+    return property('baseUrl', isString).call(this, url);
+  }
 
   /**
    * @method
@@ -51,7 +68,9 @@ function Http(options = {}) {
    * timeout for all requests created with this client, and returns the client
    * instance.  If value is ommitted, returns the current timeout value.
    */
-  this.timeout = property('timeout', isInteger);
+  timeout(value) {
+    return property('timeout', isInteger).call(this, value);
+  }
 
   /**
    * @method
@@ -61,7 +80,9 @@ function Http(options = {}) {
    * of retries allowed for requests from this client, and returns the client
    * instance.  If count is ommitted, returns the current value.
    */
-  this.retries = property('retries', isInteger);
+  retries(value) {
+    return property('retries', isInteger).call(this, value);
+  }
 
   /**
    * @method
@@ -72,7 +93,9 @@ function Http(options = {}) {
    * instance.  If values is ommitted, returns the current array of
    * interceptors.
    */
-  this.interceptors = property('interceptors', isArray);
+  interceptors(values) {
+    return property('interceptors', isArray).call(this, values);
+  }
 
   /**
    * @method
@@ -81,10 +104,10 @@ function Http(options = {}) {
    * chain of interceptors.
    * @return {Http} - The current client instance.
    */
-  this.addInterceptor = function (interceptor) {
-    settings.interceptors.push(interceptor);
+  addInterceptor(interceptor) {
+    _settings.get(this).interceptors.push(interceptor);
     return this;
-  };
+  }
 
   /**
    * @method
@@ -92,10 +115,11 @@ function Http(options = {}) {
    * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.
    * @returns {Http} - The current client instance.
    */
-  this.removeInterceptor = function (interceptor) {
+  removeInterceptor(interceptor) {
+    const settings = _settings.get(this);
     settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);
     return this;
-  };
+  }
 
   /**
    * @method
@@ -110,8 +134,10 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  const request = this.request = function (url, options = {}) {
+  request(url, options = {}) {
+    const settings = _settings.get(this);
     let fullUrl = url;
+
     if (settings.baseUrl) {
       fullUrl = Path.join(settings.baseUrl, url);
     }
@@ -123,12 +149,6 @@ function Http(options = {}) {
     assign(config, { url: new Url(parsed) });
 
     return new Request(config);
-  };
-
-  function generateRequestMethod(method) {
-    return function (url, options = {}) {
-      return request(url, assign({ method }, options));
-    };
   }
 
   /**
@@ -144,7 +164,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.head = generateRequestMethod('HEAD');
+  head(url, options) {
+    return generateRequestMethod('HEAD').call(this, url, options);
+  }
 
   /**
    * @method
@@ -159,7 +181,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.get = generateRequestMethod('GET');
+  get(url, options) {
+    return generateRequestMethod('GET').call(this, url, options);
+  }
 
   /**
    * @method
@@ -174,7 +198,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.options = generateRequestMethod('OPTIONS');
+  options(url, options) {
+    return generateRequestMethod('OPTIONS').call(this, url, options);
+  }
 
   /**
    * @method
@@ -189,7 +215,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.delete = generateRequestMethod('DELETE');
+  delete(url, options) {
+    return generateRequestMethod('DELETE').call(this, url, options);
+  }
 
   /**
    * @method
@@ -204,7 +232,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.trace = generateRequestMethod('TRACE');
+  trace(url, options) {
+    return generateRequestMethod('TRACE').call(this, url, options);
+  }
 
   /**
    * @method
@@ -219,7 +249,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.post = generateRequestMethod('POST');
+  post(url, options) {
+    return generateRequestMethod('POST').call(this, url, options);
+  }
 
   /** @method
   * @name put
@@ -233,7 +265,9 @@ function Http(options = {}) {
   *   timeout: 10000
   * })
   **/
-  this.put = generateRequestMethod('PUT');
+  put(url, options) {
+    return generateRequestMethod('PUT').call(this, url, options);
+  }
 
   /**
    * @method
@@ -248,7 +282,9 @@ function Http(options = {}) {
    *   timeout: 10000
    * })
    */
-  this.patch = generateRequestMethod('PATCH');
+  patch(url, options) {
+    return generateRequestMethod('PATCH').call(this, url, options);
+  }
 }
 
 Http.defaults = {
@@ -267,4 +303,4 @@ Http.defaults = {
   provider: XHRProvider
 };
 
-module.exports = Http;
+export default Http;
