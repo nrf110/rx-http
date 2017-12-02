@@ -74,18 +74,6 @@ class Http {
 
   /**
    * @method
-   * @name retries
-   * @param {Number} [value] - The number of retries allowed
-   * @returns {Number|Http} - If count is specified, sets the default number
-   * of retries allowed for requests from this client, and returns the client
-   * instance.  If count is ommitted, returns the current value.
-   */
-  retries(value) {
-    return property('retries', isInteger).call(this, value);
-  }
-
-  /**
-   * @method
    * @name interceptors
    * @param {Interceptor[]} [values] - An array of interceptors.
    * @returns {Interceptor[]|Http} - If values is specified, replaces the default

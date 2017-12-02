@@ -3,7 +3,7 @@
 Rx-HTTP is an HTTP library designed for native interoperability with
 [RxJS](https://github.com/Reactive-Extensions/RxJS).
 
-*This library is still in early development.  It is not yet finished, tested, documented, nor anywhere near production-ready.*
+*This library is still in beta, and probably shouldn't be used in production yet.  The API should be (mostly) stable and the first round of features has been implemented, but it is still light on tests and documentation.*
 
 ## Features
 - Simple builder pattern for requests
