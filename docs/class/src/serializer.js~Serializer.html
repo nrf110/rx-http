@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">DefaultSerializer | API Document</title>
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">Serializer | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -52,23 +52,23 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import DefaultSerializer from &apos;<span><a href="file/src/serializers/default-serializer.js.html#lineNumber45">rx-http/src/serializers/default-serializer.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import Serializer from &apos;<span><a href="file/src/serializer.js.html#lineNumber8">rx-http/src/serializer.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/serializers/default-serializer.js.html#lineNumber45">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/serializer.js.html#lineNumber8">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
-  <h1 data-ice="name">DefaultSerializer</h1>
+  <h1 data-ice="name">Serializer</h1>
 
   
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>*</span> &#x2192; DefaultSerializer</div></div>
+  
   
   
   
@@ -78,9 +78,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>Serializer that attempts uses the given contentType, or tries to detect
-the content type in order to delegate to the appropriate built-in
-<span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></p>
+  <div class="description" data-ice="description"><p>Base class for <span><a href="class/src/request.js~Request.html">Request</a></span> body serializers</p>
 </div>
   
 
@@ -95,8 +93,74 @@ the content type in order to delegate to the appropriate built-in
 
 
 
-
-
+<div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(contentType: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html#instance-member-contentType">contentType</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
 <div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
   <tbody>
@@ -114,7 +178,7 @@ the content type in order to delegate to the appropriate built-in
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html#instance-method-serialize">serialize</a></span></span><span data-ice="signature">(value: <span>*</span>): <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html#instance-method-serialize">serialize</a></span></span><span data-ice="signature">(value: <span>*</span>): <span>*</span></span>
         </p>
       </div>
       <div>
@@ -136,8 +200,115 @@ the content type in order to delegate to the appropriate built-in
 
 
 
+<div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-constructor-constructor">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">constructor</span><span data-ice="signature">(contentType: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/serializer.js.html#lineNumber13">source</a></span></span>
+    </span>
+  </h3>
 
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">contentType</td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The value of the Content-Type header</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-contentType">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">contentType</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/serializer.js.html#lineNumber14">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
@@ -152,7 +323,7 @@ the content type in order to delegate to the appropriate built-in
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/serializers/default-serializer.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/serializer.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -175,7 +346,7 @@ the content type in order to delegate to the appropriate built-in
       <td data-ice="name" data-depth="0">value</td>
       <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>the value to be serialized</p>
+      <td data-ice="description"><p>The content to be serialized</p>
 </td>
     </tr>
 </tbody>
@@ -189,7 +360,7 @@ the content type in order to delegate to the appropriate built-in
       <tbody>
         <tr>
           <td class="return-type" data-ice="returnType"><span>*</span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>the serialized content</p>
+          <td class="return-desc" data-ice="returnDescription"><p>The serialized content</p>
 </td>
         </tr>
       </tbody>

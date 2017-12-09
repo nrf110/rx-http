@@ -36,6 +36,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
@@ -45,55 +46,74 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/text-serializer.js~TextSerializer.html">TextSerializer</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/exceptions.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">class CustomError {
+  constructor(message) {
+    this.name = this.constructor.name;
+    this.message = message;
+    this.stack = (new Error(message)).stack;
+  }
+}
+CustomError.prototype = Object.create(Error.prototype);
+CustomError.prototype.constructor = CustomError;
+
+/**
+ * @class
+ * @name NotImplementedException
+ */
+class NotImplementedException extends CustomError {
+  constructor(message) {
+    super(message || &apos;Not Implemented&apos;);
+  }
+}
+
+/**
  * @class
  * @name PropertyValidationException
- * @param {String} - property
  */
-class PropertyValidationException {
+class PropertyValidationException extends CustomError {
   /**
    * @constructor
    * @param {String} - property name
    * @param value
    */
-  constructor(property, value) {
+  constructor(property, value, msg) {
+    const message = msg || `Value ${value} is not valid for property ${property}`;
+    super(message);
     this.property = property;
     this.value = value;
   }
+}
 
-  toString() {
-    return `Value ${this.value} is not valid for property ${this.property}`
+/**
+ * @class
+ * @name NoSerializerFoundException
+ */
+class NoSerializerFoundException extends CustomError {
+  constructor(contentType) {
+    super(`No serializer found for content type ${contentType}`);
+    this.contentType = contentType;
   }
 }
 
-class NoSerializerFoundException {
+/**
+ * @class
+ * @name NoDeserializerFoundException
+ */
+class NoDeserializerFoundException extends CustomError {
   constructor(contentType) {
+    super(`No deserializer found for content type ${contentType}`);
     this.contentType = contentType;
-  }
-
-  toString() {
-    return `No serializer found for content type ${this.contentType}`
-  }
-}
-
-class NoDeserializerFoundException {
-  constructor(contentType) {
-    this.contentType = contentType;
-  }
-
-  toString() {
-    return `No deserializer found for content type ${this.contentType}`
   }
 }
 
 export default {
+  NotImplementedException,
   PropertyValidationException,
   NoSerializerFoundException,
   NoDeserializerFoundException

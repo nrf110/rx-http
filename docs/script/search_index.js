@@ -60,9 +60,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "rx-http/src/serializers/serializer.js~serializer",
-    "class/src/serializers/serializer.js~Serializer.html",
-    "<span>Serializer</span> <span class=\"search-result-import-path\">rx-http/src/serializers/serializer.js</span>",
+    "rx-http/src/serializer.js~serializer",
+    "class/src/serializer.js~Serializer.html",
+    "<span>Serializer</span> <span class=\"search-result-import-path\">rx-http/src/serializer.js</span>",
     "class"
   ],
   [
@@ -834,6 +834,30 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/serializer.js",
+    "file/src/serializer.js.html",
+    "src/serializer.js",
+    "file"
+  ],
+  [
+    "src/serializer.js~serializer#constructor",
+    "class/src/serializer.js~Serializer.html#instance-constructor-constructor",
+    "src/serializer.js~Serializer#constructor",
+    "method"
+  ],
+  [
+    "src/serializer.js~serializer#contenttype",
+    "class/src/serializer.js~Serializer.html#instance-member-contentType",
+    "src/serializer.js~Serializer#contentType",
+    "member"
+  ],
+  [
+    "src/serializer.js~serializer#serialize",
+    "class/src/serializer.js~Serializer.html#instance-method-serialize",
+    "src/serializer.js~Serializer#serialize",
+    "method"
+  ],
+  [
     "src/serializers/default-serializer.js",
     "file/src/serializers/default-serializer.js.html",
     "src/serializers/default-serializer.js",
@@ -886,24 +910,6 @@ window.esdocSearchIndex = [
     "class/src/serializers/json-serializer.js~JsonSerializer.html#instance-method-serialize",
     "src/serializers/json-serializer.js~JsonSerializer#serialize",
     "method"
-  ],
-  [
-    "src/serializers/serializer.js",
-    "file/src/serializers/serializer.js.html",
-    "src/serializers/serializer.js",
-    "file"
-  ],
-  [
-    "src/serializers/serializer.js~serializer#constructor",
-    "class/src/serializers/serializer.js~Serializer.html#instance-constructor-constructor",
-    "src/serializers/serializer.js~Serializer#constructor",
-    "method"
-  ],
-  [
-    "src/serializers/serializer.js~serializer#contenttype",
-    "class/src/serializers/serializer.js~Serializer.html#instance-member-contentType",
-    "src/serializers/serializer.js~Serializer#contentType",
-    "member"
   ],
   [
     "src/serializers/text-serializer.js",

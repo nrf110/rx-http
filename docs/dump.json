@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/exceptions.js",
-    "content": "/**\n * @class\n * @name PropertyValidationException\n * @param {String} - property\n */\nclass PropertyValidationException {\n  /**\n   * @constructor\n   * @param {String} - property name\n   * @param value\n   */\n  constructor(property, value) {\n    this.property = property;\n    this.value = value;\n  }\n\n  toString() {\n    return `Value ${this.value} is not valid for property ${this.property}`\n  }\n}\n\nclass NoSerializerFoundException {\n  constructor(contentType) {\n    this.contentType = contentType;\n  }\n\n  toString() {\n    return `No serializer found for content type ${this.contentType}`\n  }\n}\n\nclass NoDeserializerFoundException {\n  constructor(contentType) {\n    this.contentType = contentType;\n  }\n\n  toString() {\n    return `No deserializer found for content type ${this.contentType}`\n  }\n}\n\nexport default {\n  PropertyValidationException,\n  NoSerializerFoundException,\n  NoDeserializerFoundException\n};\n",
+    "content": "class CustomError {\n  constructor(message) {\n    this.name = this.constructor.name;\n    this.message = message;\n    this.stack = (new Error(message)).stack;\n  }\n}\nCustomError.prototype = Object.create(Error.prototype);\nCustomError.prototype.constructor = CustomError;\n\n/**\n * @class\n * @name NotImplementedException\n */\nclass NotImplementedException extends CustomError {\n  constructor(message) {\n    super(message || 'Not Implemented');\n  }\n}\n\n/**\n * @class\n * @name PropertyValidationException\n */\nclass PropertyValidationException extends CustomError {\n  /**\n   * @constructor\n   * @param {String} - property name\n   * @param value\n   */\n  constructor(property, value, msg) {\n    const message = msg || `Value ${value} is not valid for property ${property}`;\n    super(message);\n    this.property = property;\n    this.value = value;\n  }\n}\n\n/**\n * @class\n * @name NoSerializerFoundException\n */\nclass NoSerializerFoundException extends CustomError {\n  constructor(contentType) {\n    super(`No serializer found for content type ${contentType}`);\n    this.contentType = contentType;\n  }\n}\n\n/**\n * @class\n * @name NoDeserializerFoundException\n */\nclass NoDeserializerFoundException extends CustomError {\n  constructor(contentType) {\n    super(`No deserializer found for content type ${contentType}`);\n    this.contentType = contentType;\n  }\n}\n\nexport default {\n  NotImplementedException,\n  PropertyValidationException,\n  NoSerializerFoundException,\n  NoDeserializerFoundException\n};\n",
     "static": true,
     "longname": "src/exceptions.js",
     "access": null,
@@ -12,6 +12,177 @@
   },
   {
     "__docId__": 1,
+    "kind": "class",
+    "name": "CustomError",
+    "memberof": "src/exceptions.js",
+    "static": true,
+    "longname": "src/exceptions.js~CustomError",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/exceptions.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 2,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/exceptions.js~CustomError",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/exceptions.js~CustomError#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "message",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 3,
+    "kind": "member",
+    "name": "name",
+    "memberof": "src/exceptions.js~CustomError",
+    "static": false,
+    "longname": "src/exceptions.js~CustomError#name",
+    "access": null,
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "member",
+    "name": "message",
+    "memberof": "src/exceptions.js~CustomError",
+    "static": false,
+    "longname": "src/exceptions.js~CustomError#message",
+    "access": null,
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 5,
+    "kind": "member",
+    "name": "stack",
+    "memberof": "src/exceptions.js~CustomError",
+    "static": false,
+    "longname": "src/exceptions.js~CustomError#stack",
+    "access": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "class",
+    "name": "NotImplementedException",
+    "memberof": "src/exceptions.js",
+    "static": true,
+    "longname": "src/exceptions.js~NotImplementedException",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/exceptions.js",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      }
+    ],
+    "interface": false,
+    "extends": [
+      "CustomError"
+    ]
+  },
+  {
+    "__docId__": 7,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/exceptions.js~NotImplementedException",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/exceptions.js~NotImplementedException#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "message",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 8,
     "kind": "class",
     "name": "PropertyValidationException",
     "memberof": "src/exceptions.js",
@@ -22,29 +193,20 @@
     "importPath": "rx-http/src/exceptions.js",
     "importStyle": null,
     "description": "",
-    "lineNumber": 6,
+    "lineNumber": 25,
     "unknown": [
       {
         "tagName": "@class",
         "tagValue": ""
       }
     ],
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "String"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "-",
-        "description": "property"
-      }
-    ],
-    "interface": false
+    "interface": false,
+    "extends": [
+      "CustomError"
+    ]
   },
   {
-    "__docId__": 2,
+    "__docId__": 9,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/exceptions.js~PropertyValidationException",
@@ -54,7 +216,7 @@
     "longname": "src/exceptions.js~PropertyValidationException#constructor",
     "access": null,
     "description": "",
-    "lineNumber": 12,
+    "lineNumber": 31,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -85,233 +247,12 @@
     ]
   },
   {
-    "__docId__": 3,
+    "__docId__": 10,
     "kind": "member",
     "name": "property",
     "memberof": "src/exceptions.js~PropertyValidationException",
     "static": false,
     "longname": "src/exceptions.js~PropertyValidationException#property",
-    "access": null,
-    "description": null,
-    "lineNumber": 13,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 4,
-    "kind": "member",
-    "name": "value",
-    "memberof": "src/exceptions.js~PropertyValidationException",
-    "static": false,
-    "longname": "src/exceptions.js~PropertyValidationException#value",
-    "access": null,
-    "description": null,
-    "lineNumber": 14,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 5,
-    "kind": "method",
-    "name": "toString",
-    "memberof": "src/exceptions.js~PropertyValidationException",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/exceptions.js~PropertyValidationException#toString",
-    "access": null,
-    "description": null,
-    "lineNumber": 17,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "params": [],
-    "return": {
-      "types": [
-        "string"
-      ]
-    }
-  },
-  {
-    "__docId__": 6,
-    "kind": "class",
-    "name": "NoSerializerFoundException",
-    "memberof": "src/exceptions.js",
-    "static": true,
-    "longname": "src/exceptions.js~NoSerializerFoundException",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/exceptions.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "interface": false
-  },
-  {
-    "__docId__": 7,
-    "kind": "constructor",
-    "name": "constructor",
-    "memberof": "src/exceptions.js~NoSerializerFoundException",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/exceptions.js~NoSerializerFoundException#constructor",
-    "access": null,
-    "description": null,
-    "lineNumber": 23,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "name": "contentType",
-        "types": [
-          "*"
-        ]
-      }
-    ]
-  },
-  {
-    "__docId__": 8,
-    "kind": "member",
-    "name": "contentType",
-    "memberof": "src/exceptions.js~NoSerializerFoundException",
-    "static": false,
-    "longname": "src/exceptions.js~NoSerializerFoundException#contentType",
-    "access": null,
-    "description": null,
-    "lineNumber": 24,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 9,
-    "kind": "method",
-    "name": "toString",
-    "memberof": "src/exceptions.js~NoSerializerFoundException",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/exceptions.js~NoSerializerFoundException#toString",
-    "access": null,
-    "description": null,
-    "lineNumber": 27,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "params": [],
-    "return": {
-      "types": [
-        "string"
-      ]
-    }
-  },
-  {
-    "__docId__": 10,
-    "kind": "class",
-    "name": "NoDeserializerFoundException",
-    "memberof": "src/exceptions.js",
-    "static": true,
-    "longname": "src/exceptions.js~NoDeserializerFoundException",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/exceptions.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 32,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "interface": false
-  },
-  {
-    "__docId__": 11,
-    "kind": "constructor",
-    "name": "constructor",
-    "memberof": "src/exceptions.js~NoDeserializerFoundException",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/exceptions.js~NoDeserializerFoundException#constructor",
-    "access": null,
-    "description": null,
-    "lineNumber": 33,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "name": "contentType",
-        "types": [
-          "*"
-        ]
-      }
-    ]
-  },
-  {
-    "__docId__": 12,
-    "kind": "member",
-    "name": "contentType",
-    "memberof": "src/exceptions.js~NoDeserializerFoundException",
-    "static": false,
-    "longname": "src/exceptions.js~NoDeserializerFoundException#contentType",
     "access": null,
     "description": null,
     "lineNumber": 34,
@@ -329,17 +270,15 @@
     }
   },
   {
-    "__docId__": 13,
-    "kind": "method",
-    "name": "toString",
-    "memberof": "src/exceptions.js~NoDeserializerFoundException",
-    "generator": false,
-    "async": false,
+    "__docId__": 11,
+    "kind": "member",
+    "name": "value",
+    "memberof": "src/exceptions.js~PropertyValidationException",
     "static": false,
-    "longname": "src/exceptions.js~NoDeserializerFoundException#toString",
+    "longname": "src/exceptions.js~PropertyValidationException#value",
     "access": null,
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 35,
     "undocument": true,
     "unknown": [
       {
@@ -347,15 +286,164 @@
         "tagValue": ""
       }
     ],
-    "params": [],
-    "return": {
+    "type": {
       "types": [
-        "string"
+        "*"
       ]
     }
   },
   {
+    "__docId__": 12,
+    "kind": "class",
+    "name": "NoSerializerFoundException",
+    "memberof": "src/exceptions.js",
+    "static": true,
+    "longname": "src/exceptions.js~NoSerializerFoundException",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/exceptions.js",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 43,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      }
+    ],
+    "interface": false,
+    "extends": [
+      "CustomError"
+    ]
+  },
+  {
+    "__docId__": 13,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/exceptions.js~NoSerializerFoundException",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/exceptions.js~NoSerializerFoundException#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 44,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "contentType",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
     "__docId__": 14,
+    "kind": "member",
+    "name": "contentType",
+    "memberof": "src/exceptions.js~NoSerializerFoundException",
+    "static": false,
+    "longname": "src/exceptions.js~NoSerializerFoundException#contentType",
+    "access": null,
+    "description": null,
+    "lineNumber": 46,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 15,
+    "kind": "class",
+    "name": "NoDeserializerFoundException",
+    "memberof": "src/exceptions.js",
+    "static": true,
+    "longname": "src/exceptions.js~NoDeserializerFoundException",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/exceptions.js",
+    "importStyle": null,
+    "description": "",
+    "lineNumber": 54,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      }
+    ],
+    "interface": false,
+    "extends": [
+      "CustomError"
+    ]
+  },
+  {
+    "__docId__": 16,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/exceptions.js~NoDeserializerFoundException",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/exceptions.js~NoDeserializerFoundException#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 55,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "name": "contentType",
+        "types": [
+          "*"
+        ]
+      }
+    ]
+  },
+  {
+    "__docId__": 17,
+    "kind": "member",
+    "name": "contentType",
+    "memberof": "src/exceptions.js~NoDeserializerFoundException",
+    "static": false,
+    "longname": "src/exceptions.js~NoDeserializerFoundException#contentType",
+    "access": null,
+    "description": null,
+    "lineNumber": 57,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 18,
     "kind": "file",
     "name": "src/headers.js",
     "content": "export default {\n\n  CONTENT_TYPE: \"Content-Type\",\n\n  TRANSFER_ENCODING: \"Transfer-Encoding\"\n\n}\n",
@@ -366,7 +454,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 15,
+    "__docId__": 19,
     "kind": "file",
     "name": "src/http.js",
     "content": "import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';\nimport Request from './request';\nimport Interceptors from './interceptors';\nimport XHRProvider from './xhr-provider';\nimport Url from './url';\nimport Path from './path';\nimport { PropertyValidationException } from './exceptions';\nimport { parseUri } from './utilities';\n\nfunction property(key, isValid) {\n  return function(value) {\n    const settings = _settings.get(this);\n\n    if (isUndefined(value)) {\n      return settings[key];\n    }\n\n    if (isValid(value)) {\n      settings[key] = value;\n      return this;\n    }\n\n    throw new PropertyValidationException(key, value);\n  };\n}\n\nfunction generateRequestMethod(method) {\n  return function(url, options = {}) {\n    return this.request(url, assign({ method }, options));\n  };\n}\n\nconst _settings = new WeakMap();\n\n/**\n * An HTTP client.\n * @class\n * @name Http\n */\nclass Http {\n  /**\n   * @constructor\n   * @param {Object} [options] - A hash of settings for this client.\n   */\n  constructor(options = {}) {\n    const initialSettings = assign({}, Http.defaults, options)\n    _settings.set(this, initialSettings);\n  }\n\n  /**\n   * @method\n   * @name baseUrl\n   * @param {String|Http} [url] - the base URL applied by default to all\n   * requests from this client.\n   * @returns {String|Http} - If url is specified, updates the default baseUrl\n   * for all requests created with this client, and returns the client instance.\n   * If value is ommitted, returns the current baseUrl.\n   */\n  baseUrl(url) {\n    return property('baseUrl', isString).call(this, url);\n  }\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Http} - If value is specified, updates the default request\n   * timeout for all requests created with this client, and returns the client\n   * instance.  If value is ommitted, returns the current timeout value.\n   */\n  timeout(value) {\n    return property('timeout', isInteger).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Http.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    return property('xsrfCookieName', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Http.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    return property('xsrfHeaderName', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Http} - If the value is specified, sets the withCredentials flag\n   * and returns the current Http.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    return property('withCredentials', isBoolean).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Http} - If the value is specified, sets the username and returns\n   * the current Http.  If value is ommitted, returns the current username.\n   */\n  username(value) {\n    return property('username', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Http} - If the value is specified, sets the password and returns\n   * the current Http.  If value is ommitted, returns the current password.\n   */\n  password(value) {\n    return property('password', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [values] - An array of interceptors.\n   * @returns {Interceptor[]|Http} - If values is specified, replaces the default\n   * interceptors for all requests from this client, and returns the client\n   * instance.  If values is ommitted, returns the current array of\n   * interceptors.\n   */\n  interceptors(values) {\n    return property('interceptors', isArray).call(this, values);\n  }\n\n  /**\n   * @method\n   * @name addInterceptor\n   * @param {Interceptor} interceptor - Add the interceptor to the end of the\n   * chain of interceptors.\n   * @return {Http} - The current client instance.\n   */\n  addInterceptor(interceptor) {\n    _settings.get(this).interceptors.push(interceptor);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name removeInterceptor\n   * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.\n   * @returns {Http} - The current client instance.\n   */\n  removeInterceptor(interceptor) {\n    const settings = _settings.get(this);\n    settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name request\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).request('/some/stuff', {\n   *   method: 'POST',\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  request(url, options = {}) {\n    const settings = _settings.get(this);\n    let fullUrl = url;\n\n    if (settings.baseUrl) {\n      fullUrl = Path.join(settings.baseUrl, url);\n    }\n\n    const parsed = parseUri(fullUrl);\n    const config = defaults(options, settings);\n\n    assign(parsed.query, options.query);\n    assign(config, { url: new Url(parsed) });\n\n    return new Request(config);\n  }\n\n  /**\n   * @method\n   * @name head\n   * Helper method for request.  Automatically sets method to HEAD.\n   * @param {string} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  head(url, options) {\n    return generateRequestMethod('HEAD').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name get\n   * Helper method for request.  Automatically sets method to GET.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).get('/some/stuff', {\n   *   retries: 2\n   *   timeout: 10000\n   * })\n   */\n  get(url, options) {\n    return generateRequestMethod('GET').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name options\n   * Helper method for request.  Automatically sets method to OPTIONS.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  options(url, options) {\n    return generateRequestMethod('OPTIONS').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name delete\n   * Helper method for request.  Automatically sets method to DELETE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).delete('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  delete(url, options) {\n    return generateRequestMethod('DELETE').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name trace\n   * Helper method for request.  Automatically sets method to TRACE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).trace('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  trace(url, options) {\n    return generateRequestMethod('TRACE').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name post\n   * Helper method for request.  Automatically sets method to POST.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).post('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  post(url, options) {\n    return generateRequestMethod('POST').call(this, url, options);\n  }\n\n  /** @method\n  * @name put\n  * Helper method for request.  Automatically sets method to PUT.\n  * @param {String} url - the URL where the request will be sent.\n  * @param {Object} [options] - add/override settings for this request.\n  * @return {Request}\n  * @example\n  * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).put('/some/stuff', {\n  *   body: { foo: \"bar\", baz: 1 },\n  *   timeout: 10000\n  * })\n  **/\n  put(url, options) {\n    return generateRequestMethod('PUT').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name patch\n   * Helper method for request.  Automatically sets method to PATCH.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).patch('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  patch(url, options) {\n    return generateRequestMethod('PATCH').call(this, url, options);\n  }\n}\n\nHttp.defaults = {\n  baseUrl: '',\n  retries: 0,\n  timeout: 30000,\n  xsrfCookieName: 'XSRF-TOKEN',\n  xsrfHeaderName: 'X-XSRF-TOKEN',\n  withCredentials: false,\n  interceptors: [\n    Interceptors.MethodOverride,\n    Interceptors.BodyTransformer,\n    Interceptors.XSRF,\n    Interceptors.ErrorHandling\n  ],\n  provider: XHRProvider\n};\n\nexport default Http;\n",
@@ -377,7 +465,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 16,
+    "__docId__": 20,
     "kind": "function",
     "name": "property",
     "memberof": "src/http.js",
@@ -419,7 +507,7 @@
     }
   },
   {
-    "__docId__": 17,
+    "__docId__": 21,
     "kind": "function",
     "name": "generateRequestMethod",
     "memberof": "src/http.js",
@@ -455,7 +543,7 @@
     }
   },
   {
-    "__docId__": 18,
+    "__docId__": 22,
     "kind": "variable",
     "name": "_settings",
     "memberof": "src/http.js",
@@ -481,7 +569,7 @@
     }
   },
   {
-    "__docId__": 19,
+    "__docId__": 23,
     "kind": "class",
     "name": "Http",
     "memberof": "src/http.js",
@@ -502,7 +590,7 @@
     "interface": false
   },
   {
-    "__docId__": 20,
+    "__docId__": 24,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/http.js~Http",
@@ -533,7 +621,7 @@
     ]
   },
   {
-    "__docId__": 21,
+    "__docId__": 25,
     "kind": "method",
     "name": "baseUrl",
     "memberof": "src/http.js~Http",
@@ -578,7 +666,7 @@
     }
   },
   {
-    "__docId__": 22,
+    "__docId__": 26,
     "kind": "method",
     "name": "timeout",
     "memberof": "src/http.js~Http",
@@ -622,7 +710,7 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 27,
     "kind": "method",
     "name": "xsrfCookieName",
     "memberof": "src/http.js~Http",
@@ -666,7 +754,7 @@
     }
   },
   {
-    "__docId__": 24,
+    "__docId__": 28,
     "kind": "method",
     "name": "xsrfHeaderName",
     "memberof": "src/http.js~Http",
@@ -710,7 +798,7 @@
     }
   },
   {
-    "__docId__": 25,
+    "__docId__": 29,
     "kind": "method",
     "name": "withCredentials",
     "memberof": "src/http.js~Http",
@@ -754,7 +842,7 @@
     }
   },
   {
-    "__docId__": 26,
+    "__docId__": 30,
     "kind": "method",
     "name": "username",
     "memberof": "src/http.js~Http",
@@ -798,7 +886,7 @@
     }
   },
   {
-    "__docId__": 27,
+    "__docId__": 31,
     "kind": "method",
     "name": "password",
     "memberof": "src/http.js~Http",
@@ -842,7 +930,7 @@
     }
   },
   {
-    "__docId__": 28,
+    "__docId__": 32,
     "kind": "method",
     "name": "interceptors",
     "memberof": "src/http.js~Http",
@@ -886,7 +974,7 @@
     }
   },
   {
-    "__docId__": 29,
+    "__docId__": 33,
     "kind": "method",
     "name": "addInterceptor",
     "memberof": "src/http.js~Http",
@@ -925,7 +1013,7 @@
     }
   },
   {
-    "__docId__": 30,
+    "__docId__": 34,
     "kind": "method",
     "name": "removeInterceptor",
     "memberof": "src/http.js~Http",
@@ -968,7 +1056,7 @@
     }
   },
   {
-    "__docId__": 31,
+    "__docId__": 35,
     "kind": "method",
     "name": "request",
     "memberof": "src/http.js~Http",
@@ -1020,7 +1108,7 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 36,
     "kind": "method",
     "name": "head",
     "memberof": "src/http.js~Http",
@@ -1072,7 +1160,7 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 37,
     "kind": "method",
     "name": "get",
     "memberof": "src/http.js~Http",
@@ -1124,7 +1212,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 38,
     "kind": "method",
     "name": "options",
     "memberof": "src/http.js~Http",
@@ -1176,7 +1264,7 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 39,
     "kind": "method",
     "name": "delete",
     "memberof": "src/http.js~Http",
@@ -1228,7 +1316,7 @@
     }
   },
   {
-    "__docId__": 36,
+    "__docId__": 40,
     "kind": "method",
     "name": "trace",
     "memberof": "src/http.js~Http",
@@ -1280,7 +1368,7 @@
     }
   },
   {
-    "__docId__": 37,
+    "__docId__": 41,
     "kind": "method",
     "name": "post",
     "memberof": "src/http.js~Http",
@@ -1332,7 +1420,7 @@
     }
   },
   {
-    "__docId__": 38,
+    "__docId__": 42,
     "kind": "method",
     "name": "put",
     "memberof": "src/http.js~Http",
@@ -1384,7 +1472,7 @@
     }
   },
   {
-    "__docId__": 39,
+    "__docId__": 43,
     "kind": "method",
     "name": "patch",
     "memberof": "src/http.js~Http",
@@ -1436,10 +1524,10 @@
     }
   },
   {
-    "__docId__": 40,
+    "__docId__": 44,
     "kind": "file",
     "name": "src/index.js",
-    "content": "import Url from './url';\nimport Http from './http';\nimport Headers from './headers';\nimport Interceptor from './interceptor';\nimport Interceptors from './interceptors';\nimport Exceptions from './exceptions';\n\nexport {\n  Url,\n  Http,\n  Headers,\n  Interceptor,\n  Interceptors,\n  Exceptions\n};\n",
+    "content": "import Url from './url';\nimport Http from './http';\nimport Headers from './headers';\nimport Interceptor from './interceptor';\nimport Interceptors from './interceptors';\nimport Exceptions from './exceptions';\nimport Serializer from './serializer';\nimport Serializers from './serializers';\n\nexport {\n  Url,\n  Http,\n  Headers,\n  Interceptor,\n  Interceptors,\n  Exceptions,\n  Serializer,\n  Serializers\n};\n",
     "static": true,
     "longname": "src/index.js",
     "access": null,
@@ -1447,7 +1535,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 41,
+    "__docId__": 45,
     "kind": "file",
     "name": "src/interceptor.js",
     "content": "/**\n * Base class to be inherited by Interceptors\n * @class\n * @name Interceptor\n */\nexport default class Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    accept(request);\n  }\n\n\n  /**\n   * Try to recover from a request error so processing can resume.\n   * @method\n   * @name requestError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   */\n  requestError(error, accept, reject) {\n    reject(error);\n  }\n\n  /**\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  response(response, accept, reject) {\n    accept(response);\n  }\n\n  /**\n   * Try to recover from a response error so processing can resume.\n   * @method\n   * @name responseError\n   * @param error - The error to be processed\n   * @param {Function} accept - called on success if we were able to recover\n   * @param {Function} reject - called on failure to pass an error\n   */\n  responseError(error, accept, reject) {\n    reject(error);\n  }\n}\n",
@@ -1458,7 +1546,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 42,
+    "__docId__": 46,
     "kind": "class",
     "name": "Interceptor",
     "memberof": "src/interceptor.js",
@@ -1479,7 +1567,7 @@
     "interface": false
   },
   {
-    "__docId__": 43,
+    "__docId__": 47,
     "kind": "method",
     "name": "request",
     "memberof": "src/interceptor.js~Interceptor",
@@ -1530,7 +1618,7 @@
     ]
   },
   {
-    "__docId__": 44,
+    "__docId__": 48,
     "kind": "method",
     "name": "requestError",
     "memberof": "src/interceptor.js~Interceptor",
@@ -1581,7 +1669,7 @@
     ]
   },
   {
-    "__docId__": 45,
+    "__docId__": 49,
     "kind": "method",
     "name": "response",
     "memberof": "src/interceptor.js~Interceptor",
@@ -1632,7 +1720,7 @@
     ]
   },
   {
-    "__docId__": 46,
+    "__docId__": 50,
     "kind": "method",
     "name": "responseError",
     "memberof": "src/interceptor.js~Interceptor",
@@ -1683,7 +1771,7 @@
     ]
   },
   {
-    "__docId__": 47,
+    "__docId__": 51,
     "kind": "file",
     "name": "src/interceptors/body-transformer.js",
     "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Interceptor from '../interceptor';\n\n/**\n * Tries to automatically detect the response content type and deserialize the\n * raw body into the appropriate type.\n * @class\n * @name BodyTransformer\n */\nexport default class BodyTransformer extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    const body = request.body();\n\n    if (!!body) {\n      const serializer = request.serializer();\n      const contentType = request.contentType();\n\n      request\n        .contentType(contentType || serializer.contentType)\n        .body(serializer.serialize(body));\n    }\n\n    accept(request);\n  }\n}\n",
@@ -1694,7 +1782,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 48,
+    "__docId__": 52,
     "kind": "class",
     "name": "BodyTransformer",
     "memberof": "src/interceptors/body-transformer.js",
@@ -1718,7 +1806,7 @@
     ]
   },
   {
-    "__docId__": 49,
+    "__docId__": 53,
     "kind": "method",
     "name": "request",
     "memberof": "src/interceptors/body-transformer.js~BodyTransformer",
@@ -1769,7 +1857,7 @@
     ]
   },
   {
-    "__docId__": 50,
+    "__docId__": 54,
     "kind": "file",
     "name": "src/interceptors/error-handling.js",
     "content": "import Interceptor from '../interceptor';\n\n/**\n * Rejects a response with a non-20x status-code.\n * @class\n * @name ErrorHandling\n */\nexport default class ErrorHandling extends Interceptor {\n  /**\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  response(response, accept, reject) {\n    if (response.status() / 100 === 2) {\n      accept(response);\n    } else {\n      reject(response);\n    }\n  }\n}\n",
@@ -1780,7 +1868,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 51,
+    "__docId__": 55,
     "kind": "class",
     "name": "ErrorHandling",
     "memberof": "src/interceptors/error-handling.js",
@@ -1804,7 +1892,7 @@
     ]
   },
   {
-    "__docId__": 52,
+    "__docId__": 56,
     "kind": "method",
     "name": "response",
     "memberof": "src/interceptors/error-handling.js~ErrorHandling",
@@ -1855,7 +1943,7 @@
     ]
   },
   {
-    "__docId__": 53,
+    "__docId__": 57,
     "kind": "file",
     "name": "src/interceptors/index.js",
     "content": "import MethodOverride from './method-override';\nimport BodyTransformer from './body-transformer';\nimport XSRF from './xsrf';\nimport ErrorHandling from './error-handling';\n\nexport default {\n  MethodOverride: new MethodOverride(),\n  BodyTransformer: new BodyTransformer(),\n  XSRF: new XSRF(),\n  ErrorHandling: new ErrorHandling()\n};\n",
@@ -1866,7 +1954,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 54,
+    "__docId__": 58,
     "kind": "file",
     "name": "src/interceptors/method-override.js",
     "content": "import Interceptor from '../interceptor';\n\nconst BROWSER_METHODS = ['GET', 'POST'];\n\n/**\n * If the HTTP verb is not one understood by Browsers, change the verb\n * to a POST and send the X-HTTP-Method-Override header with the original\n * method.  This should generally be understood by the routers of most\n * server backends.\n * @class\n * @name MethodOverride\n */\nexport default class MethodOverride extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request (request, accept, reject) {\n    const originalMethod = request.method();\n\n    if (!BROWSER_METHODS.some(m => m === originalMethod)) {\n      request\n        .method('POST')\n        .header('X-HTTP-Method-Override', originalMethod);\n    }\n\n    accept(request);\n  }\n}\n",
@@ -1877,7 +1965,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 55,
+    "__docId__": 59,
     "kind": "variable",
     "name": "BROWSER_METHODS",
     "memberof": "src/interceptors/method-override.js",
@@ -1903,7 +1991,7 @@
     }
   },
   {
-    "__docId__": 56,
+    "__docId__": 60,
     "kind": "class",
     "name": "MethodOverride",
     "memberof": "src/interceptors/method-override.js",
@@ -1927,7 +2015,7 @@
     ]
   },
   {
-    "__docId__": 57,
+    "__docId__": 61,
     "kind": "method",
     "name": "request",
     "memberof": "src/interceptors/method-override.js~MethodOverride",
@@ -1978,7 +2066,7 @@
     ]
   },
   {
-    "__docId__": 58,
+    "__docId__": 62,
     "kind": "file",
     "name": "src/interceptors/xsrf.js",
     "content": "import { isUndefined, isString } from 'lodash';\nimport Cookies from 'js-cookie';\nimport Interceptor from '../interceptor';\n\n/**\n * Reads the value from the configured XSRF cookie and sends it back to the\n * server and sends it back in the configured header.\n * @class\n * @name XSRF\n */\nexport default class XSRF extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    const xsrfToken = Cookies.get(request.xsrfCookieName());\n    const xsrfHeader = request.xsrfHeaderName();\n\n    if (!isUndefined(xsrfToken) && isString(xsrfToken)) {\n      request.header(xsrfHeader, xsrfToken);\n    }\n\n    accept(request);\n  }\n}\n",
@@ -1989,7 +2077,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 59,
+    "__docId__": 63,
     "kind": "class",
     "name": "XSRF",
     "memberof": "src/interceptors/xsrf.js",
@@ -2013,7 +2101,7 @@
     ]
   },
   {
-    "__docId__": 60,
+    "__docId__": 64,
     "kind": "method",
     "name": "request",
     "memberof": "src/interceptors/xsrf.js~XSRF",
@@ -2064,7 +2152,7 @@
     ]
   },
   {
-    "__docId__": 61,
+    "__docId__": 65,
     "kind": "file",
     "name": "src/path.js",
     "content": "import { reduce, startsWith, endsWith } from 'lodash';\n\nexport default {\n  separator: '/',\n\n  join() {\n    const separator = this.separator;\n    const initial = arguments[0];\n    const args = [...arguments].slice(1)\n\n    return reduce(args, (accum, value) => {\n      if (value.trim() != '') {\n        if (endsWith(accum, separator) && startsWith(value, separator)) {\n          accum += value.substring(1);\n        } else if (endsWith(accum, separator) || startsWith(value, separator)) {\n          accum += value;\n        } else {\n          accum += '/' + value;\n        }\n      }\n\n      return accum;\n    }, initial);\n  }\n};\n",
@@ -2075,7 +2163,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 62,
+    "__docId__": 66,
     "kind": "file",
     "name": "src/request-interceptor-chain.js",
     "content": "import { isEmpty, head, tail, partial } from 'lodash';\n\n/**\n * Runs the request interceptors, and requestError interceptors if necessary.\n * @private\n * @class\n * @param {Object[]} interceptors - The array of interceptors to be run\n * @param {Function} accept - Callback that is invoked with the final request\n * object after all interceptors have run successfully.\n * @param {Function} reject - Callback that is invoked with an error object\n * if all of the interceptors fail to recover from an error.\n */\nexport default function RequestInterceptorChain(interceptors, accept, reject) {\n  /**\n   * Handler for a rejected interceptor.  Runs requestError interceptor for\n   * all interceptors following the failure, in an attempt to recover.\n   * If one of the interceptors manages to recover, hop back into the next\n   * interceptor after the initial failure.\n   */\n  function failure(remaining, recover) {\n    return function (error) {\n      function step(rest, err) {\n        if (!isEmpty(rest)) {\n          const interceptor = head(rest);\n          const xs = tail(rest);\n          const transform = interceptor.requestError;\n          const next = partial(step, xs);\n\n          transform(err, recover, next);\n        } else {\n          reject(err);\n        }\n      }\n\n      step(remaining, error);\n    };\n  }\n\n  /** @method\n   * Runs the request through the chain of request interceptors\n   * @name run\n   * @param {Request} request\n   */\n  this.run = function (request) {\n    function step(remaining, next) {\n      if (!isEmpty(remaining)) {\n        const interceptor = head(remaining);\n        const xs = tail(remaining);\n        const transform = interceptor.request;\n        const success = partial(step, xs);\n\n        transform(request, success, failure(xs, success));\n      } else {\n        accept(request);\n      }\n    }\n\n    step(interceptors, request);\n  };\n}\n",
@@ -2086,7 +2174,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 63,
+    "__docId__": 67,
     "kind": "function",
     "name": "RequestInterceptorChain",
     "memberof": "src/request-interceptor-chain.js",
@@ -2140,7 +2228,7 @@
     ]
   },
   {
-    "__docId__": 64,
+    "__docId__": 68,
     "kind": "file",
     "name": "src/request.js",
     "content": "import { isUndefined, identity, assign, isString, isObject } from 'lodash';\nimport { PropertyValidationException } from './exceptions';\nimport Path from './path';\nimport Url from './url';\nimport { parseUri } from './utilities';\nimport Serializers from './serializers';\n\nlet _method = new WeakMap();\nlet _headers = new WeakMap();\nlet _timeout = new WeakMap();\nlet _body = new WeakMap();\nlet _serializer = new WeakMap();\nlet _url = new WeakMap();\nlet _interceptors = new WeakMap();\nlet _xsrfCookieName = new WeakMap();\nlet _xsrfHeaderName = new WeakMap();\nlet _withCredentials = new WeakMap();\nlet _username = new WeakMap();\nlet _password = new WeakMap();\nlet _provider = new WeakMap();\n\n/**\n * A Request should only ever be created by an instance of {@link Http}\n * @class\n * @name Request\n */\nexport default class Request {\n  /**\n   * @constructor\n   * @param {Object} config - Override default settings for this Request only.\n   */\n  constructor(config) {\n    _method.set(this, config.method || null);\n    _headers.set(this, config.headers || {});\n    _timeout.set(this, config.timeout || null);\n    _body.set(this, config.body || null);\n    _url.set(this, config.url || null);\n    _interceptors.set(this, config.interceptors || {})\n    _xsrfCookieName.set(this, config.xsrfCookieName);\n    _xsrfHeaderName.set(this, config.xsrfHeaderName);\n    _withCredentials.set(this, !!config.withCredentials);\n    _username.set(this, config.username || null);\n    _password.set(this, config.password || null);\n    _provider.set(this, config.provider);\n  }\n\n  /**\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   */\n  method(value) {\n    if (isUndefined(value)) {\n     return _method.get(this);\n    }\n\n    _method.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   */\n  header(name, value) {\n    let headers = _headers.get(this);\n    if (isUndefined(value)) {\n      return headers[name];\n    }\n    headers[name] = value.toString();\n    return this;\n  }\n\n  /**\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   */\n  headers(value) {\n    if (isUndefined(value)) {\n      return assign({}, _headers.get(this));\n    }\n\n    _headers.set(this, value);\n    return this;\n  }\n\n  /**\n   * Convenience method for getting/setting the Content-Type header.\n   * @method\n   * @name contentType\n   * @param {String} [value] - The value of the Content-Type header\n   * @returns {String|Request} - If value is specified, sets the\n   * Content-Type header.  If value is ommitted, returns the current value\n   * of the Content-Type header (or undefined);\n   */\n  contentType(value) {\n    const headers = _headers.get(this);\n    const currentEntry = Object.entries(headers).find((header) => header[0].toLowerCase() === 'content-type');\n\n    if (isUndefined(value)) {\n      return currentEntry[0];\n    }\n\n    headers[currentEntry] = value;\n    return this;\n  }\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Request} - If value is specified, sets the timeout\n   * for this request. and returns the current request. If value is ommitted,\n   * returns the current timeout value.\n   */\n  timeout(value) {\n    if (isUndefined(value)) {\n      return _timeout.get(this);\n    }\n\n    _timeout.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name body\n   * @param {Serializer} [value] - The serializer for the body\n   * @returns {Serializer|Request} - If value is specified, sets the Serializer\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current Serializer\n   */\n  serializer(value) {\n    if (isUndefined(value)) {\n      return _serializer.get(this);\n    }\n\n    _serializer.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @param {Serializer} [serializer] - The serializer for the body\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   */\n  body(value, serializer) {\n    if (isUndefined(value)) {\n     return _body.get(this);\n    }\n\n    _body.set(this, value);\n    _serializer.set(this, serializer || new Serializers.Default());\n\n    return this;\n  }\n\n  /**\n   * @method\n   * @name url\n   * @param {Url} [value] - The {@link Url} for this request.\n   * @returns {Url|Request} - If value is specified, sets the {@link Url} for\n   * this request and returns the current Request.  If value is ommitted,\n   * returns the current {@link Url}.\n   */\n  url(value) {\n    if (isUndefined(value)) {\n      return _url.get(this);\n    }\n\n    if (value instanceof Url) {\n      _url.set(this, value);\n      return this;\n    }\n\n    if (isString(value) || isObject(value)) {\n      const newUrl = Url.factory(url);\n      if (newUrl.isAbsolute()) {\n        _url.set(this, newUrl);\n        return this;\n      } else if (_url.get(this) && _url.get().isAbsolute()) {\n        _url.set(this, _url.get(this).merge(newUrl));\n        return this;\n      }\n    }\n\n    throw new PropertyValidationException('url', url);\n  }\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [value] - The set of interceptors to be run against this Request and/or Response\n   * @returns {Interceptor[]|Request} - If value is specified, overrides the current set of interceptors\n   * for this Request and/or Response and returns the current Request.  If value is ommitted,\n   * returns the current set of interceptors.\n   */\n  interceptors(value) {\n    if (isUndefined(value)) {\n      return _interceptors.get(this);\n    }\n    _interceptors.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    if (isUndefined(value)) {\n      return _xsrfCookieName.get(this);\n    }\n    _xsrfCookieName.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    if (isUndefined(value)) {\n      return _xsrfHeaderName.get(this);\n    }\n    _xsrfHeaderName.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    if (isUndefined(value)) {\n      return this.config.withCredentials = value;\n    }\n    this.config.withCredentials = value;\n    return this;\n  }\n\n  /**\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   */\n  username(value) {\n    if (isUndefined(value)) {\n      return _username.get(this);\n    }\n    _username.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   */\n  password(value) {\n    if (isUndefined(value)) {\n      return _password.get(this);\n    }\n    _password.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name execute\n   * @returns {Object} - Executes the request and returns an object containing\n   * the response, uploadProgress, and downloadProgress streams.\n   * @example\n   * var streams = request.execute();\n   * streams.flatMap(response => response.body()).forEach((body) => console.log(body));\n   * streams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));\n   * streams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));\n   */\n  execute() {\n    const provider = _provider.get(this);\n    return provider(this);\n  };\n}\n",
@@ -2151,7 +2239,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 65,
+    "__docId__": 69,
     "kind": "variable",
     "name": "_method",
     "memberof": "src/request.js",
@@ -2177,7 +2265,7 @@
     }
   },
   {
-    "__docId__": 66,
+    "__docId__": 70,
     "kind": "variable",
     "name": "_headers",
     "memberof": "src/request.js",
@@ -2203,7 +2291,7 @@
     }
   },
   {
-    "__docId__": 67,
+    "__docId__": 71,
     "kind": "variable",
     "name": "_timeout",
     "memberof": "src/request.js",
@@ -2229,7 +2317,7 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 72,
     "kind": "variable",
     "name": "_body",
     "memberof": "src/request.js",
@@ -2255,7 +2343,7 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 73,
     "kind": "variable",
     "name": "_serializer",
     "memberof": "src/request.js",
@@ -2281,7 +2369,7 @@
     }
   },
   {
-    "__docId__": 70,
+    "__docId__": 74,
     "kind": "variable",
     "name": "_url",
     "memberof": "src/request.js",
@@ -2307,7 +2395,7 @@
     }
   },
   {
-    "__docId__": 71,
+    "__docId__": 75,
     "kind": "variable",
     "name": "_interceptors",
     "memberof": "src/request.js",
@@ -2333,7 +2421,7 @@
     }
   },
   {
-    "__docId__": 72,
+    "__docId__": 76,
     "kind": "variable",
     "name": "_xsrfCookieName",
     "memberof": "src/request.js",
@@ -2359,7 +2447,7 @@
     }
   },
   {
-    "__docId__": 73,
+    "__docId__": 77,
     "kind": "variable",
     "name": "_xsrfHeaderName",
     "memberof": "src/request.js",
@@ -2385,7 +2473,7 @@
     }
   },
   {
-    "__docId__": 74,
+    "__docId__": 78,
     "kind": "variable",
     "name": "_withCredentials",
     "memberof": "src/request.js",
@@ -2411,7 +2499,7 @@
     }
   },
   {
-    "__docId__": 75,
+    "__docId__": 79,
     "kind": "variable",
     "name": "_username",
     "memberof": "src/request.js",
@@ -2437,7 +2525,7 @@
     }
   },
   {
-    "__docId__": 76,
+    "__docId__": 80,
     "kind": "variable",
     "name": "_password",
     "memberof": "src/request.js",
@@ -2463,7 +2551,7 @@
     }
   },
   {
-    "__docId__": 77,
+    "__docId__": 81,
     "kind": "variable",
     "name": "_provider",
     "memberof": "src/request.js",
@@ -2489,7 +2577,7 @@
     }
   },
   {
-    "__docId__": 78,
+    "__docId__": 82,
     "kind": "class",
     "name": "Request",
     "memberof": "src/request.js",
@@ -2510,7 +2598,7 @@
     "interface": false
   },
   {
-    "__docId__": 79,
+    "__docId__": 83,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/request.js~Request",
@@ -2541,7 +2629,7 @@
     ]
   },
   {
-    "__docId__": 80,
+    "__docId__": 84,
     "kind": "method",
     "name": "method",
     "memberof": "src/request.js~Request",
@@ -2585,7 +2673,7 @@
     }
   },
   {
-    "__docId__": 81,
+    "__docId__": 85,
     "kind": "method",
     "name": "header",
     "memberof": "src/request.js~Request",
@@ -2639,7 +2727,7 @@
     }
   },
   {
-    "__docId__": 82,
+    "__docId__": 86,
     "kind": "method",
     "name": "headers",
     "memberof": "src/request.js~Request",
@@ -2683,7 +2771,7 @@
     }
   },
   {
-    "__docId__": 83,
+    "__docId__": 87,
     "kind": "method",
     "name": "contentType",
     "memberof": "src/request.js~Request",
@@ -2727,7 +2815,7 @@
     }
   },
   {
-    "__docId__": 84,
+    "__docId__": 88,
     "kind": "method",
     "name": "timeout",
     "memberof": "src/request.js~Request",
@@ -2771,7 +2859,7 @@
     }
   },
   {
-    "__docId__": 85,
+    "__docId__": 89,
     "kind": "method",
     "name": "serializer",
     "memberof": "src/request.js~Request",
@@ -2815,7 +2903,7 @@
     }
   },
   {
-    "__docId__": 86,
+    "__docId__": 90,
     "kind": "method",
     "name": "body",
     "memberof": "src/request.js~Request",
@@ -2877,7 +2965,7 @@
     }
   },
   {
-    "__docId__": 87,
+    "__docId__": 91,
     "kind": "method",
     "name": "url",
     "memberof": "src/request.js~Request",
@@ -2921,7 +3009,7 @@
     }
   },
   {
-    "__docId__": 88,
+    "__docId__": 92,
     "kind": "method",
     "name": "interceptors",
     "memberof": "src/request.js~Request",
@@ -2965,7 +3053,7 @@
     }
   },
   {
-    "__docId__": 89,
+    "__docId__": 93,
     "kind": "method",
     "name": "xsrfCookieName",
     "memberof": "src/request.js~Request",
@@ -3009,7 +3097,7 @@
     }
   },
   {
-    "__docId__": 90,
+    "__docId__": 94,
     "kind": "method",
     "name": "xsrfHeaderName",
     "memberof": "src/request.js~Request",
@@ -3053,7 +3141,7 @@
     }
   },
   {
-    "__docId__": 91,
+    "__docId__": 95,
     "kind": "method",
     "name": "withCredentials",
     "memberof": "src/request.js~Request",
@@ -3097,7 +3185,7 @@
     }
   },
   {
-    "__docId__": 92,
+    "__docId__": 96,
     "kind": "method",
     "name": "username",
     "memberof": "src/request.js~Request",
@@ -3141,7 +3229,7 @@
     }
   },
   {
-    "__docId__": 93,
+    "__docId__": 97,
     "kind": "method",
     "name": "password",
     "memberof": "src/request.js~Request",
@@ -3185,7 +3273,7 @@
     }
   },
   {
-    "__docId__": 94,
+    "__docId__": 98,
     "kind": "method",
     "name": "execute",
     "memberof": "src/request.js~Request",
@@ -3220,7 +3308,7 @@
     }
   },
   {
-    "__docId__": 95,
+    "__docId__": 99,
     "kind": "file",
     "name": "src/response-interceptor-chain.js",
     "content": "import { isEmpty, head, tail, partial } from 'lodash';\n\n/**\n * Runs the response interceptors, and responseError interceptors if necessary.\n * @private\n * @class\n * @param {Interceptor[]} interceptors - The array of interceptors to be run\n * @param {Function} accept - Callback that is invoked with the final response\n * object after all interceptors have run successfully.\n * @param {Function} reject - Callback that is invoked with an error object\n * if all of the interceptors fail to recover from an error.\n */\nexport default function ResponseInterceptorChain(interceptors, accept, reject) {\n  /**\n   * Handler for a rejected interceptor.  Runs responseError interceptor for\n   * all interceptors following the failure, in an attempt to recover.\n   * If one of the interceptors manages to recover, hop back into the next\n   * interceptor after the initial failure.\n   */\n  function failure(remaining, recover) {\n    return function (error) {\n      function step(rest, err) {\n        if (isEmpty(rest)) {\n          const interceptor = head(rest);\n          const xs = tail(rest);\n          const transform = interceptor.responseError;\n          const next = partial(step, xs);\n\n          transform(err, recover, next);\n        } else {\n          reject(err);\n        }\n      }\n\n      step(remaining, error);\n    };\n  }\n\n  /** @method\n   * Runs the response through the chain of response interceptors\n   * @name run\n   * @param {Response} response\n   */\n  this.run = function (response) {\n    function step(remaining, next) {\n      if (!isEmpty(remaining)) {\n        const interceptor = head(remaining);\n        const xs = tail(remaining);\n        const transform = interceptor.response;\n        const success = partial(step, xs);\n\n        transform(response, success, failure(xs, success));\n      } else {\n        accept(response);\n      }\n    }\n\n    step(interceptors, response);\n  };\n}\n",
@@ -3231,7 +3319,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 96,
+    "__docId__": 100,
     "kind": "function",
     "name": "ResponseInterceptorChain",
     "memberof": "src/response-interceptor-chain.js",
@@ -3285,7 +3373,7 @@
     ]
   },
   {
-    "__docId__": 97,
+    "__docId__": 101,
     "kind": "file",
     "name": "src/response.js",
     "content": "import { isUndefined, isFunction } from 'lodash';\nimport Headers from './headers';\n\nlet _status = new WeakMap();\nlet _statusText = new WeakMap();\nlet _headers = new WeakMap();\nlet _body = new WeakMap();\nlet _uploadProgress = new WeakMap();\nlet _downloadProgress = new WeakMap();\nlet _isChunked = new WeakMap();\n\nfunction evaluateLazy(property) {\n  const value = property.get(this);\n  if (!isUndefined(value) && isFunction(value)) {\n    property.set(this, value());\n  }\n  return property.get(this);\n}\n\n/**\n * Immutable response container.  Should only be created by executing a {@link Request}.\n * @class\n * @name Response\n */\nexport default class Response {\n\n  /**\n   * @param {XMLHttpRequest} xhr\n   * @param {Observable<String>} body - An Observable representing the body/entity of the response\n   * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events\n   * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events\n   */\n  constructor(xhr, body, uploadProgress, downloadProgress) {\n    _status.set(this, xhr.status);\n    _statusText.set(this, xhr.statusText);\n    _headers.set(this, xhr.getAllResponseHeaders());\n    _body.set(this, body);\n    _uploadProgress.set(this, uploadProgress);\n    _downloadProgress.set(this, downloadProgress);\n  }\n\n  /**\n   * @method\n   * @name uploadProgress\n   * @returns {Observable<Object>} - an Observable stream of upload progress events\n   */\n  uploadProgress() {\n    return evaluateLazy.call(this, _uploadProgress);\n  }\n\n  /**\n   * @method\n   * @name downloadProgress\n   * @returns {Observable<Object>} - an Observable stream of download progress events\n   */\n  downloadProgress() {\n    return evaluateLazy.call(this, _downloadProgress);\n  }\n\n  /**\n   * @method\n   * @name body\n   * @returns {Observable<String>} - An Observable stream of the response body/entity contents\n   */\n  body() {\n    return evaluateLazy.call(this, _body);\n  }\n\n  /**\n   * @method\n   * @name status\n   * @returns {Number} - The HTTP status code of the response\n   */\n  status() {\n    return _status.get(this);\n  }\n\n  /**\n   * @method\n   * @name statusText\n   * @returns {String} - The status text of the response\n   */\n  statusText() {\n    return _statusText.get(this);\n  }\n\n  /**\n   * @method\n   * @name headers\n   * @returns {Object} - An object containing the response headers\n   * @example\n   * { \"Content-Type\": \"application/json\", \"Content-Length\": \"22\" }\n   */\n  headers() {\n    return _headers.get(this);\n  }\n\n  /**\n   * Look-up the value of an individual resonse header\n   * @method\n   * @name header\n   * @param {String} name - The name of the header to lookup\n   * @returns {String} - The value of the header, or undefined if not found\n   */\n  header(name) {\n    return _headers.get(this)[name];\n  }\n\n  contentType() {\n    const headers = _headers.get(this);\n    const entry = Object.entries(headers)\n      .find((headers) => headers[0].toLowerCase() === 'content-type');\n\n    if (entry) return entry[1];\n  }\n\n  /**\n   * @method\n   * @name isChunked\n   * @returns {Boolean} - Determines if this is a chunked response.  A chunked\n   * response will send each chunk through the {@link body} stream.  A non-chunked\n   * response will only push the final result through the stream.\n   */\n  isChunked() {\n    if (!_isChunked.has(this)) {\n      let transferEncoding = (this.header(Headers.TRANSFER_ENCODING) || '').toLowerCase();\n      let isChunked = transferEncoding.indexOf('chunked') > -1 ||\n                      transferEncoding.indexOf('identity') > -1;\n      // Detect SPDY. It uses chunked transfer but doesn't set the Transfer-Encoding header.\n      if (!isChunked) {\n        let c = window.chrome;\n        let loadTimes = c && c.loadTimes && c.loadTimes();\n        let chromeSpdy = loadTimes && loadTimes.wasFetchedViaSpdy;\n        let ffSpdy = !!this.header('X-Firefox-Spdy');\n        isChunked = ffSpdy || chromeSpdy;\n      }\n      _isChunked.set(this, isChunked);\n    }\n    return _isChunked.get(this);\n  }\n}\n",
@@ -3296,7 +3384,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 98,
+    "__docId__": 102,
     "kind": "variable",
     "name": "_status",
     "memberof": "src/response.js",
@@ -3322,7 +3410,7 @@
     }
   },
   {
-    "__docId__": 99,
+    "__docId__": 103,
     "kind": "variable",
     "name": "_statusText",
     "memberof": "src/response.js",
@@ -3348,7 +3436,7 @@
     }
   },
   {
-    "__docId__": 100,
+    "__docId__": 104,
     "kind": "variable",
     "name": "_headers",
     "memberof": "src/response.js",
@@ -3374,7 +3462,7 @@
     }
   },
   {
-    "__docId__": 101,
+    "__docId__": 105,
     "kind": "variable",
     "name": "_body",
     "memberof": "src/response.js",
@@ -3400,7 +3488,7 @@
     }
   },
   {
-    "__docId__": 102,
+    "__docId__": 106,
     "kind": "variable",
     "name": "_uploadProgress",
     "memberof": "src/response.js",
@@ -3426,7 +3514,7 @@
     }
   },
   {
-    "__docId__": 103,
+    "__docId__": 107,
     "kind": "variable",
     "name": "_downloadProgress",
     "memberof": "src/response.js",
@@ -3452,7 +3540,7 @@
     }
   },
   {
-    "__docId__": 104,
+    "__docId__": 108,
     "kind": "variable",
     "name": "_isChunked",
     "memberof": "src/response.js",
@@ -3478,7 +3566,7 @@
     }
   },
   {
-    "__docId__": 105,
+    "__docId__": 109,
     "kind": "function",
     "name": "evaluateLazy",
     "memberof": "src/response.js",
@@ -3514,7 +3602,7 @@
     }
   },
   {
-    "__docId__": 106,
+    "__docId__": 110,
     "kind": "class",
     "name": "Response",
     "memberof": "src/response.js",
@@ -3535,7 +3623,7 @@
     "interface": false
   },
   {
-    "__docId__": 107,
+    "__docId__": 111,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/response.js~Response",
@@ -3590,7 +3678,7 @@
     ]
   },
   {
-    "__docId__": 108,
+    "__docId__": 112,
     "kind": "method",
     "name": "uploadProgress",
     "memberof": "src/response.js~Response",
@@ -3622,7 +3710,7 @@
     }
   },
   {
-    "__docId__": 109,
+    "__docId__": 113,
     "kind": "method",
     "name": "downloadProgress",
     "memberof": "src/response.js~Response",
@@ -3654,7 +3742,7 @@
     }
   },
   {
-    "__docId__": 110,
+    "__docId__": 114,
     "kind": "method",
     "name": "body",
     "memberof": "src/response.js~Response",
@@ -3686,7 +3774,7 @@
     }
   },
   {
-    "__docId__": 111,
+    "__docId__": 115,
     "kind": "method",
     "name": "status",
     "memberof": "src/response.js~Response",
@@ -3718,7 +3806,7 @@
     }
   },
   {
-    "__docId__": 112,
+    "__docId__": 116,
     "kind": "method",
     "name": "statusText",
     "memberof": "src/response.js~Response",
@@ -3750,7 +3838,7 @@
     }
   },
   {
-    "__docId__": 113,
+    "__docId__": 117,
     "kind": "method",
     "name": "headers",
     "memberof": "src/response.js~Response",
@@ -3785,7 +3873,7 @@
     }
   },
   {
-    "__docId__": 114,
+    "__docId__": 118,
     "kind": "method",
     "name": "header",
     "memberof": "src/response.js~Response",
@@ -3828,7 +3916,7 @@
     }
   },
   {
-    "__docId__": 115,
+    "__docId__": 119,
     "kind": "method",
     "name": "contentType",
     "memberof": "src/response.js~Response",
@@ -3854,7 +3942,7 @@
     }
   },
   {
-    "__docId__": 116,
+    "__docId__": 120,
     "kind": "method",
     "name": "isChunked",
     "memberof": "src/response.js~Response",
@@ -3886,10 +3974,139 @@
     }
   },
   {
-    "__docId__": 117,
+    "__docId__": 121,
+    "kind": "file",
+    "name": "src/serializer.js",
+    "content": "import { NotImplementedException } from './exceptions';\n\n/**\n * Base class for {@link Request} body serializers\n * @class\n * @name Serializer\n */\nexport default class Serializer {\n  /**\n   * @constructor\n   * @param {String} [contentType] - The value of the Content-Type header\n   */\n  constructor(contentType) {\n    if (!!contentType) this.contentType = contentType;\n  }\n\n  /**\n   * @method\n   * @name serialize\n   * @param value - The content to be serialized\n   * @returns - The serialized content\n   */\n  serialize(value) {\n    throw new NotImplementedException();\n  }\n}\n",
+    "static": true,
+    "longname": "src/serializer.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 122,
+    "kind": "class",
+    "name": "Serializer",
+    "memberof": "src/serializer.js",
+    "static": true,
+    "longname": "src/serializer.js~Serializer",
+    "access": null,
+    "export": true,
+    "importPath": "rx-http/src/serializer.js",
+    "importStyle": "Serializer",
+    "description": "Base class for {@link Request} body serializers",
+    "lineNumber": 8,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      }
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 123,
+    "kind": "constructor",
+    "name": "constructor",
+    "memberof": "src/serializer.js~Serializer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/serializer.js~Serializer#constructor",
+    "access": null,
+    "description": "",
+    "lineNumber": 13,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "contentType",
+        "description": "The value of the Content-Type header"
+      }
+    ]
+  },
+  {
+    "__docId__": 124,
+    "kind": "member",
+    "name": "contentType",
+    "memberof": "src/serializer.js~Serializer",
+    "static": false,
+    "longname": "src/serializer.js~Serializer#contentType",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 125,
+    "kind": "method",
+    "name": "serialize",
+    "memberof": "src/serializer.js~Serializer",
+    "generator": false,
+    "async": false,
+    "static": false,
+    "longname": "src/serializer.js~Serializer#serialize",
+    "access": null,
+    "description": "",
+    "lineNumber": 23,
+    "unknown": [
+      {
+        "tagName": "@method",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "- The serialized content"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "The content to be serialized"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "*"
+      ],
+      "spread": false,
+      "description": "The serialized content"
+    }
+  },
+  {
+    "__docId__": 126,
     "kind": "file",
     "name": "src/serializers/default-serializer.js",
-    "content": "import { isObject, isString } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport { NoSerializerFoundException } from '../exceptions';\nimport Serializer from './serializer';\nimport JsonSerializer from './json-serializer';\nimport FormDataSerializer from './form-data-serializer';\nimport TextSerializer from './text-serializer';\n\nconst contentTypeSerializers = {\n  'text/json': JsonSerializer,\n  'application/json': JsonSerializer,\n  'multipart/form-data': FormDataSerializer,\n  'application/x-www-urlencoded': FormDataSerializer,\n  'text/plain': TextSerializer\n}\n\nfunction autoDetect(body, contentType) {\n  if (isObject(body)) {\n    if (isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {\n      return new FormDataSerializer(contentType);\n    }\n  }\n\n  if (isString(body)) {\n    return new TextSerializer('text/plain');\n  }\n\n  if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {\n    const result = contentTypeSerializers[contentType.toLowerCase()];\n    if (!!result) return result;\n    throw new NoSerializerFoundException(contentType);\n  }\n\n  throw new NoSerializerFoundException('unknown');\n}\n\nexport default class DefaultSerializer extends Serializer {\n  serialize(value) {\n    const delegate = autoDetect(value, this.contentType)\n    return delegate.serialize(value);\n  }\n}\n",
+    "content": "import { isObject, isString } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport { NoSerializerFoundException } from '../exceptions';\nimport Serializer from '../serializer';\nimport JsonSerializer from './json-serializer';\nimport FormDataSerializer from './form-data-serializer';\nimport TextSerializer from './text-serializer';\n\nconst contentTypeSerializers = {\n  'text/json': JsonSerializer,\n  'application/json': JsonSerializer,\n  'multipart/form-data': FormDataSerializer,\n  'application/x-www-urlencoded': FormDataSerializer,\n  'text/plain': TextSerializer\n}\n\nfunction autoDetect(body, contentType) {\n  if (isObject(body)) {\n    if (isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {\n      return new FormDataSerializer(contentType);\n    }\n  }\n\n  if (isString(body)) {\n    return new TextSerializer('text/plain');\n  }\n\n  if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {\n    const result = contentTypeSerializers[contentType.toLowerCase()];\n    if (!!result) return result;\n    throw new NoSerializerFoundException(contentType);\n  }\n\n  throw new NoSerializerFoundException('unknown');\n}\n\n/**\n * Serializer that attempts uses the given contentType, or tries to detect\n * the content type in order to delegate to the appropriate built-in\n * {@link Serializer}\n * @class\n * @name DefaultSerializer\n * @extends Serializer\n */\nexport default class DefaultSerializer extends Serializer {\n  /**\n   * @method\n   * @name serialize\n   * @param value - the value to be serialized\n   * @returns the serialized content\n   */\n  serialize(value) {\n    const delegate = autoDetect(value, this.contentType)\n    return delegate.serialize(value);\n  }\n}\n",
     "static": true,
     "longname": "src/serializers/default-serializer.js",
     "access": null,
@@ -3897,7 +4114,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 118,
+    "__docId__": 127,
     "kind": "variable",
     "name": "contentTypeSerializers",
     "memberof": "src/serializers/default-serializer.js",
@@ -3923,7 +4140,7 @@
     }
   },
   {
-    "__docId__": 119,
+    "__docId__": 128,
     "kind": "function",
     "name": "autoDetect",
     "memberof": "src/serializers/default-serializer.js",
@@ -3965,7 +4182,7 @@
     }
   },
   {
-    "__docId__": 120,
+    "__docId__": 129,
     "kind": "class",
     "name": "DefaultSerializer",
     "memberof": "src/serializers/default-serializer.js",
@@ -3975,22 +4192,21 @@
     "export": true,
     "importPath": "rx-http/src/serializers/default-serializer.js",
     "importStyle": "DefaultSerializer",
-    "description": null,
-    "lineNumber": 37,
-    "undocument": true,
+    "description": "Serializer that attempts uses the given contentType, or tries to detect\nthe content type in order to delegate to the appropriate built-in\n{@link Serializer}",
+    "lineNumber": 45,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@class",
         "tagValue": ""
       }
     ],
     "interface": false,
     "extends": [
-      "src/serializers/serializer.js~Serializer"
+      "*"
     ]
   },
   {
-    "__docId__": 121,
+    "__docId__": 130,
     "kind": "method",
     "name": "serialize",
     "memberof": "src/serializers/default-serializer.js~DefaultSerializer",
@@ -3999,34 +4215,44 @@
     "static": false,
     "longname": "src/serializers/default-serializer.js~DefaultSerializer#serialize",
     "access": null,
-    "description": null,
-    "lineNumber": 38,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 52,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "the serialized content"
       }
     ],
     "params": [
       {
-        "name": "value",
+        "nullable": null,
         "types": [
           "*"
-        ]
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "the value to be serialized"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
         "*"
-      ]
+      ],
+      "spread": false,
+      "description": "the serialized content"
     }
   },
   {
-    "__docId__": 122,
+    "__docId__": 131,
     "kind": "file",
     "name": "src/serializers/form-data-serializer.js",
-    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Serializer from './serializer';\n\nexport default class FormDataSerializer extends Serializer {\n  constructor(contentType) {\n    super(contentType || 'multipart/form-data');\n  }\n\n  serialize(value) {\n    if (isFormData(value)) return value;\n\n    const result = new FormData();\n\n    if (isFile(value) || isBlob(value)) {\n      result.append('data', value);\n    }\n\n    if (isObject(value)) {\n      Object.entries(value).forEach((entry) => {\n        result.append(entry[0], entry[1]);\n      });\n    }\n\n    throw `${value} is not an object and cannot be converted to FormData`;\n  }\n}\n",
+    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Serializer from '../serializer';\n\n/**\n * @class\n * @name FormDataSerializer\n * @extends Serializer\n */\nexport default class FormDataSerializer extends Serializer {\n  /**\n   * @constructor\n   * @param {String} [contentType] - The value of the Content-Type header\n   */\n  constructor(contentType) {\n    super(contentType || 'multipart/form-data');\n  }\n\n  /**\n   * @method\n   * @name serialize\n   * @param {FormData|Blob|Object} value - The content to convert to a\n   * {@link FormData} value.\n   * @returns {FormData} - The {@link FormData} value to be sent to the server\n   */\n  serialize(value) {\n    if (isFormData(value)) return value;\n\n    const result = new FormData();\n\n    if (isFile(value) || isBlob(value)) {\n      result.append('data', value);\n    }\n\n    if (isObject(value)) {\n      Object.entries(value).forEach((entry) => {\n        result.append(entry[0], entry[1]);\n      });\n    }\n\n    throw `${value} is not an object and cannot be converted to FormData`;\n  }\n}\n",
     "static": true,
     "longname": "src/serializers/form-data-serializer.js",
     "access": null,
@@ -4034,7 +4260,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 123,
+    "__docId__": 132,
     "kind": "class",
     "name": "FormDataSerializer",
     "memberof": "src/serializers/form-data-serializer.js",
@@ -4044,22 +4270,21 @@
     "export": true,
     "importPath": "rx-http/src/serializers/form-data-serializer.js",
     "importStyle": "FormDataSerializer",
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 10,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@class",
         "tagValue": ""
       }
     ],
     "interface": false,
     "extends": [
-      "src/serializers/serializer.js~Serializer"
+      "*"
     ]
   },
   {
-    "__docId__": 124,
+    "__docId__": 133,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/serializers/form-data-serializer.js~FormDataSerializer",
@@ -4068,26 +4293,29 @@
     "static": false,
     "longname": "src/serializers/form-data-serializer.js~FormDataSerializer#constructor",
     "access": null,
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 15,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@constructor",
         "tagValue": ""
       }
     ],
     "params": [
       {
-        "name": "contentType",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "contentType",
+        "description": "The value of the Content-Type header"
       }
     ]
   },
   {
-    "__docId__": 125,
+    "__docId__": 134,
     "kind": "method",
     "name": "serialize",
     "memberof": "src/serializers/form-data-serializer.js~FormDataSerializer",
@@ -4096,34 +4324,46 @@
     "static": false,
     "longname": "src/serializers/form-data-serializer.js~FormDataSerializer#serialize",
     "access": null,
-    "description": null,
-    "lineNumber": 10,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 26,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{FormData} - The {@link FormData} value to be sent to the server"
       }
     ],
     "params": [
       {
-        "name": "value",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "FormData",
+          "Blob",
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "The content to convert to a\n{@link FormData} value."
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "FormData"
+      ],
+      "spread": false,
+      "description": "The {@link FormData} value to be sent to the server"
     }
   },
   {
-    "__docId__": 126,
+    "__docId__": 135,
     "kind": "file",
     "name": "src/serializers/index.js",
-    "content": "import Serializer from './serializer';\nimport DefaultSerializer from './default-serializer';\nimport FormDataSerializer from './form-data-serializer';\nimport JsonSerializer from './json-serializer';\nimport TextSerializer from './text-serializer';\n\nexport default {\n  Serializer,\n  'Default': DefaultSerializer,\n  'Form': FormDataSerializer,\n  'Json': JsonSerializer,\n  'Text': TextSerializer\n};\n",
+    "content": "import DefaultSerializer from './default-serializer';\nimport FormDataSerializer from './form-data-serializer';\nimport JsonSerializer from './json-serializer';\nimport TextSerializer from './text-serializer';\n\nexport default {\n  'Default': DefaultSerializer,\n  'Form': FormDataSerializer,\n  'Json': JsonSerializer,\n  'Text': TextSerializer\n};\n",
     "static": true,
     "longname": "src/serializers/index.js",
     "access": null,
@@ -4131,10 +4371,10 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 127,
+    "__docId__": 136,
     "kind": "file",
     "name": "src/serializers/json-serializer.js",
-    "content": "import Serializer from './serializer';\n\nexport default class JsonSerializer extends Serializer {\n  constructor(contentType) {\n    super(contentType || 'application/json');\n  }\n\n  serialize(value) {\n    return JSON.stringify(value);\n  }\n}\n",
+    "content": "import Serializer from '../serializer';\n\n/**\n * @class\n * @name JsonSerializer\n * @extends Serializer\n */\nexport default class JsonSerializer extends Serializer {\n  /**\n   * @constructor\n   * @param {String} [contentType] - The value of the Content-Type header\n   */\n  constructor(contentType) {\n    super(contentType || 'application/json');\n  }\n\n  /**\n   * @method\n   * @name serialize\n   * @param {Object|String|Number|Array|Boolean} value - The content to convert\n   * to a JSON string\n   * @returns {String} - The serialized JSON string\n   */\n  serialize(value) {\n    return JSON.stringify(value);\n  }\n}\n",
     "static": true,
     "longname": "src/serializers/json-serializer.js",
     "access": null,
@@ -4142,7 +4382,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 128,
+    "__docId__": 137,
     "kind": "class",
     "name": "JsonSerializer",
     "memberof": "src/serializers/json-serializer.js",
@@ -4152,22 +4392,21 @@
     "export": true,
     "importPath": "rx-http/src/serializers/json-serializer.js",
     "importStyle": "JsonSerializer",
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 8,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@class",
         "tagValue": ""
       }
     ],
     "interface": false,
     "extends": [
-      "src/serializers/serializer.js~Serializer"
+      "*"
     ]
   },
   {
-    "__docId__": 129,
+    "__docId__": 138,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/serializers/json-serializer.js~JsonSerializer",
@@ -4176,26 +4415,29 @@
     "static": false,
     "longname": "src/serializers/json-serializer.js~JsonSerializer#constructor",
     "access": null,
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 13,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@constructor",
         "tagValue": ""
       }
     ],
     "params": [
       {
-        "name": "contentType",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "contentType",
+        "description": "The value of the Content-Type header"
       }
     ]
   },
   {
-    "__docId__": 130,
+    "__docId__": 139,
     "kind": "method",
     "name": "serialize",
     "memberof": "src/serializers/json-serializer.js~JsonSerializer",
@@ -4204,118 +4446,48 @@
     "static": false,
     "longname": "src/serializers/json-serializer.js~JsonSerializer#serialize",
     "access": null,
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 24,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{String} - The serialized JSON string"
       }
     ],
     "params": [
       {
-        "name": "value",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Object",
+          "String",
+          "Number",
+          "Array",
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "The content to convert\nto a JSON string"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": "The serialized JSON string"
     }
   },
   {
-    "__docId__": 131,
-    "kind": "file",
-    "name": "src/serializers/serializer.js",
-    "content": "export default class Serializer {\n  constructor(contentType) {\n    if (!!contentType) this.contentType = contentType;\n  }\n}\n",
-    "static": true,
-    "longname": "src/serializers/serializer.js",
-    "access": null,
-    "description": null,
-    "lineNumber": 1
-  },
-  {
-    "__docId__": 132,
-    "kind": "class",
-    "name": "Serializer",
-    "memberof": "src/serializers/serializer.js",
-    "static": true,
-    "longname": "src/serializers/serializer.js~Serializer",
-    "access": null,
-    "export": true,
-    "importPath": "rx-http/src/serializers/serializer.js",
-    "importStyle": "Serializer",
-    "description": null,
-    "lineNumber": 1,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "interface": false
-  },
-  {
-    "__docId__": 133,
-    "kind": "constructor",
-    "name": "constructor",
-    "memberof": "src/serializers/serializer.js~Serializer",
-    "generator": false,
-    "async": false,
-    "static": false,
-    "longname": "src/serializers/serializer.js~Serializer#constructor",
-    "access": null,
-    "description": null,
-    "lineNumber": 2,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "params": [
-      {
-        "name": "contentType",
-        "types": [
-          "*"
-        ]
-      }
-    ]
-  },
-  {
-    "__docId__": 134,
-    "kind": "member",
-    "name": "contentType",
-    "memberof": "src/serializers/serializer.js~Serializer",
-    "static": false,
-    "longname": "src/serializers/serializer.js~Serializer#contentType",
-    "access": null,
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 135,
+    "__docId__": 140,
     "kind": "file",
     "name": "src/serializers/text-serializer.js",
-    "content": "import Serializer from './serializer';\n\nexport default class TextSerializer extends Serializer {\n  constructor(contentType) {\n    super(contentType || 'text/plain');\n  }\n\n  serialize(value) {\n    return value.toString();\n  }\n}\n",
+    "content": "import Serializer from '../serializer';\n\n/**\n * @class\n * @name TextSerializer\n * @extends Serializer\n */\nexport default class TextSerializer extends Serializer {\n  /**\n   * @constructor\n   * @param {String} [contentType] - The value of the Content-Type header\n   */\n  constructor(contentType) {\n    super(contentType || 'text/plain');\n  }\n\n  /**\n   * @method\n   * @name serialize\n   * @param value - The content to be serialized\n   * @returns {String} - The serialized string to be sent to the server\n   */\n  serialize(value) {\n    return value.toString();\n  }\n}\n",
     "static": true,
     "longname": "src/serializers/text-serializer.js",
     "access": null,
@@ -4323,7 +4495,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 136,
+    "__docId__": 141,
     "kind": "class",
     "name": "TextSerializer",
     "memberof": "src/serializers/text-serializer.js",
@@ -4333,22 +4505,21 @@
     "export": true,
     "importPath": "rx-http/src/serializers/text-serializer.js",
     "importStyle": "TextSerializer",
-    "description": null,
-    "lineNumber": 3,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 8,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@class",
         "tagValue": ""
       }
     ],
     "interface": false,
     "extends": [
-      "src/serializers/serializer.js~Serializer"
+      "*"
     ]
   },
   {
-    "__docId__": 137,
+    "__docId__": 142,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/serializers/text-serializer.js~TextSerializer",
@@ -4357,26 +4528,29 @@
     "static": false,
     "longname": "src/serializers/text-serializer.js~TextSerializer#constructor",
     "access": null,
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 13,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@constructor",
         "tagValue": ""
       }
     ],
     "params": [
       {
-        "name": "contentType",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "contentType",
+        "description": "The value of the Content-Type header"
       }
     ]
   },
   {
-    "__docId__": 138,
+    "__docId__": 143,
     "kind": "method",
     "name": "serialize",
     "memberof": "src/serializers/text-serializer.js~TextSerializer",
@@ -4385,31 +4559,41 @@
     "static": false,
     "longname": "src/serializers/text-serializer.js~TextSerializer#serialize",
     "access": null,
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
+    "description": "",
+    "lineNumber": 23,
     "unknown": [
       {
-        "tagName": "@_undocument",
+        "tagName": "@method",
         "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{String} - The serialized string to be sent to the server"
       }
     ],
     "params": [
       {
-        "name": "value",
+        "nullable": null,
         "types": [
           "*"
-        ]
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "The content to be serialized"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": "The serialized string to be sent to the server"
     }
   },
   {
-    "__docId__": 139,
+    "__docId__": 144,
     "kind": "file",
     "name": "src/url.js",
     "content": "import {\n  isObject,\n  isString,\n  isUndefined,\n  isEmpty,\n  assign,\n  reduce,\n  endsWith,\n  startsWith,\n  identity,\n  cloneDeep\n} from 'lodash';\nimport { parseUri } from './utilities';\n\nfunction encode(val) {\n  return encodeURIComponent(val)\n    .replace(/%40/gi, '@')\n    .replace(/%3A/gi, ':')\n    .replace(/%24/g, '$')\n    .replace(/%2C/gi, ',')\n    .replace(/%20/g, '+')\n    .replace(/%5B/gi, '[')\n    .replace(/%5D/gi, ']');\n}\n\nfunction property(member, value) {\n  if (isUndefined(value)) {\n    member.get(this);\n  }\n\n  member.set(this);\n  return this;\n}\n\nconst _protocol = new WeakMap();\nconst _user = new WeakMap();\nconst _password = new WeakMap();\nconst _host = new WeakMap();\nconst _port = new WeakMap();\nconst _directory = new WeakMap();\nconst _file = new WeakMap();\nconst _fragment = new WeakMap();\nconst _query = new WeakMap();\n\n/**\n * @class\n * @name Url\n * @param {Object} parts\n */\nclass Url {\n  /**\n   * @constructor\n   * @param {Object} parts\n   */\n  constructor(parts) {\n    if (parts.protocol) _protocol.set(this, parts.protocol);\n    if (parts.user) _user.set(this, parts.user);\n    if (parts.password) _password.set(this, parts.password);\n    if (parts.host) _host.set(this, parts.host);\n    if (parts.port) _port.set(this, parts.port);\n    if (parts.directory) _directory.set(this, parts.directory);\n    if (parts.file) _file.set(this, parts.file);\n    if (parts.fragment) _fragment.set(this, parts.fragment);\n  }\n\n  /**\n   * @method\n   * @name protocol\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the protocol for the url\n   * and returns the current instance.  If value is ommitted, returns the\n   * current protocol.\n   */\n  protocol(value) {\n    return property.call(this, _protocol, value);\n  }\n\n  /**\n   * @method\n   * @name user\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the user and returns\n   * the current instance.  If value is ommitted, returns the current user.\n   */\n  user(value) {\n    return property.call(this, _user, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the password and returns\n   * the current instance.  If value is ommitted, returns the current password.\n   */\n  password(value) {\n    return property.call(this, _password, value);\n  }\n\n  /**\n   * @method\n   * @name host\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the host and returns\n   * the current instance.  If value is ommitted, returns the current host.\n   */\n  host(value) {\n    return property.call(this, _host, value);\n  }\n\n  /**\n   * @method\n   * @name port\n   * @param {String|Number} [value]\n   * @returns {Url|String|Number} - If value is specified, sets the port and returns\n   * the current instance.  If value is ommitted, returns the current port.\n   */\n  port(value) {\n    return property.call(this, _port, value);\n  }\n\n  /**\n   * @method\n   * @name directory\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the directory and returns\n   * the current instance.  If value is ommitted, returns the current directory.\n   */\n  directory(value) {\n    return property.call(this, _directory, value);\n  }\n\n  /**\n   * @method\n   * @name file\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the file and returns\n   * the current instance.  If value is ommitted, returns the current file.\n   */\n  file(value) {\n    return property.call(this, _file, value);\n  }\n\n  /**\n   * @method\n   * @name fragment\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the fragment and returns\n   * the current instance.  If value is ommitted, returns the current fragment.\n   */\n  fragment(value) {\n    return property.call(this, _fragment, value);\n  }\n\n  /**\n   * @method\n   * @name isAbsolute\n   * @returns {Boolean} - true if the url is absolute, false if it is relative.\n   */\n  isAbsolute() {\n    return !!this.host();\n  }\n\n  /**\n   * @method\n   * @name isRelative\n   * @returns {Boolean} - true if the url is relative, false if it is absolute.\n   */\n  isRelative() {\n    return !this.isAbsolute();\n  }\n\n  /**\n   * @method\n   * @name query\n   * @param {String|Object} [name] - The name of the query-string parameter\n   * @param [value] - The value of the query-string parameter\n   * @returns {Object|String|Request} -\n   * If no parameters are specified - returns a copy of the entire query hash.\n   * @example\n   * request.query() // returns { \"foo\": \"bar\" }\n   * If only name is specified, and name is a string - returns the value for the key in the query hash.\n   * @example\n   * request.query(\"foo\") // returns \"bar\"\n   * If only name is specified, and name is an object - replaces the entire query hash\n   * and returns the current Request.\n   * @example\n   * request.query({ \"foo\": \"bar\", \"baz\": 1 }).execute()\n   * If name and value are specified - sets the value of name in the query hash\n   * and returns the current Request.\n   * @example\n   * request.query(\"foo\", \"bar\").execute()\n   */\n  query(name, value) {\n    if (!isUndefined(name)) {\n      if (isUndefined(value)) {\n        if (isObject(name)) {\n          _query.set(this, name);\n          return this;\n        }\n        return _query.get(this)[name];\n      }\n      const existing = _query.get(this);\n      existing[name] = value;\n      return this;\n    }\n\n    return assign({}, _query.get(this));\n  }\n\n  /**\n   * @method\n   * @name userInfo\n   * @returns {String} - returns basic auth credentials in the format\n   * user:password, if both user and password are set.\n   */\n  userInfo() {\n    const u = _user.get(this);\n    const p = _password.get(this);\n\n    if (isString(u) && !isEmpty(u.trim()) && isString(p) && isEmpty(p.trim())) {\n      return `${u}:${p}`;\n    }\n\n    return null;\n  }\n\n  /**\n   * @method\n   * @name authority\n   * @returns {String} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])\n   */\n  authority() {\n    const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : '';\n    const ui = this.userInfo() ? `${this.userInfo()}@` : '';\n    const h = _host.get(this) || '';\n    const p = _port.get(this) ? `:${_port.get(this)}` : '';\n\n    return pr + ui + h + p;\n  }\n\n  /**\n   * @method\n   * @name path\n   * @returns {String} - returns the path portion of the url\n   */\n  path() {\n    const dir = _directory.get(this) || '';\n    const f = _file.get(this) || '';\n\n    if (endsWith(dir, '/')) {\n      if (startsWith(f, '/')) {\n        return dir + f.substring(1);\n      }\n\n      return dir + f;\n    } else if (startsWith(f, '/')) {\n      return dir + f;\n    }\n\n    return `${dir}/${f}`;\n    return '';\n  }\n\n  /**\n   * @method\n   * @name merge\n   * @param {Url} other - the {@link Url} to merge into this one\n   * @returns {Url} - returns a copy of this {@link Url} with the directory,\n   * file, gragment, path, and query portions from taken from other.  If\n   * any of those properties do not exist in other, they will be removed\n   * from the copy.\n   */\n  merge(other) {\n    const copied = cloneDeep(parts);\n    const otherParts = parseUri(other.toString());\n    const propertiesToMerge = ['directory', 'file', 'fragment', 'path', 'query'];\n    propertiesToMerge.forEach((property) => {\n      if (!!otherParts[property]) {\n        copied[property] = otherParts[property];\n      } else if (!!copied[property]) {\n        delete copied[property];\n      }\n    });\n\n    return new Url(copied);\n  }\n\n  /**\n   * @method\n   * @name toString\n   * @param {Function<Object, String>} serializeQuery - a function that can customize\n   * how the query-string hash is rendered in the resulting url\n   * @returns {String}\n   */\n  toString(serializeQuery) {\n    const auth = this.authority();\n    const p = this.path();\n    const f = this.fragment();\n    const querySerializer = serializeQuery || identity;\n    const q = querySerializer(this.query());\n\n    const fullyQualified = (() => {\n      if (endsWith(auth, '/')) {\n        if (endsWith(p, '/')) {\n          return auth + p.substring(1);\n        }\n\n        return auth + p;\n      } else if (startsWith(p, '/')) {\n        return auth + p;\n      }\n\n      return `${auth}/${p}`;\n    })();\n\n    const queryParts = reduce(q, (accum, value, key) => {\n      let pair = `${encode(key)}=${encode(value)}`;\n\n      accum.push(pair);\n      return accum;\n    }, []);\n\n    const fullyQualifiedWithQuery = (() => {\n      if (!isEmpty(queryParts)) {\n        return `${fullyQualified}?${queryParts.join('&')}`;\n      }\n\n      return fullyQualified;\n    })();\n\n    if (!isEmpty(f)) {\n      return `${fullyQualifiedWithQuery}#${f}`;\n    }\n\n    return fullyQualifiedWithQuery;\n  }\n}\n\n/**\n * @function\n * @name factory\n * @param {Object|String} value - A hash containing the Url parts, or a string\n * representation of a Url\n * @returns {Url}\n */\nUrl.factory = (value) => {\n  if (isString(value)) {\n    return new Url(parseUri(value));\n  }\n  return new Url(value);\n}\n\nexport default Url;\n",
@@ -4420,7 +4604,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 140,
+    "__docId__": 145,
     "kind": "function",
     "name": "encode",
     "memberof": "src/url.js",
@@ -4456,7 +4640,7 @@
     }
   },
   {
-    "__docId__": 141,
+    "__docId__": 146,
     "kind": "function",
     "name": "property",
     "memberof": "src/url.js",
@@ -4498,7 +4682,7 @@
     }
   },
   {
-    "__docId__": 142,
+    "__docId__": 147,
     "kind": "variable",
     "name": "_protocol",
     "memberof": "src/url.js",
@@ -4524,7 +4708,7 @@
     }
   },
   {
-    "__docId__": 143,
+    "__docId__": 148,
     "kind": "variable",
     "name": "_user",
     "memberof": "src/url.js",
@@ -4550,7 +4734,7 @@
     }
   },
   {
-    "__docId__": 144,
+    "__docId__": 149,
     "kind": "variable",
     "name": "_password",
     "memberof": "src/url.js",
@@ -4576,7 +4760,7 @@
     }
   },
   {
-    "__docId__": 145,
+    "__docId__": 150,
     "kind": "variable",
     "name": "_host",
     "memberof": "src/url.js",
@@ -4602,7 +4786,7 @@
     }
   },
   {
-    "__docId__": 146,
+    "__docId__": 151,
     "kind": "variable",
     "name": "_port",
     "memberof": "src/url.js",
@@ -4628,7 +4812,7 @@
     }
   },
   {
-    "__docId__": 147,
+    "__docId__": 152,
     "kind": "variable",
     "name": "_directory",
     "memberof": "src/url.js",
@@ -4654,7 +4838,7 @@
     }
   },
   {
-    "__docId__": 148,
+    "__docId__": 153,
     "kind": "variable",
     "name": "_file",
     "memberof": "src/url.js",
@@ -4680,7 +4864,7 @@
     }
   },
   {
-    "__docId__": 149,
+    "__docId__": 154,
     "kind": "variable",
     "name": "_fragment",
     "memberof": "src/url.js",
@@ -4706,7 +4890,7 @@
     }
   },
   {
-    "__docId__": 150,
+    "__docId__": 155,
     "kind": "variable",
     "name": "_query",
     "memberof": "src/url.js",
@@ -4732,7 +4916,7 @@
     }
   },
   {
-    "__docId__": 151,
+    "__docId__": 156,
     "kind": "class",
     "name": "Url",
     "memberof": "src/url.js",
@@ -4765,7 +4949,7 @@
     "interface": false
   },
   {
-    "__docId__": 152,
+    "__docId__": 157,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/url.js~Url",
@@ -4796,7 +4980,7 @@
     ]
   },
   {
-    "__docId__": 153,
+    "__docId__": 158,
     "kind": "method",
     "name": "protocol",
     "memberof": "src/url.js~Url",
@@ -4840,7 +5024,7 @@
     }
   },
   {
-    "__docId__": 154,
+    "__docId__": 159,
     "kind": "method",
     "name": "user",
     "memberof": "src/url.js~Url",
@@ -4884,7 +5068,7 @@
     }
   },
   {
-    "__docId__": 155,
+    "__docId__": 160,
     "kind": "method",
     "name": "password",
     "memberof": "src/url.js~Url",
@@ -4928,7 +5112,7 @@
     }
   },
   {
-    "__docId__": 156,
+    "__docId__": 161,
     "kind": "method",
     "name": "host",
     "memberof": "src/url.js~Url",
@@ -4972,7 +5156,7 @@
     }
   },
   {
-    "__docId__": 157,
+    "__docId__": 162,
     "kind": "method",
     "name": "port",
     "memberof": "src/url.js~Url",
@@ -5018,7 +5202,7 @@
     }
   },
   {
-    "__docId__": 158,
+    "__docId__": 163,
     "kind": "method",
     "name": "directory",
     "memberof": "src/url.js~Url",
@@ -5062,7 +5246,7 @@
     }
   },
   {
-    "__docId__": 159,
+    "__docId__": 164,
     "kind": "method",
     "name": "file",
     "memberof": "src/url.js~Url",
@@ -5106,7 +5290,7 @@
     }
   },
   {
-    "__docId__": 160,
+    "__docId__": 165,
     "kind": "method",
     "name": "fragment",
     "memberof": "src/url.js~Url",
@@ -5150,7 +5334,7 @@
     }
   },
   {
-    "__docId__": 161,
+    "__docId__": 166,
     "kind": "method",
     "name": "isAbsolute",
     "memberof": "src/url.js~Url",
@@ -5182,7 +5366,7 @@
     }
   },
   {
-    "__docId__": 162,
+    "__docId__": 167,
     "kind": "method",
     "name": "isRelative",
     "memberof": "src/url.js~Url",
@@ -5214,7 +5398,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 168,
     "kind": "method",
     "name": "query",
     "memberof": "src/url.js~Url",
@@ -5276,7 +5460,7 @@
     }
   },
   {
-    "__docId__": 164,
+    "__docId__": 169,
     "kind": "method",
     "name": "userInfo",
     "memberof": "src/url.js~Url",
@@ -5308,7 +5492,7 @@
     }
   },
   {
-    "__docId__": 165,
+    "__docId__": 170,
     "kind": "method",
     "name": "authority",
     "memberof": "src/url.js~Url",
@@ -5340,7 +5524,7 @@
     }
   },
   {
-    "__docId__": 166,
+    "__docId__": 171,
     "kind": "method",
     "name": "path",
     "memberof": "src/url.js~Url",
@@ -5372,7 +5556,7 @@
     }
   },
   {
-    "__docId__": 167,
+    "__docId__": 172,
     "kind": "method",
     "name": "merge",
     "memberof": "src/url.js~Url",
@@ -5415,7 +5599,7 @@
     }
   },
   {
-    "__docId__": 168,
+    "__docId__": 173,
     "kind": "method",
     "name": "toString",
     "memberof": "src/url.js~Url",
@@ -5458,7 +5642,7 @@
     }
   },
   {
-    "__docId__": 169,
+    "__docId__": 174,
     "kind": "file",
     "name": "src/utilities.js",
     "content": "/** @private **/\nexport function isFile(value) {\n  return toString.call(value) === '[object File]';\n}\n\n/** @private **/\nexport function isFormData(value) {\n  return toString.call(value) === '[object FormData]';\n}\n\n/** @private **/\nexport function isBlob(value) {\n  return toString.call(value) === '[object Blob]';\n}\n\n/** parseUri 1.2.2\n * (c) Steven Levithan <stevenlevithan.com>\n * MIT License\n * @private\n */\nexport function parseUri(str) {\n  let\to = parseUri.options;\n  let m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str);\n  let uri = {};\n  let i = 14;\n\n  while (i--) uri[o.key[i]] = m[i] || '';\n\n  uri[o.q.name] = {};\n  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {\n    if ($1) uri[o.q.name][$1] = $2;\n  });\n\n  return uri;\n};\n\nparseUri.options = {\n  strictMode: false,\n  key: [\n    'source',\n    'protocol',\n    'authority',\n    'userInfo',\n    'user',\n    'password',\n    'host',\n    'port',\n    'relative',\n    'path',\n    'directory',\n    'file',\n    'query',\n    'anchor'\n  ],\n  q: {\n    name: 'queryKey',\n    parser: /(?:^|&)([^&=]*)=?([^&]*)/g\n  },\n  parser: {\n    strict: /^(?:([^:\\/?#]+):)?(?:\\/\\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?))?((((?:[^?#\\/]*\\/)*)([^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/,\n    loose: /^(?:(?![^:@]+:[^:@\\/]*@)([^:\\/?#.]+):)?(?:\\/\\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?)(((\\/(?:[^?#](?![^?#\\/]*\\.[^?#\\/.]+(?:[?#]|$)))*\\/?)?([^?#\\/]*))(?:\\?([^#]*))?(?:#(.*))?)/\n  }\n};\n",
@@ -5469,7 +5653,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 170,
+    "__docId__": 175,
     "kind": "function",
     "name": "isFile",
     "memberof": "src/utilities.js",
@@ -5498,7 +5682,7 @@
     }
   },
   {
-    "__docId__": 171,
+    "__docId__": 176,
     "kind": "function",
     "name": "isFormData",
     "memberof": "src/utilities.js",
@@ -5527,7 +5711,7 @@
     }
   },
   {
-    "__docId__": 172,
+    "__docId__": 177,
     "kind": "function",
     "name": "isBlob",
     "memberof": "src/utilities.js",
@@ -5556,7 +5740,7 @@
     }
   },
   {
-    "__docId__": 173,
+    "__docId__": 178,
     "kind": "function",
     "name": "parseUri",
     "memberof": "src/utilities.js",
@@ -5585,7 +5769,7 @@
     }
   },
   {
-    "__docId__": 174,
+    "__docId__": 179,
     "kind": "file",
     "name": "src/xhr-builder.js",
     "content": "import { isInteger, partial, noop } from 'lodash';\n\nconst STATE = {\n  UNSENT: 0,\n  OPEN: 1,\n  HEADERS_RECEIVED: 2,\n  LOADING: 3,\n  DONE: 4\n}\n\n/**\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n */\nexport default class XHRBuilder {\n  constructor() {\n    this.headersReceived = noop;\n    this.downloadProgress = noop;\n    this.uploadProgress = noop;\n    this.complete = noop;\n    this.progress = noop;\n    this.error = noop;\n    this.abort = noop;\n    this.load = noop;\n    this.loadEnd = noop;\n  }\n\n  onHeadersReceived(fn) {\n    this.headersReceived = fn;\n    return this;\n  }\n\n  onDownloadProgress(fn) {\n    this.downloadProgress = fn;\n    return this;\n  }\n\n  onUploadProgress(fn) {\n    this.uploadProgress = fn;\n    return this;\n  }\n\n  onError(fn) {\n    this.error = fn;\n    return this;\n  }\n\n  onAbort(fn) {\n    this.abort = fn;\n    return this;\n  }\n\n  onLoad(fn) {\n    this.load = fn;\n    return this;\n  }\n\n  onLoadEnd(fn) {\n    this.loadEnd = fn;\n    return this;\n  }\n\n  request(req) {\n    this.req = req;\n    return this;\n  }\n\n  build() {\n    const self = this;\n    const request = this.req;\n    const xhr = new XMLHttpRequest();\n\n    const openArgs = [request.method(), request.url().toString(), true];\n    if (request.username()) {\n      openArgs.push(request.username());\n\n      if (request.password()) {\n        openArgs.push(request.password());\n      }\n    }\n\n    xhr.open(...openArgs);\n\n    if (isInteger(request)) {\n      xhr.timeout = request.timeout();\n    }\n\n    const headers = request.headers();\n\n    Object.keys(headers).forEach(headerName => {\n      xhr.setRequestHeader(headerName, headers[headerName]);\n    });\n\n    if (xhr.upload) {\n      xhr.upload.addEventListener('progress', self.uploadProgress);\n      xhr.upload.addEventListener('error', self.error);\n      xhr.upload.addEventListener('abort', self.abort);\n    }\n\n    xhr.addEventListener('progress', self.downloadProgress);\n    xhr.addEventListener('error', self.error);\n    xhr.addEventListener('abort', self.abort);\n    xhr.addEventListener('load', self.load);\n    xhr.addEventListener('loadend', self.loadEnd);\n\n    xhr.addEventListener('readystatechange', (evt) => {\n      if (xhr.readyState === STATE.HEADERS_RECEIVED) {\n        self.headersReceived(evt);\n      }\n    });\n\n    return xhr;\n  }\n}\n",
@@ -5596,7 +5780,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 175,
+    "__docId__": 180,
     "kind": "variable",
     "name": "STATE",
     "memberof": "src/xhr-builder.js",
@@ -5622,7 +5806,7 @@
     }
   },
   {
-    "__docId__": 176,
+    "__docId__": 181,
     "kind": "class",
     "name": "XHRBuilder",
     "memberof": "src/xhr-builder.js",
@@ -5643,7 +5827,7 @@
     "interface": false
   },
   {
-    "__docId__": 177,
+    "__docId__": 182,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5664,7 +5848,7 @@
     "params": []
   },
   {
-    "__docId__": 178,
+    "__docId__": 183,
     "kind": "member",
     "name": "headersReceived",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5687,7 +5871,7 @@
     }
   },
   {
-    "__docId__": 179,
+    "__docId__": 184,
     "kind": "member",
     "name": "downloadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5710,7 +5894,7 @@
     }
   },
   {
-    "__docId__": 180,
+    "__docId__": 185,
     "kind": "member",
     "name": "uploadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5733,7 +5917,7 @@
     }
   },
   {
-    "__docId__": 181,
+    "__docId__": 186,
     "kind": "member",
     "name": "complete",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5756,7 +5940,7 @@
     }
   },
   {
-    "__docId__": 182,
+    "__docId__": 187,
     "kind": "member",
     "name": "progress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5779,7 +5963,7 @@
     }
   },
   {
-    "__docId__": 183,
+    "__docId__": 188,
     "kind": "member",
     "name": "error",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5802,7 +5986,7 @@
     }
   },
   {
-    "__docId__": 184,
+    "__docId__": 189,
     "kind": "member",
     "name": "abort",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5825,7 +6009,7 @@
     }
   },
   {
-    "__docId__": 185,
+    "__docId__": 190,
     "kind": "member",
     "name": "load",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5848,7 +6032,7 @@
     }
   },
   {
-    "__docId__": 186,
+    "__docId__": 191,
     "kind": "member",
     "name": "loadEnd",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5871,7 +6055,7 @@
     }
   },
   {
-    "__docId__": 187,
+    "__docId__": 192,
     "kind": "method",
     "name": "onHeadersReceived",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5904,7 +6088,7 @@
     }
   },
   {
-    "__docId__": 188,
+    "__docId__": 193,
     "kind": "member",
     "name": "headersReceived",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5927,7 +6111,7 @@
     }
   },
   {
-    "__docId__": 189,
+    "__docId__": 194,
     "kind": "method",
     "name": "onDownloadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5960,7 +6144,7 @@
     }
   },
   {
-    "__docId__": 190,
+    "__docId__": 195,
     "kind": "member",
     "name": "downloadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5983,7 +6167,7 @@
     }
   },
   {
-    "__docId__": 191,
+    "__docId__": 196,
     "kind": "method",
     "name": "onUploadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6016,7 +6200,7 @@
     }
   },
   {
-    "__docId__": 192,
+    "__docId__": 197,
     "kind": "member",
     "name": "uploadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6039,7 +6223,7 @@
     }
   },
   {
-    "__docId__": 193,
+    "__docId__": 198,
     "kind": "method",
     "name": "onError",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6072,7 +6256,7 @@
     }
   },
   {
-    "__docId__": 194,
+    "__docId__": 199,
     "kind": "member",
     "name": "error",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6095,7 +6279,7 @@
     }
   },
   {
-    "__docId__": 195,
+    "__docId__": 200,
     "kind": "method",
     "name": "onAbort",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6128,7 +6312,7 @@
     }
   },
   {
-    "__docId__": 196,
+    "__docId__": 201,
     "kind": "member",
     "name": "abort",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6151,7 +6335,7 @@
     }
   },
   {
-    "__docId__": 197,
+    "__docId__": 202,
     "kind": "method",
     "name": "onLoad",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6184,7 +6368,7 @@
     }
   },
   {
-    "__docId__": 198,
+    "__docId__": 203,
     "kind": "member",
     "name": "load",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6207,7 +6391,7 @@
     }
   },
   {
-    "__docId__": 199,
+    "__docId__": 204,
     "kind": "method",
     "name": "onLoadEnd",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6240,7 +6424,7 @@
     }
   },
   {
-    "__docId__": 200,
+    "__docId__": 205,
     "kind": "member",
     "name": "loadEnd",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6263,7 +6447,7 @@
     }
   },
   {
-    "__docId__": 201,
+    "__docId__": 206,
     "kind": "method",
     "name": "request",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6296,7 +6480,7 @@
     }
   },
   {
-    "__docId__": 202,
+    "__docId__": 207,
     "kind": "member",
     "name": "req",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6319,7 +6503,7 @@
     }
   },
   {
-    "__docId__": 203,
+    "__docId__": 208,
     "kind": "method",
     "name": "build",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6345,7 +6529,7 @@
     }
   },
   {
-    "__docId__": 204,
+    "__docId__": 209,
     "kind": "file",
     "name": "src/xhr-provider.js",
     "content": "import { partial, isInteger } from 'lodash';\nimport Rx from 'rxjs';\nimport XHRBuilder from './xhr-builder';\nimport Response from './response';\nimport RequestInterceptorChain from './request-interceptor-chain';\nimport ResponseInterceptorChain from './response-interceptor-chain';\n\n/** @function\n * Provider-implementation for browser-based clients.  Providers are simply\n * functions that take in a {@link Request} and return an RxJS Observable\n * that eventually contains the {@link Response}.\n * @name XHRProvider\n * @param {Request} request\n * @returns {Observable<Response>}\n */\nexport default function XHRProvider(request) {\n  const interceptors = request.interceptors();\n\n  function attempt(observable) {\n    let response;\n    let offset = 0;\n    let body = new Rx.Subject();\n    let uploadProgress = new Rx.Subject();\n    let downloadProgress = new Rx.Subject();\n    let all = [observable, body, uploadProgress, downloadProgress];\n\n    function errorAll(err) {\n      all.forEach(o => o.error(err));\n    }\n\n    function completeAll() {\n      all.forEach(o => o.complete());\n    }\n\n    function nextChunk() {\n      let chunk = xhr.responseText.slice(offset);\n      offset = xhr.responseText.length;\n      body.next(chunk);\n    }\n\n    const xhr = new XHRBuilder()\n      .request(request)\n      .onHeadersReceived((evt) => {\n        response = new Response(\n          xhr,\n          body,\n          uploadProgress,\n          downloadProgress\n        );\n\n        const responseChain = new ResponseInterceptorChain(\n          interceptors,\n          (transformedResponse) => observable.next(transformedResponse),\n          Rx.Observable.throw\n        );\n\n        responseChain.run(response);\n      })\n      .onUploadProgress((evt) => {\n        uploadProgress.next(evt);\n      })\n      .onDownloadProgress((evt) => {\n        downloadProgress.next(evt);\n        if (response.isChunked()) {\n          nextChunk();\n        }\n      })\n      .onLoad((evt) => {\n        if (response.isChunked()) {\n          if (xhr.responseText.length > offset) {\n            nextChunk();\n          }\n        } else {\n          body.next(xhr.responseText);\n        }\n      })\n      .onError(Rx.Observable.throw)\n      .onAbort(errorAll)\n      .onLoadEnd(completeAll)\n      .build();\n\n    const success = transformed => {\n      if (!!transformed.body()) xhr.send(transformed.body());\n      else xhr.send();\n    };\n\n    const requestChain = new RequestInterceptorChain(\n      interceptors,\n      success,\n      (err) => {\n        Rx.Observable.throw(err);\n        completeAll();\n      }\n    );\n\n    requestChain.run(request);\n  }\n\n  return Rx.Observable.create(attempt);\n}\n",
@@ -6356,7 +6540,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 205,
+    "__docId__": 210,
     "kind": "function",
     "name": "XHRProvider",
     "memberof": "src/xhr-provider.js",
@@ -6402,7 +6586,7 @@
     }
   },
   {
-    "__docId__": 207,
+    "__docId__": 212,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -6414,7 +6598,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 208,
+    "__docId__": 213,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -6426,7 +6610,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 209,
+    "__docId__": 214,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -6438,7 +6622,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 210,
+    "__docId__": 215,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -6450,7 +6634,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 211,
+    "__docId__": 216,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -6462,7 +6646,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 212,
+    "__docId__": 217,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -6474,7 +6658,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 213,
+    "__docId__": 218,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -6486,7 +6670,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 214,
+    "__docId__": 219,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -6498,7 +6682,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 215,
+    "__docId__": 220,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -6510,7 +6694,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 216,
+    "__docId__": 221,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -6522,7 +6706,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 217,
+    "__docId__": 222,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -6534,7 +6718,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 218,
+    "__docId__": 223,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -6546,7 +6730,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 219,
+    "__docId__": 224,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -6558,7 +6742,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 220,
+    "__docId__": 225,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -6570,7 +6754,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 221,
+    "__docId__": 226,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -6582,7 +6766,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 222,
+    "__docId__": 227,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -6594,7 +6778,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 223,
+    "__docId__": 228,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -6606,7 +6790,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 224,
+    "__docId__": 229,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -6618,7 +6802,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 225,
+    "__docId__": 230,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -6630,7 +6814,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 226,
+    "__docId__": 231,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -6642,7 +6826,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 227,
+    "__docId__": 232,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -6654,7 +6838,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 228,
+    "__docId__": 233,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -6666,7 +6850,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 229,
+    "__docId__": 234,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -6678,7 +6862,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 230,
+    "__docId__": 235,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -6690,7 +6874,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 231,
+    "__docId__": 236,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -6702,7 +6886,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 232,
+    "__docId__": 237,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -6714,7 +6898,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 233,
+    "__docId__": 238,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -6726,7 +6910,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 234,
+    "__docId__": 239,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -6738,7 +6922,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 235,
+    "__docId__": 240,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -6750,7 +6934,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 236,
+    "__docId__": 241,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -6762,7 +6946,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 237,
+    "__docId__": 242,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -6774,7 +6958,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 238,
+    "__docId__": 243,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -6786,7 +6970,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 239,
+    "__docId__": 244,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -6798,7 +6982,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 240,
+    "__docId__": 245,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -6810,7 +6994,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 241,
+    "__docId__": 246,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -6822,7 +7006,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 242,
+    "__docId__": 247,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -6834,7 +7018,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 243,
+    "__docId__": 248,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -6846,7 +7030,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 244,
+    "__docId__": 249,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -6858,7 +7042,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 245,
+    "__docId__": 250,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -6870,7 +7054,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 246,
+    "__docId__": 251,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -6882,7 +7066,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 247,
+    "__docId__": 252,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -6894,7 +7078,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 248,
+    "__docId__": 253,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -6906,7 +7090,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 249,
+    "__docId__": 254,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -6918,7 +7102,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 250,
+    "__docId__": 255,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -6930,7 +7114,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 251,
+    "__docId__": 256,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -6942,7 +7126,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 252,
+    "__docId__": 257,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -6954,7 +7138,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 253,
+    "__docId__": 258,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -6967,7 +7151,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 255,
+    "__docId__": 260,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -6979,7 +7163,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 256,
+    "__docId__": 261,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -6991,7 +7175,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 257,
+    "__docId__": 262,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -7003,7 +7187,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 258,
+    "__docId__": 263,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -7015,7 +7199,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 259,
+    "__docId__": 264,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -7027,7 +7211,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 260,
+    "__docId__": 265,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -7039,7 +7223,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 261,
+    "__docId__": 266,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -7051,7 +7235,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 262,
+    "__docId__": 267,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

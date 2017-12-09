@@ -1,7 +1,7 @@
 {
-  "coverage": "84.21%",
-  "expectCount": 95,
-  "actualCount": 80,
+  "coverage": "97.91%",
+  "expectCount": 96,
+  "actualCount": 94,
   "files": {
     "src/interceptors/body-transformer.js": {
       "expectCount": 2,
@@ -10,11 +10,8 @@
     },
     "src/serializers/default-serializer.js": {
       "expectCount": 2,
-      "actualCount": 0,
-      "undocumentLines": [
-        37,
-        38
-      ]
+      "actualCount": 2,
+      "undocumentLines": []
     },
     "src/interceptors/error-handling.js": {
       "expectCount": 2,
@@ -23,12 +20,8 @@
     },
     "src/serializers/form-data-serializer.js": {
       "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        5,
-        6,
-        10
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/http.js": {
       "expectCount": 21,
@@ -42,12 +35,8 @@
     },
     "src/serializers/json-serializer.js": {
       "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        3,
-        4,
-        8
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/interceptors/method-override.js": {
       "expectCount": 2,
@@ -66,23 +55,17 @@
         109
       ]
     },
-    "src/serializers/serializer.js": {
-      "expectCount": 3,
-      "actualCount": 0,
+    "src/serializer.js": {
+      "expectCount": 4,
+      "actualCount": 3,
       "undocumentLines": [
-        1,
-        2,
-        3
+        14
       ]
     },
     "src/serializers/text-serializer.js": {
       "expectCount": 3,
-      "actualCount": 0,
-      "undocumentLines": [
-        3,
-        4,
-        8
-      ]
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/url.js": {
       "expectCount": 18,

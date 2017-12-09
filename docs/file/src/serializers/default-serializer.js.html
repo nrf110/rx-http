@@ -36,6 +36,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
@@ -45,7 +46,6 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/text-serializer.js~TextSerializer.html">TextSerializer</a></span></span></li>
 </ul>
 </div>
@@ -55,7 +55,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isObject, isString } from &apos;lodash&apos;;
 import { isFile, isFormData, isBlob } from &apos;../utilities&apos;;
 import { NoSerializerFoundException } from &apos;../exceptions&apos;;
-import Serializer from &apos;./serializer&apos;;
+import Serializer from &apos;../serializer&apos;;
 import JsonSerializer from &apos;./json-serializer&apos;;
 import FormDataSerializer from &apos;./form-data-serializer&apos;;
 import TextSerializer from &apos;./text-serializer&apos;;
@@ -88,7 +88,21 @@ function autoDetect(body, contentType) {
   throw new NoSerializerFoundException(&apos;unknown&apos;);
 }
 
+/**
+ * Serializer that attempts uses the given contentType, or tries to detect
+ * the content type in order to delegate to the appropriate built-in
+ * {@link Serializer}
+ * @class
+ * @name DefaultSerializer
+ * @extends Serializer
+ */
 export default class DefaultSerializer extends Serializer {
+  /**
+   * @method
+   * @name serialize
+   * @param value - the value to be serialized
+   * @returns the serialized content
+   */
   serialize(value) {
     const delegate = autoDetect(value, this.contentType)
     return delegate.serialize(value);

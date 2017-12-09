@@ -1,7 +1,7 @@
 import { isObject, isString } from 'lodash';
 import { isFile, isFormData, isBlob } from '../utilities';
-import { NoSerializerFoundException } from '../exceptions';
-import Serializer from './serializer';
+import { NoSerializerFoundError } from '../exceptions';
+import Serializer from '../serializer';
 import JsonSerializer from './json-serializer';
 import FormDataSerializer from './form-data-serializer';
 import TextSerializer from './text-serializer';
@@ -28,13 +28,27 @@ function autoDetect(body, contentType) {
   if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {
     const result = contentTypeSerializers[contentType.toLowerCase()];
     if (!!result) return result;
-    throw new NoSerializerFoundException(contentType);
+    throw new NoSerializerFoundError(contentType);
   }
 
-  throw new NoSerializerFoundException('unknown');
+  throw new NoSerializerFoundError('unknown');
 }
 
+/**
+ * Serializer that attempts uses the given contentType, or tries to detect
+ * the content type in order to delegate to the appropriate built-in
+ * {@link Serializer}
+ * @class
+ * @name DefaultSerializer
+ * @extends Serializer
+ */
 export default class DefaultSerializer extends Serializer {
+  /**
+   * @method
+   * @name serialize
+   * @param value - the value to be serialized
+   * @returns the serialized content
+   */
   serialize(value) {
     const delegate = autoDetect(value, this.contentType)
     return delegate.serialize(value);

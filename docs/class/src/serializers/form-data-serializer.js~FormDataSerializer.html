@@ -36,6 +36,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptor.js~Interceptor.html">Interceptor</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/request.js~Request.html">Request</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
@@ -45,20 +46,19 @@
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/text-serializer.js~TextSerializer.html">TextSerializer</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import FormDataSerializer from &apos;<span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber5">rx-http/src/serializers/form-data-serializer.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import FormDataSerializer from &apos;<span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber10">rx-http/src/serializers/form-data-serializer.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber5">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber10">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -68,7 +68,7 @@
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span> &#x2192; FormDataSerializer</div></div>
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>*</span> &#x2192; FormDataSerializer</div></div>
   
   
   
@@ -109,7 +109,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(contentType: <span>*</span>)</span>
+          <span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(contentType: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
@@ -144,7 +144,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html#instance-method-serialize">serialize</a></span></span><span data-ice="signature">(value: <span>*</span>): <span>*</span></span>
+          <span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html#instance-method-serialize">serialize</a></span></span><span data-ice="signature">(value: <span>FormData</span> | <span>Blob</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span>FormData</span></span>
         </p>
       </div>
       <div>
@@ -162,40 +162,7 @@
 </table>
 </div>
 
-<div class="inherited-summary" data-ice="inheritedSummary"><h2>Inherited Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span></td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          <span data-ice="name"><span><a href="class/src/serializers/serializer.js~Serializer.html#instance-member-contentType">contentType</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-</div>
+
 
 
 
@@ -209,11 +176,11 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(contentType: <span>*</span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(contentType: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber6">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber15">source</a></span></span>
     </span>
   </h3>
 
@@ -222,7 +189,7 @@
   
   
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/serializers/serializer.js~Serializer.html#instance-constructor-constructor">Serializer#constructor</a></span></div>
+  
 
   <div data-ice="properties"><div data-ice="properties">
   <h4 data-ice="title">Params:</h4>
@@ -234,9 +201,10 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">contentType</td>
-      <td data-ice="type"><span>*</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The value of the Content-Type header</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -272,11 +240,11 @@
     
     
     
-    <span data-ice="name">serialize</span><span data-ice="signature">(value: <span>*</span>): <span>*</span></span>
+    <span data-ice="name">serialize</span><span data-ice="signature">(value: <span>FormData</span> | <span>Blob</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span>FormData</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber10">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/serializers/form-data-serializer.js.html#lineNumber26">source</a></span></span>
     </span>
   </h3>
 
@@ -297,9 +265,11 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">value</td>
-      <td data-ice="type"><span>*</span></td>
+      <td data-ice="type"><span>FormData</span> | <span>Blob</span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"></td>
+      <td data-ice="description"><p>The content to convert to a
+<span>FormData</span> value.</p>
+</td>
     </tr>
 </tbody>
   </table>
@@ -311,8 +281,9 @@
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span>*</span></td>
-          
+          <td class="return-type" data-ice="returnType"><span>FormData</span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The <span>FormData</span> value to be sent to the server</p>
+</td>
         </tr>
       </tbody>
     </table>

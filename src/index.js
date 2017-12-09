@@ -3,7 +3,9 @@ import Http from './http';
 import Headers from './headers';
 import Interceptor from './interceptor';
 import Interceptors from './interceptors';
-import Exceptions from './exceptions';
+import Errors from './errors';
+import Serializer from './serializer';
+import Serializers from './serializers';
 
 export {
   Url,
@@ -11,5 +13,7 @@ export {
   Headers,
   Interceptor,
   Interceptors,
-  Exceptions
+  Errors,
+  Serializer,
+  Serializers
 };

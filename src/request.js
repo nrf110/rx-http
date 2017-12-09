@@ -1,5 +1,5 @@
 import { isUndefined, identity, assign, isString, isObject } from 'lodash';
-import { PropertyValidationException } from './exceptions';
+import { PropertyValidationError } from './errors';
 import Path from './path';
 import Url from './url';
 import { parseUri } from './utilities';
@@ -201,7 +201,7 @@ export default class Request {
       }
     }
 
-    throw new PropertyValidationException('url', url);
+    throw new PropertyValidationError('url', url);
   }
 
   /**

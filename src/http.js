@@ -4,7 +4,7 @@ import Interceptors from './interceptors';
 import XHRProvider from './xhr-provider';
 import Url from './url';
 import Path from './path';
-import { PropertyValidationException } from './exceptions';
+import { PropertyValidationError } from './errors';
 import { parseUri } from './utilities';
 
 function property(key, isValid) {
@@ -20,7 +20,7 @@ function property(key, isValid) {
       return this;
     }
 
-    throw new PropertyValidationException(key, value);
+    throw new PropertyValidationError(key, value);
   };
 }
 
