@@ -52,7 +52,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/serializer.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { NotImplementedException } from &apos;./exceptions&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { NotImplementedError } from &apos;./errors&apos;;
 
 /**
  * Base class for {@link Request} body serializers
@@ -75,7 +75,7 @@ export default class Serializer {
    * @returns - The serialized content
    */
   serialize(value) {
-    throw new NotImplementedException();
+    throw new NotImplementedError();
   }
 }
 </code></pre>

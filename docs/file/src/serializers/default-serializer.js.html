@@ -54,7 +54,7 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/serializers/default-serializer.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isObject, isString } from &apos;lodash&apos;;
 import { isFile, isFormData, isBlob } from &apos;../utilities&apos;;
-import { NoSerializerFoundException } from &apos;../exceptions&apos;;
+import { NoSerializerFoundError } from &apos;../errors&apos;;
 import Serializer from &apos;../serializer&apos;;
 import JsonSerializer from &apos;./json-serializer&apos;;
 import FormDataSerializer from &apos;./form-data-serializer&apos;;
@@ -82,10 +82,10 @@ function autoDetect(body, contentType) {
   if (!!contentType &amp;&amp; contentTypeSerializers[contentType.toLowerCase()]) {
     const result = contentTypeSerializers[contentType.toLowerCase()];
     if (!!result) return result;
-    throw new NoSerializerFoundException(contentType);
+    throw new NoSerializerFoundError(contentType);
   }
 
-  throw new NoSerializerFoundException(&apos;unknown&apos;);
+  throw new NoSerializerFoundError(&apos;unknown&apos;);
 }
 
 /**

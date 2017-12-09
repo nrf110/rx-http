@@ -58,7 +58,7 @@ import Interceptors from &apos;./interceptors&apos;;
 import XHRProvider from &apos;./xhr-provider&apos;;
 import Url from &apos;./url&apos;;
 import Path from &apos;./path&apos;;
-import { PropertyValidationException } from &apos;./exceptions&apos;;
+import { PropertyValidationError } from &apos;./errors&apos;;
 import { parseUri } from &apos;./utilities&apos;;
 
 function property(key, isValid) {
@@ -74,7 +74,7 @@ function property(key, isValid) {
       return this;
     }
 
-    throw new PropertyValidationException(key, value);
+    throw new PropertyValidationError(key, value);
   };
 }
 

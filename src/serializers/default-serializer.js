@@ -1,6 +1,6 @@
 import { isObject, isString } from 'lodash';
 import { isFile, isFormData, isBlob } from '../utilities';
-import { NoSerializerFoundError } from '../exceptions';
+import { NoSerializerFoundError } from '../errors';
 import Serializer from '../serializer';
 import JsonSerializer from './json-serializer';
 import FormDataSerializer from './form-data-serializer';

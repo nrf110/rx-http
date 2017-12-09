@@ -420,9 +420,9 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
-    "src/exceptions.js",
-    "file/src/exceptions.js.html",
-    "src/exceptions.js",
+    "src/errors.js",
+    "file/src/errors.js.html",
+    "src/errors.js",
     "file"
   ],
   [
