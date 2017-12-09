@@ -19,6 +19,28 @@ class PropertyValidationException {
   }
 }
 
+class NoSerializerFoundException {
+  constructor(contentType) {
+    this.contentType = contentType;
+  }
+
+  toString() {
+    return `No serializer found for content type ${this.contentType}`
+  }
+}
+
+class NoDeserializerFoundException {
+  constructor(contentType) {
+    this.contentType = contentType;
+  }
+
+  toString() {
+    return `No deserializer found for content type ${this.contentType}`
+  }
+}
+
 export default {
-  PropertyValidationException
+  PropertyValidationException,
+  NoSerializerFoundException,
+  NoDeserializerFoundException
 };

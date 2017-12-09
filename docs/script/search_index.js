@@ -6,9 +6,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "rx-http/src/serializers/default-serializer.js~defaultserializer",
+    "class/src/serializers/default-serializer.js~DefaultSerializer.html",
+    "<span>DefaultSerializer</span> <span class=\"search-result-import-path\">rx-http/src/serializers/default-serializer.js</span>",
+    "class"
+  ],
+  [
     "rx-http/src/interceptors/error-handling.js~errorhandling",
     "class/src/interceptors/error-handling.js~ErrorHandling.html",
     "<span>ErrorHandling</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/error-handling.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/serializers/form-data-serializer.js~formdataserializer",
+    "class/src/serializers/form-data-serializer.js~FormDataSerializer.html",
+    "<span>FormDataSerializer</span> <span class=\"search-result-import-path\">rx-http/src/serializers/form-data-serializer.js</span>",
     "class"
   ],
   [
@@ -21,6 +33,12 @@ window.esdocSearchIndex = [
     "rx-http/src/interceptor.js~interceptor",
     "class/src/interceptor.js~Interceptor.html",
     "<span>Interceptor</span> <span class=\"search-result-import-path\">rx-http/src/interceptor.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/serializers/json-serializer.js~jsonserializer",
+    "class/src/serializers/json-serializer.js~JsonSerializer.html",
+    "<span>JsonSerializer</span> <span class=\"search-result-import-path\">rx-http/src/serializers/json-serializer.js</span>",
     "class"
   ],
   [
@@ -39,6 +57,18 @@ window.esdocSearchIndex = [
     "rx-http/src/response.js~response",
     "class/src/response.js~Response.html",
     "<span>Response</span> <span class=\"search-result-import-path\">rx-http/src/response.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/serializers/serializer.js~serializer",
+    "class/src/serializers/serializer.js~Serializer.html",
+    "<span>Serializer</span> <span class=\"search-result-import-path\">rx-http/src/serializers/serializer.js</span>",
+    "class"
+  ],
+  [
+    "rx-http/src/serializers/text-serializer.js~textserializer",
+    "class/src/serializers/text-serializer.js~TextSerializer.html",
+    "<span>TextSerializer</span> <span class=\"search-result-import-path\">rx-http/src/serializers/text-serializer.js</span>",
     "class"
   ],
   [
@@ -456,6 +486,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/http.js~http#password",
+    "class/src/http.js~Http.html#instance-method-password",
+    "src/http.js~Http#password",
+    "method"
+  ],
+  [
     "src/http.js~http#patch",
     "class/src/http.js~Http.html#instance-method-patch",
     "src/http.js~Http#patch",
@@ -486,12 +522,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/http.js~http#retries",
-    "class/src/http.js~Http.html#instance-method-retries",
-    "src/http.js~Http#retries",
-    "method"
-  ],
-  [
     "src/http.js~http#timeout",
     "class/src/http.js~Http.html#instance-method-timeout",
     "src/http.js~Http#timeout",
@@ -501,6 +531,30 @@ window.esdocSearchIndex = [
     "src/http.js~http#trace",
     "class/src/http.js~Http.html#instance-method-trace",
     "src/http.js~Http#trace",
+    "method"
+  ],
+  [
+    "src/http.js~http#username",
+    "class/src/http.js~Http.html#instance-method-username",
+    "src/http.js~Http#username",
+    "method"
+  ],
+  [
+    "src/http.js~http#withcredentials",
+    "class/src/http.js~Http.html#instance-method-withCredentials",
+    "src/http.js~Http#withCredentials",
+    "method"
+  ],
+  [
+    "src/http.js~http#xsrfcookiename",
+    "class/src/http.js~Http.html#instance-method-xsrfCookieName",
+    "src/http.js~Http#xsrfCookieName",
+    "method"
+  ],
+  [
+    "src/http.js~http#xsrfheadername",
+    "class/src/http.js~Http.html#instance-method-xsrfHeaderName",
+    "src/http.js~Http#xsrfHeaderName",
     "method"
   ],
   [
@@ -624,6 +678,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/request.js~request#contenttype",
+    "class/src/request.js~Request.html#instance-method-contentType",
+    "src/request.js~Request#contentType",
+    "method"
+  ],
+  [
     "src/request.js~request#execute",
     "class/src/request.js~Request.html#instance-method-execute",
     "src/request.js~Request#execute",
@@ -660,9 +720,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/request.js~request#retries",
-    "class/src/request.js~Request.html#instance-method-retries",
-    "src/request.js~Request#retries",
+    "src/request.js~request#serializer",
+    "class/src/request.js~Request.html#instance-method-serializer",
+    "src/request.js~Request#serializer",
+    "method"
+  ],
+  [
+    "src/request.js~request#timeout",
+    "class/src/request.js~Request.html#instance-method-timeout",
+    "src/request.js~Request#timeout",
     "method"
   ],
   [
@@ -720,6 +786,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/response.js~response#contenttype",
+    "class/src/response.js~Response.html#instance-method-contentType",
+    "src/response.js~Response#contentType",
+    "method"
+  ],
+  [
     "src/response.js~response#downloadprogress",
     "class/src/response.js~Response.html#instance-method-downloadProgress",
     "src/response.js~Response#downloadProgress",
@@ -759,6 +831,96 @@ window.esdocSearchIndex = [
     "src/response.js~response#uploadprogress",
     "class/src/response.js~Response.html#instance-method-uploadProgress",
     "src/response.js~Response#uploadProgress",
+    "method"
+  ],
+  [
+    "src/serializers/default-serializer.js",
+    "file/src/serializers/default-serializer.js.html",
+    "src/serializers/default-serializer.js",
+    "file"
+  ],
+  [
+    "src/serializers/default-serializer.js~defaultserializer#serialize",
+    "class/src/serializers/default-serializer.js~DefaultSerializer.html#instance-method-serialize",
+    "src/serializers/default-serializer.js~DefaultSerializer#serialize",
+    "method"
+  ],
+  [
+    "src/serializers/form-data-serializer.js",
+    "file/src/serializers/form-data-serializer.js.html",
+    "src/serializers/form-data-serializer.js",
+    "file"
+  ],
+  [
+    "src/serializers/form-data-serializer.js~formdataserializer#constructor",
+    "class/src/serializers/form-data-serializer.js~FormDataSerializer.html#instance-constructor-constructor",
+    "src/serializers/form-data-serializer.js~FormDataSerializer#constructor",
+    "method"
+  ],
+  [
+    "src/serializers/form-data-serializer.js~formdataserializer#serialize",
+    "class/src/serializers/form-data-serializer.js~FormDataSerializer.html#instance-method-serialize",
+    "src/serializers/form-data-serializer.js~FormDataSerializer#serialize",
+    "method"
+  ],
+  [
+    "src/serializers/index.js",
+    "file/src/serializers/index.js.html",
+    "src/serializers/index.js",
+    "file"
+  ],
+  [
+    "src/serializers/json-serializer.js",
+    "file/src/serializers/json-serializer.js.html",
+    "src/serializers/json-serializer.js",
+    "file"
+  ],
+  [
+    "src/serializers/json-serializer.js~jsonserializer#constructor",
+    "class/src/serializers/json-serializer.js~JsonSerializer.html#instance-constructor-constructor",
+    "src/serializers/json-serializer.js~JsonSerializer#constructor",
+    "method"
+  ],
+  [
+    "src/serializers/json-serializer.js~jsonserializer#serialize",
+    "class/src/serializers/json-serializer.js~JsonSerializer.html#instance-method-serialize",
+    "src/serializers/json-serializer.js~JsonSerializer#serialize",
+    "method"
+  ],
+  [
+    "src/serializers/serializer.js",
+    "file/src/serializers/serializer.js.html",
+    "src/serializers/serializer.js",
+    "file"
+  ],
+  [
+    "src/serializers/serializer.js~serializer#constructor",
+    "class/src/serializers/serializer.js~Serializer.html#instance-constructor-constructor",
+    "src/serializers/serializer.js~Serializer#constructor",
+    "method"
+  ],
+  [
+    "src/serializers/serializer.js~serializer#contenttype",
+    "class/src/serializers/serializer.js~Serializer.html#instance-member-contentType",
+    "src/serializers/serializer.js~Serializer#contentType",
+    "member"
+  ],
+  [
+    "src/serializers/text-serializer.js",
+    "file/src/serializers/text-serializer.js.html",
+    "src/serializers/text-serializer.js",
+    "file"
+  ],
+  [
+    "src/serializers/text-serializer.js~textserializer#constructor",
+    "class/src/serializers/text-serializer.js~TextSerializer.html#instance-constructor-constructor",
+    "src/serializers/text-serializer.js~TextSerializer#constructor",
+    "method"
+  ],
+  [
+    "src/serializers/text-serializer.js~textserializer#serialize",
+    "class/src/serializers/text-serializer.js~TextSerializer.html#instance-method-serialize",
+    "src/serializers/text-serializer.js~TextSerializer#serialize",
     "method"
   ],
   [

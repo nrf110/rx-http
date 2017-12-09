@@ -42,12 +42,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/text-serializer.js~TextSerializer.html">TextSerializer</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/http.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isString, isInteger, isArray, isUndefined, assign, defaults, remove } from &apos;lodash&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults, remove } from &apos;lodash&apos;;
 import Request from &apos;./request&apos;;
 import Interceptors from &apos;./interceptors&apos;;
 import XHRProvider from &apos;./xhr-provider&apos;;
@@ -123,14 +128,60 @@ class Http {
 
   /**
    * @method
-   * @name retries
-   * @param {Number} [value] - The number of retries allowed
-   * @returns {Number|Http} - If count is specified, sets the default number
-   * of retries allowed for requests from this client, and returns the client
-   * instance.  If count is ommitted, returns the current value.
+   * @name xsrfCookieName
+   * @param {String} [value] - The name of the XSRF cookie
+   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Cookie
+   * and returns the current Http.  If value is ommitted, returns the current name.
    */
-  retries(value) {
-    return property(&apos;retries&apos;, isInteger).call(this, value);
+  xsrfCookieName(value) {
+    return property(&apos;xsrfCookieName&apos;, isString).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name xsrfHeaderName
+   * @param {String} [value] - The name of the XSRF header
+   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Header
+   * and returns the current Http.  If value is ommitted, returns the current name.
+   */
+  xsrfHeaderName(value) {
+    return property(&apos;xsrfHeaderName&apos;, isString).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name withCredentials
+   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl
+   * requests should be made using cookies, authorization headers, or TLS client
+   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
+   * @returns {Boolean|Http} - If the value is specified, sets the withCredentials flag
+   * and returns the current Http.  If value is ommitted, returns the current
+   * value of the flag.
+   */
+  withCredentials(value) {
+    return property(&apos;withCredentials&apos;, isBoolean).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name username
+   * @param {String} [value] - Basic auth username
+   * @returns {String|Http} - If the value is specified, sets the username and returns
+   * the current Http.  If value is ommitted, returns the current username.
+   */
+  username(value) {
+    return property(&apos;username&apos;, isString).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name password
+   * @param {String} [value] - Basic auth password
+   * @returns {String|Http} - If the value is specified, sets the password and returns
+   * the current Http.  If value is ommitted, returns the current password.
+   */
+  password(value) {
+    return property(&apos;password&apos;, isString).call(this, value);
   }
 
   /**

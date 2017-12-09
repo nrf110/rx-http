@@ -1,21 +1,38 @@
 {
-  "coverage": "100%",
-  "expectCount": 74,
-  "actualCount": 74,
+  "coverage": "84.21%",
+  "expectCount": 95,
+  "actualCount": 80,
   "files": {
     "src/interceptors/body-transformer.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
+    "src/serializers/default-serializer.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        37,
+        38
+      ]
+    },
     "src/interceptors/error-handling.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
+    "src/serializers/form-data-serializer.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        5,
+        6,
+        10
+      ]
+    },
     "src/http.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+      "expectCount": 21,
+      "actualCount": 21,
       "undocumentLines": []
     },
     "src/interceptor.js": {
@@ -23,20 +40,49 @@
       "actualCount": 5,
       "undocumentLines": []
     },
+    "src/serializers/json-serializer.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        8
+      ]
+    },
     "src/interceptors/method-override.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
     "src/request.js": {
-      "expectCount": 15,
-      "actualCount": 15,
+      "expectCount": 17,
+      "actualCount": 17,
       "undocumentLines": []
     },
     "src/response.js": {
-      "expectCount": 10,
+      "expectCount": 11,
       "actualCount": 10,
-      "undocumentLines": []
+      "undocumentLines": [
+        109
+      ]
+    },
+    "src/serializers/serializer.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        1,
+        2,
+        3
+      ]
+    },
+    "src/serializers/text-serializer.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        4,
+        8
+      ]
     },
     "src/url.js": {
       "expectCount": 18,

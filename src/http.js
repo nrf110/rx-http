@@ -1,4 +1,4 @@
-import { isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';
+import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';
 import Request from './request';
 import Interceptors from './interceptors';
 import XHRProvider from './xhr-provider';
@@ -70,6 +70,64 @@ class Http {
    */
   timeout(value) {
     return property('timeout', isInteger).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name xsrfCookieName
+   * @param {String} [value] - The name of the XSRF cookie
+   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Cookie
+   * and returns the current Http.  If value is ommitted, returns the current name.
+   */
+  xsrfCookieName(value) {
+    return property('xsrfCookieName', isString).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name xsrfHeaderName
+   * @param {String} [value] - The name of the XSRF header
+   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Header
+   * and returns the current Http.  If value is ommitted, returns the current name.
+   */
+  xsrfHeaderName(value) {
+    return property('xsrfHeaderName', isString).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name withCredentials
+   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl
+   * requests should be made using cookies, authorization headers, or TLS client
+   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
+   * @returns {Boolean|Http} - If the value is specified, sets the withCredentials flag
+   * and returns the current Http.  If value is ommitted, returns the current
+   * value of the flag.
+   */
+  withCredentials(value) {
+    return property('withCredentials', isBoolean).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name username
+   * @param {String} [value] - Basic auth username
+   * @returns {String|Http} - If the value is specified, sets the username and returns
+   * the current Http.  If value is ommitted, returns the current username.
+   */
+  username(value) {
+    return property('username', isString).call(this, value);
+  }
+
+  /**
+   * @method
+   * @name password
+   * @param {String} [value] - Basic auth password
+   * @returns {String|Http} - If the value is specified, sets the password and returns
+   * the current Http.  If value is ommitted, returns the current password.
+   */
+  password(value) {
+    return property('password', isString).call(this, value);
   }
 
   /**

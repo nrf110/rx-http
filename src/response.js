@@ -106,6 +106,14 @@ export default class Response {
     return _headers.get(this)[name];
   }
 
+  contentType() {
+    const headers = _headers.get(this);
+    const entry = Object.entries(headers)
+      .find((headers) => headers[0].toLowerCase() === 'content-type');
+
+    if (entry) return entry[1];
+  }
+
   /**
    * @method
    * @name isChunked

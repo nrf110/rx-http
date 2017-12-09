@@ -3,12 +3,14 @@ import { PropertyValidationException } from './exceptions';
 import Path from './path';
 import Url from './url';
 import { parseUri } from './utilities';
+import Serializers from './serializers';
 
 let _method = new WeakMap();
 let _headers = new WeakMap();
+let _timeout = new WeakMap();
 let _body = new WeakMap();
+let _serializer = new WeakMap();
 let _url = new WeakMap();
-let _retries = new WeakMap();
 let _interceptors = new WeakMap();
 let _xsrfCookieName = new WeakMap();
 let _xsrfHeaderName = new WeakMap();
@@ -20,6 +22,7 @@ let _provider = new WeakMap();
 /**
  * A Request should only ever be created by an instance of {@link Http}
  * @class
+ * @name Request
  */
 export default class Request {
   /**
@@ -29,9 +32,9 @@ export default class Request {
   constructor(config) {
     _method.set(this, config.method || null);
     _headers.set(this, config.headers || {});
+    _timeout.set(this, config.timeout || null);
     _body.set(this, config.body || null);
     _url.set(this, config.url || null);
-    _retries.set(this, config.retries || 0);
     _interceptors.set(this, config.interceptors || {})
     _xsrfCookieName.set(this, config.xsrfCookieName);
     _xsrfHeaderName.set(this, config.xsrfHeaderName);
@@ -95,19 +98,77 @@ export default class Request {
   }
 
   /**
+   * Convenience method for getting/setting the Content-Type header.
+   * @method
+   * @name contentType
+   * @param {String} [value] - The value of the Content-Type header
+   * @returns {String|Request} - If value is specified, sets the
+   * Content-Type header.  If value is ommitted, returns the current value
+   * of the Content-Type header (or undefined);
+   */
+  contentType(value) {
+    const headers = _headers.get(this);
+    const currentEntry = Object.entries(headers).find((header) => header[0].toLowerCase() === 'content-type');
+
+    if (isUndefined(value)) {
+      return currentEntry[0];
+    }
+
+    headers[currentEntry] = value;
+    return this;
+  }
+
+  /**
+   * @method
+   * @name timeout
+   * @param {Number} [value] - The request timeout in milliseconds
+   * @returns {Number|Request} - If value is specified, sets the timeout
+   * for this request. and returns the current request. If value is ommitted,
+   * returns the current timeout value.
+   */
+  timeout(value) {
+    if (isUndefined(value)) {
+      return _timeout.get(this);
+    }
+
+    _timeout.set(this, value);
+    return this;
+  }
+
+  /**
+   * @method
+   * @name body
+   * @param {Serializer} [value] - The serializer for the body
+   * @returns {Serializer|Request} - If value is specified, sets the Serializer
+   * for this request and returns the current Request.  If value is ommitted,
+   * returns the current Serializer
+   */
+  serializer(value) {
+    if (isUndefined(value)) {
+      return _serializer.get(this);
+    }
+
+    _serializer.set(this, value);
+    return this;
+  }
+
+  /**
    * @method
    * @name body
    * @param {Object|FormData|Blob|File|String} [value] - The body for this request
+   * @param {Serializer} [serializer] - The serializer for the body
    * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body
    * for this request and returns the current Request.  If value is ommitted,
    * returns the current body
    */
-  body(value) {
+  body(value, serializer) {
     if (isUndefined(value)) {
      return _body.get(this);
     }
 
     _body.set(this, value);
+    _serializer.set(this, serializer || new Serializers.Default());
+
     return this;
   }
 
@@ -141,22 +202,6 @@ export default class Request {
     }
 
     throw new PropertyValidationException('url', url);
-  }
-
-  /**
-   * @method
-   * @name retries
-   * @param {Number} [value] - The number of times this request will be retried on failure.
-   * @returns {Number|Request} - If value is specified, sets the number of retries
-   * for this request and returns the current Request.  If value is ommitted,
-   * returns the current number of retries.
-   */
-  retries(value) {
-    if (isUndefined(value)) {
-      return _retries.get(this);
-    }
-    _retries.set(this, value);
-    return this;
   }
 
   /**

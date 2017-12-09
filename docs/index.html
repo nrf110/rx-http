@@ -42,6 +42,11 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/serializer.js~Serializer.html">Serializer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/text-serializer.js~TextSerializer.html">TextSerializer</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -49,7 +54,7 @@
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="rx-http">Rx-HTTP</h1>
 <p>Rx-HTTP is an HTTP library designed for native interoperability with
 <a href="https://github.com/Reactive-Extensions/RxJS">RxJS</a>.</p>
-<p><em>This library is still in early development.  It is not yet finished, tested, documented, nor anywhere near production-ready.</em></p>
+<p><em>This library is still in beta, and probably shouldn&apos;t be used in production yet.  The API should be (mostly) stable and the first round of features has been implemented, but it is still light on tests</em></p>
 <h2 id="features">Features</h2>
 <ul>
 <li>Simple builder pattern for requests</li>
@@ -60,13 +65,17 @@
 <h2 id="installation">Installation</h2>
 <p>npm:</p>
 <p><code>npm install rx-http</code></p>
-<p>bower:</p>
+<p>bower (not yet tested):</p>
 <p><code>bower install rx-http</code></p>
 <h2 id="browser-support-based-on-xmlhttprequest-browser-compatibility-matrix-">Browser Support - Based on XmlHTTPRequest browser compatibility matrix.</h2>
 <ul>
 <li>IE 10+</li>
 <li>Chrome 31+ - Tested against Chrome 50</li>
 <li>Firefox 20+ - Tested against Firefox 45</li>
+</ul>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+<li><a href="#basic-usage">Basic Usage</a></li>
 </ul>
 <h2 id="basic-usage">Basic Usage</h2>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
@@ -78,7 +87,6 @@ client.post(&apos;http://example.com/my/path&apos;)
   .header(&apos;Accept&apos;, &apos;application/json&apos;)
   .body({ &quot;foo&quot;: &quot;bar&quot;})
   .timeout(5000)
-  .retries(3)
   .execute()
   .subscribe((response) =&gt; {
     response.downloadProgress()
@@ -91,6 +99,180 @@ client.post(&apos;http://example.com/my/path&apos;)
       .subscribe((body) =&gt; console.log(body));
   });</code>
 </code></pre>
+<h2 id="the-http-client">The HTTP Client</h2>
+<p>The <a href="class/src/http.js~Http.html">Http</a> class is a client instance that is used to create <a href="class/src/request.js~Request.html">Request</a> objects.  Requests created by a client instance
+inherit the settings of that instance as defaults, which can be overridden
+on the request.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
+
+const client = new Http({ baseUrl: &apos;/users&apos; });
+
+const request = client.request(&apos;/123&apos;, {
+  method: &apos;GET&apos;,
+  query: {&apos;key&apos;: &apos;value&apos; },
+  headers: { &apos;Accept&apos;: &apos;application/json&apos; }
+})
+
+request.execute().subscribe((response) =&gt; {
+  // do something with the response
+});</code>
+</code></pre>
+<p>The Http client provides convenience methods for each of the HTTP verbs (GET, POST, PUT, PATCH, DELETE, HEAD, TRACE, and OPTIONS), in addition to the raw <code>request</code> method.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">new Http().post(&apos;/some/path&apos;, { body: { &apos;key&apos;, &apos;value&apos; } })
+  .execute()
+  .subscribe((response) =&gt; ...));</code>
+</code></pre>
+<h2 id="interceptors">Interceptors</h2>
+<p>Interceptors provide reusable logic for validation, error-handling and recovery, enrichment, and transformation of requests and responses.</p>
+<p>Interceptors implement 4 methods (the <a href="">Interceptor</a> base class provides default implementations that can be overridden):</p>
+<h3 id="request-enrich-transform-and-or-validate-an-outgoing-request-">request - enrich/transform and/or validate an outgoing request.</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Interceptor } from &apos;rx-http&apos;;
+class MyRequestInterceptor extends Interceptor {
+  request(req, accept, reject) {
+    // Add a custom header on a same-domain request
+    if (req.url().isRelative()) {
+      accept(request.header(&apos;X-Custom-Header&apos;, &apos;value&apos;));
+    } else {
+      // Don&apos;t allow cross-domain requests
+      reject({ message: &apos;Cross domain not allowed&apos;, request: req });
+    }
+  }
+}
+
+new Http().addInterceptor(new MyRequestInterceptor());</code>
+</code></pre>
+<h3 id="requesterror-recover-from-a-request-rejection">requestError - recover from a request rejection</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Interceptor } from &apos;rx-http&apos;;
+class MyRequestErrorInterceptor extends Interceptor {
+  requestError(err, accept, reject) {
+    // Do something to fix the request
+    //.
+    //.
+    //.
+    accept(err.req)
+  }
+}
+
+new Http().addInterceptor(new MyRequestErrorInterceptor());</code>
+</code></pre>
+<h3 id="response-enrich-transform-and-or-validate-an-incoming-response-">response - enrich/transform and/or validate an incoming response.</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">class MyResponseInterceptor extends Interceptor {
+  response(res, accept, reject) {
+    // Enrich the response
+    const headerValue = res.header(&apos;X-Custom-Header&apos;)
+    if (!!headerValue) {
+      res.customThing = headerValue;
+      accept(res);
+    } else {
+      reject({ message: &apos;Missing special header!&apos;, req: res);
+    }   
+  }
+}</code>
+</code></pre>
+<h3 id="responseerror-recover-from-a-response-rejection">responseError - recover from a response rejection</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">class MyResponseErrorInterceptor extends Interceptor {
+  responseError(err, accept, reject) {
+    // We were expecting the resource not to exist, don&apos;t fail.
+    if (err.res.status() === 404) {
+      accept(err.res);
+    }   
+  }
+}</code>
+</code></pre>
+<p>The <code>request</code> method is run, on outgoing requests, for each interceptor until all interceptors are run, or a request is rejected.  In the event of a rejection, the <code>requestError</code> method is tried on each interceptor.  If any of the <code>requestError</code> methods is able to repair the request, the interceptor chain will resume from where it left off, using the repaired request.</p>
+<p>The idea works similarly with <code>response</code> and <code>responseError</code> for incoming responses.</p>
+<h3 id="built-in-interceptors">Built-in Interceptors</h3>
+<ul>
+<li><strong>BodyTransformer</strong> - serializes the request body using the given or default serializer.  The serializer may also specify the value of the Content-Type header here, if it is not already specified by the request.</li>
+<li><strong>ErrorHandling</strong> - response interceptor that rejects non 20x status requests.</li>
+<li><strong>MethodOverride</strong> - request interceptor that converts HTTP verbs (GET, PUT, POST, PATCH, DELETE, etc...) into ones that the browser understands (GET and POST), and puts the original verb in the X-HTTP-Method-Override header for the server to use to route the request as intended.</li>
+<li><strong>XSRF</strong> - reads the specified cookie containing the XSRF token, and places it in the specified custom header to send back to the server.</li>
+</ul>
+<h2 id="request-body">Request Body</h2>
+<p>The <code>body([value, [serializer]])</code> method allows setting the request body.  The <code>value</code> may be a File, Blob, Object, or String.  An instance of a Serializer implementation may be provided here to serialize the data before it is sent to the server.  If no serializer is provided, Serializers.Default will be used.  This serializer attempts to automatically determine the correct built-in Serializer implementation and delegate to it.  If no appropriate implementation is found, it will throw a NoSerializerFoundException.</p>
+<h2 id="response-body">Response Body</h2>
+<p>The <a href="class/src/request.js~Request.html">Response</a> body is itself an RxJS Observable.  For a non-chunked response, it will produce exactly 1 element.  For chunked responses, it will emit each chunk by default.  Response Interceptors can be used to transform chunked or non-chunked response bodies before they are consumed by the body Observable.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">const client = new Http();
+client.get(&apos;/widgets/123&apos;)
+  .flatMap((response) =&gt; response.body())
+  .subscribe((widget) =&gt; console.log(user));</code>
+</code></pre>
+<h2 id="xsrf">XSRF</h2>
+<p>XSRF Support is provided by the XSRF Interceptor, which is applied by default.  The Interceptor will read the value from the server-sent XSRF Cookie and send it back in a header.  The default cookie and header names are XSRF-Token and X-XSRF-TOKEN, respectively.  These names can be configured on either the Http instance or a Request instance via the xsrfCookieName and xsrfHeaderName methods.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http, Interceptors } from &apos;rx-http&apos;;
+
+const client = new Http()
+  .addInterceptor(Interceptors.XSRF) // this isn&apos;t needed unless you remove the default interceptors
+  .xsrfCookieName(&apos;CSRF-Token&apos;)
+  .xsrfHeaderName(&apos;X-CSRF-TOKEN&apos;);
+
+// override at the request level
+client.xsrfCookieName(&apos;OTHER-TOKEN&apos;)
+  .execute()
+  .subscribe(...)</code>
+</code></pre>
+<h2 id="timeouts">Timeouts</h2>
+<p>You can set the request timeout using the <code>timeout</code> method on the Http client or on an individual Request.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
+
+const client = new Http()
+  .timeout(3000);
+
+client.get(&apos;/some/url&apos;)
+  .timeout(5000)
+  .execute()
+  .subscribe(...);</code>
+</code></pre>
+<h2 id="progress-tracking">Progress Tracking</h2>
+<p>Upload and Download progress can be tracked as additional RxJS Observables on the response object.  These observables currently emit the native browser events.  This may be abstracted in the future for more consistency across browsers, as well as Node.js.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
+
+const client = new Http();
+
+client.post(&apos;http://example.com/my/path&apos;)
+  .header(&apos;Content-Type&apos;, &apos;application/json&apos;)
+  .header(&apos;Accept&apos;, &apos;application/json&apos;)
+  .body({ &quot;foo&quot;: &quot;bar&quot;})
+  .timeout(5000)
+  .execute()
+  .subscribe((response) =&gt; {
+    response.downloadProgress()
+      .subscribe((progress) =&gt; console.log(&apos;Received progress&apos;));
+
+    response.uploadProgress()
+      .subscribe((progress) =&gt; console.log(&apos;Received progress&apos;));
+
+    response.body()
+      .subscribe((body) =&gt; console.log(body));
+  });</code>
+</code></pre>
+<h2 id="authentication">Authentication</h2>
+<p>Basic auth username, password, and withCredentials
+properties are exposed on both the client and on individual request objects.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
+
+// Apply basic auth credentials to all Requests
+const client = new Http()
+  .username(&apos;user&apos;)
+  .password(&apos;password1&apos;);
+
+// Override credentials for just this request.
+const req = client.get(&apos;/some/path&apos;)
+  .withCredentials(true);
+  .username(&apos;admin&apos;)
+  .password(&apos;supersecret!&apos;)
+
+req.execute().subscribe(...)</code>
+</code></pre>
+<h2 id="cookies">Cookies</h2>
+<p>rx-http requires <a href="https://github.com/js-cookie/js-cookie">js-cookie</a> as a peer-dependency, primarily for use in the XSRF interceptor.</p>
+<h1 id="contributing">Contributing</h1>
+<ul>
+<li>I would be happy to accept core contributors who have time to help maintain this project.</li>
+<li>Report bugs - use the issues link and submit issues.  I can&apos;t fix it if I don&apos;t know about it.</li>
+<li>Submit PRs with test/automation - make it more robust and useable!</li>
+<li>Feature requests/bugfixes - if you would like to submit ideas or PRs for enhancements, please first open an issue for discussion, with the tag &apos;enhancements&apos;.</li>
+</ul>
 </div>
 </div>
 

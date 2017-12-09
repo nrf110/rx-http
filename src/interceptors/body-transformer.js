@@ -20,10 +20,13 @@ export default class BodyTransformer extends Interceptor {
   request(request, accept, reject) {
     const body = request.body();
 
-    if (isObject(body) && !isFile(body) && !isFormData(body) && !isBlob(body)) {
-      const json = JSON.stringify(body);
+    if (!!body) {
+      const serializer = request.serializer();
+      const contentType = request.contentType();
 
-      request.body(json);
+      request
+        .contentType(contentType || serializer.contentType)
+        .body(serializer.serialize(body));
     }
 
     accept(request);
