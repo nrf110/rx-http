@@ -720,6 +720,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/request.js~request#responsetype",
+    "class/src/request.js~Request.html#instance-method-responseType",
+    "src/request.js~Request#responseType",
+    "method"
+  ],
+  [
     "src/request.js~request#serializer",
     "class/src/request.js~Request.html#instance-method-serializer",
     "src/request.js~Request#serializer",

@@ -1,7 +1,7 @@
 {
-  "coverage": "97.91%",
-  "expectCount": 96,
-  "actualCount": 94,
+  "coverage": "97.93%",
+  "expectCount": 97,
+  "actualCount": 95,
   "files": {
     "src/interceptors/body-transformer.js": {
       "expectCount": 2,
@@ -44,8 +44,8 @@
       "undocumentLines": []
     },
     "src/request.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+      "expectCount": 18,
+      "actualCount": 18,
       "undocumentLines": []
     },
     "src/response.js": {

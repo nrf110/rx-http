@@ -8,6 +8,7 @@ import Serializers from './serializers';
 let _method = new WeakMap();
 let _headers = new WeakMap();
 let _timeout = new WeakMap();
+let _responseType = new WeakMap();
 let _body = new WeakMap();
 let _serializer = new WeakMap();
 let _url = new WeakMap();
@@ -119,11 +120,30 @@ export default class Request {
   }
 
   /**
+   * XHRProvider only - sets the responseType field of the {@link XMLHttpRequest}
+   *
+   * @method
+   * @name responseType
+   * @param {String} [value] - The expected responseType
+   * @returns {String|Request} -  If value is specified, sets the responseType
+   * for this request, and returns the current request.  If value is ommitted,
+   * returns the current responseType value.
+   */
+  responseType(value) {
+    if (isUndefined(value)) {
+      return _responseType.get(this);
+    }
+
+    _responseType.set(this, value);
+    return this;
+  }
+
+  /**
    * @method
    * @name timeout
    * @param {Number} [value] - The request timeout in milliseconds
    * @returns {Number|Request} - If value is specified, sets the timeout
-   * for this request. and returns the current request. If value is ommitted,
+   * for this request, and returns the current request. If value is ommitted,
    * returns the current timeout value.
    */
   timeout(value) {

@@ -81,6 +81,10 @@ export default class XHRBuilder {
       }
     }
 
+    if (request.responseType()) {
+      xhr.responseType = request.responseType();
+    }
+
     xhr.open(...openArgs);
 
     if (isInteger(request)) {
