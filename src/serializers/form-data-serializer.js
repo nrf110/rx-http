@@ -28,13 +28,14 @@ export default class FormDataSerializer extends Serializer {
 
     const result = new FormData();
 
-    if (isFile(value) || isBlob(value)) {
-      result.append('data', value);
-    }
-
-    if (isObject(value)) {
+    if (isBlob(value)) {
+      result.append('blob', value);
+    } else if (isFile(value)) {
+      result.append('file', value, value.name)
+    } else if (isObject(value)) {
       Object.entries(value).forEach((entry) => {
-        result.append(entry[0], entry[1]);
+        if (isFile(entry[1])) result.append(entry[0], entry[1], entry[1].name);
+        else result.append(entry[0], entry[1]);
       });
     }
 

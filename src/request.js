@@ -112,10 +112,13 @@ export default class Request {
     const currentEntry = Object.entries(headers).find((header) => header[0].toLowerCase() === 'content-type');
 
     if (isUndefined(value)) {
-      return currentEntry[0];
+      if (!!currentEntry) return currentEntry[1];
+      else return;
     }
 
-    headers[currentEntry] = value;
+    if (!!currentEntry) headers[currentEntry[0]] = value;
+    else headers['Content-Type'] = value;
+
     return this;
   }
 

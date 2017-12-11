@@ -18,10 +18,10 @@ module.exports = function(config) {
       'sinon'
     ],
     preprocessors: {
-      './test/*.spec.js': ['webpack']
+      './test/**/*.spec.js': ['webpack']
     },
     files: [
-      './test/*.spec.js'
+      './test/**/*.spec.js'
     ],
     webpack: {
       module: {

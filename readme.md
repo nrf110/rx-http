@@ -28,6 +28,21 @@ bower (not yet tested):
 
 # Table of Contents
 - [Basic Usage](#basic-usage)
+- [HTTP Client](#http-client)
+- [Interceptors](#interceptors)
+  - [request](#request)
+  - [requestError](#requesterror)
+  - [response](#responseerror)
+  - [responseError](#responseerror)
+  - [Built-in Interceptors](#built-in-interceptors)
+- [Request Body](#request-body)
+- [Response Body](#response-body)
+- [Cross-Site Request Forgery](#xsrf)
+- [Timeouts](#timeouts)
+- [Progress Tracking](#progress-tracking)
+- [Authentication](#authentication)
+- [Cookies](#cookies)
+
 
 ## Basic Usage
 ```javascript
@@ -53,8 +68,8 @@ client.post('http://example.com/my/path')
   });
 ```
 
-## The HTTP Client
-The [Http](class/src/http.js~Http.html) class is a client instance that is used to create [Request](class/src/request.js~Request.html) objects.  Requests created by a client instance
+## HTTP Client
+The [Http](https://nrf110.github.io/rx-http/class/src/http.js~Http.html) class is a client instance that is used to create [Request](https://nrf110.github.io/rx-http/class/src/request.js~Request.html) objects.  Requests created by a client instance
 inherit the settings of that instance as defaults, which can be overridden
 on the request.
 
@@ -162,7 +177,7 @@ The idea works similarly with `response` and `responseError` for incoming respon
 The `body([value, [serializer]])` method allows setting the request body.  The `value` may be a File, Blob, Object, or String.  An instance of a Serializer implementation may be provided here to serialize the data before it is sent to the server.  If no serializer is provided, Serializers.Default will be used.  This serializer attempts to automatically determine the correct built-in Serializer implementation and delegate to it.  If no appropriate implementation is found, it will throw a NoSerializerFoundException.
 
 ## Response Body
-The [Response](class/src/request.js~Request.html) body is itself an RxJS Observable.  For a non-chunked response, it will produce exactly 1 element.  For chunked responses, it will emit each chunk by default.  Response Interceptors can be used to transform chunked or non-chunked response bodies before they are consumed by the body Observable.
+The [Response](https://nrf110.github.io/rx-http/class/src/request.js~Request.html) body is itself an RxJS Observable.  For a non-chunked response, it will produce exactly 1 element.  For chunked responses, it will emit each chunk by default.  Response Interceptors can be used to transform chunked or non-chunked response bodies before they are consumed by the body Observable.
 
 ```javascript
 const client = new Http();
