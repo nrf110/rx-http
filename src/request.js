@@ -1,8 +1,8 @@
-import { isUndefined, identity, assign, isString, isObject } from 'lodash';
+import { isUndefined, identity, isString, isInteger, isObject } from 'lodash';
 import { PropertyValidationError } from './errors';
 import Path from './path';
 import Url from './url';
-import { parseUri } from './utilities';
+import { parseUri, property, mapProperty } from './utilities';
 import Serializers from './serializers';
 
 let _method = new WeakMap();
@@ -16,7 +16,7 @@ let _interceptors = new WeakMap();
 let _xsrfCookieName = new WeakMap();
 let _xsrfHeaderName = new WeakMap();
 let _withCredentials = new WeakMap();
-let _username = new WeakMap();
+let _user = new WeakMap();
 let _password = new WeakMap();
 let _provider = new WeakMap();
 
@@ -30,19 +30,32 @@ export default class Request {
    * @constructor
    * @param {Object} config - Override default settings for this Request only.
    */
-  constructor(config) {
-    _method.set(this, config.method || null);
-    _headers.set(this, config.headers || {});
-    _timeout.set(this, config.timeout || null);
-    _body.set(this, config.body || null);
-    _url.set(this, config.url || null);
-    _interceptors.set(this, config.interceptors || {})
-    _xsrfCookieName.set(this, config.xsrfCookieName);
-    _xsrfHeaderName.set(this, config.xsrfHeaderName);
-    _withCredentials.set(this, !!config.withCredentials);
-    _username.set(this, config.username || null);
-    _password.set(this, config.password || null);
-    _provider.set(this, config.provider);
+  constructor({
+              method,
+              headers,
+              timeout,
+              body,
+              url,
+              interceptors,
+              xsrfCookieName,
+              xsrfHeaderName,
+              withCredentials,
+              user,
+              password,
+              provider
+            } = {}) {
+    _method.set(this, method || null);
+    _headers.set(this, headers || {});
+    _timeout.set(this, timeout || null);
+    _body.set(this, body || null);
+    _url.set(this, url || null);
+    _interceptors.set(this, interceptors || [])
+    _xsrfCookieName.set(this, xsrfCookieName || null);
+    _xsrfHeaderName.set(this, xsrfHeaderName || null);
+    _withCredentials.set(this, !!withCredentials);
+    _user.set(this, user || null);
+    _password.set(this, password || null);
+    _provider.set(this, provider);
   }
 
   /**
@@ -54,48 +67,32 @@ export default class Request {
    * returns the current HTTP method
    */
   method(value) {
-    if (isUndefined(value)) {
-     return _method.get(this);
-    }
-
-    _method.set(this, value);
-    return this;
-  }
-
-  /**
-   * @method
-   * @name header
-   * @param {String} name - The name of the header
-   * @param {String} [value] - The value to assign to the header
-   * @returns {String|Request} - If value is specified, sets the header
-   * and returns the current Request.  If value is ommitted, returns the
-   * value for the header.
-   */
-  header(name, value) {
-    let headers = _headers.get(this);
-    if (isUndefined(value)) {
-      return headers[name];
-    }
-    headers[name] = value.toString();
-    return this;
+    return property.call(this, 'method', _method, value, isString);
   }
 
   /**
    * @method
    * @name headers
-   * @param {Object} [value] - The hash of headers to send with this request.
-   * Replaces any existing headers
-   * @returns {Object|Request} - If value is specified, sets the headers
-   * and returns the current Request.  If value is ommitted, returns a copy
-   * of the current headers.
+   * @param {String|Object} [name] - The name of the header
+   * @param [value] - The value of the header
+   * @returns {Object|String|Request} -
+   * If no parameters are specified - returns a copy of the entire headers hash.
+   * @example
+   * request.headers() // returns { "foo": "bar" }
+   * If only name is specified, and name is a string - returns the value for the key in the headers hash.
+   * @example
+   * request.headers("foo") // returns "bar"
+   * If only name is specified, and name is an object - replaces the entire headers hash
+   * and returns the current Request.
+   * @example
+   * request.headers({ "foo": "bar", "baz": 1 })
+   * If name and value are specified - sets the value of name in the headers hash
+   * and returns the current Request.
+   * @example
+   * request.headers("foo", "bar")
    */
-  headers(value) {
-    if (isUndefined(value)) {
-      return assign({}, _headers.get(this));
-    }
-
-    _headers.set(this, value);
-    return this;
+  headers(name, value) {
+    return mapProperty.call(this, _headers, name, value);
   }
 
   /**
@@ -133,12 +130,7 @@ export default class Request {
    * returns the current responseType value.
    */
   responseType(value) {
-    if (isUndefined(value)) {
-      return _responseType.get(this);
-    }
-
-    _responseType.set(this, value);
-    return this;
+    return property.call(this, 'responseType', _responseType, value, isString);
   }
 
   /**
@@ -150,12 +142,7 @@ export default class Request {
    * returns the current timeout value.
    */
   timeout(value) {
-    if (isUndefined(value)) {
-      return _timeout.get(this);
-    }
-
-    _timeout.set(this, value);
-    return this;
+    return property.call(this, 'timeout', _timeout, value, isInteger);
   }
 
   /**
@@ -167,12 +154,7 @@ export default class Request {
    * returns the current Serializer
    */
   serializer(value) {
-    if (isUndefined(value)) {
-      return _serializer.get(this);
-    }
-
-    _serializer.set(this, value);
-    return this;
+    return property.call(this, 'serializer', _serializer, value);
   }
 
   /**
@@ -189,8 +171,9 @@ export default class Request {
      return _body.get(this);
     }
 
+    const currentSerializer = _serializer.get(this);
     _body.set(this, value);
-    _serializer.set(this, serializer || new Serializers.Default());
+    _serializer.set(this, serializer || currentSerializer || new Serializers.Default());
 
     return this;
   }
@@ -214,17 +197,18 @@ export default class Request {
     }
 
     if (isString(value) || isObject(value)) {
-      const newUrl = Url.factory(url);
+      const newUrl = Url.factory(value);
+      const currentUrl = _url.get(this);
       if (newUrl.isAbsolute()) {
         _url.set(this, newUrl);
         return this;
-      } else if (_url.get(this) && _url.get().isAbsolute()) {
-        _url.set(this, _url.get(this).merge(newUrl));
+      } else if (currentUrl && currentUrl.isAbsolute()) {
+        _url.set(this, currentUrl.merge(newUrl));
         return this;
       }
     }
 
-    throw new PropertyValidationError('url', url);
+    throw new PropertyValidationError('url', value);
   }
 
   /**
@@ -236,11 +220,7 @@ export default class Request {
    * returns the current set of interceptors.
    */
   interceptors(value) {
-    if (isUndefined(value)) {
-      return _interceptors.get(this);
-    }
-    _interceptors.set(this, value);
-    return this;
+    return property.call(this, 'interceptors', _interceptors, value);
   }
 
   /**
@@ -251,11 +231,7 @@ export default class Request {
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfCookieName(value) {
-    if (isUndefined(value)) {
-      return _xsrfCookieName.get(this);
-    }
-    _xsrfCookieName.set(this, value);
-    return this;
+    return property.call(this, 'xsrfCookieName', _xsrfCookieName, value, isString);
   }
 
   /**
@@ -266,11 +242,7 @@ export default class Request {
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfHeaderName(value) {
-    if (isUndefined(value)) {
-      return _xsrfHeaderName.get(this);
-    }
-    _xsrfHeaderName.set(this, value);
-    return this;
+    return property.call(this, 'xsrfHeaderName', _xsrfHeaderName, value, isString);
   }
 
   /**
@@ -284,26 +256,18 @@ export default class Request {
    * value of the flag.
    */
   withCredentials(value) {
-    if (isUndefined(value)) {
-      return this.config.withCredentials = value;
-    }
-    this.config.withCredentials = value;
-    return this;
+    return property.call(this, 'withCredentials', _withCredentials, value);
   }
 
   /**
    * @method
-   * @name username
-   * @param {String} [value] - Basic auth username
-   * @returns {String|Request} - If the value is specified, sets the username and returns
-   * the current Request.  If value is ommitted, retursn the current username.
+   * @name user
+   * @param {String} [value] - Basic auth user
+   * @returns {String|Request} - If the value is specified, sets the user and returns
+   * the current Request.  If value is ommitted, retursn the current user.
    */
-  username(value) {
-    if (isUndefined(value)) {
-      return _username.get(this);
-    }
-    _username.set(this, value);
-    return this;
+  user(value) {
+    return property.call(this, 'user', _user, value, isString);
   }
 
   /**
@@ -314,11 +278,7 @@ export default class Request {
    * the current Request.  If value is ommitted, retursn the current password.
    */
   password(value) {
-    if (isUndefined(value)) {
-      return _password.get(this);
-    }
-    _password.set(this, value);
-    return this;
+    return property.call(this, 'password', _password, value, isString);
   }
 
   /**

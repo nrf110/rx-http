@@ -3,14 +3,14 @@ import {
   isString,
   isUndefined,
   isEmpty,
-  assign,
   reduce,
   endsWith,
   startsWith,
   identity,
   cloneDeep
 } from 'lodash';
-import { parseUri } from './utilities';
+import Path from './path';
+import { parseUri, isNonEmptyString, isValidPort, property, mapProperty } from './utilities';
 
 function encode(val) {
   return encodeURIComponent(val)
@@ -21,15 +21,6 @@ function encode(val) {
     .replace(/%20/g, '+')
     .replace(/%5B/gi, '[')
     .replace(/%5D/gi, ']');
-}
-
-function property(member, value) {
-  if (isUndefined(value)) {
-    member.get(this);
-  }
-
-  member.set(this);
-  return this;
 }
 
 const _protocol = new WeakMap();
@@ -52,15 +43,16 @@ class Url {
    * @constructor
    * @param {Object} parts
    */
-  constructor(parts) {
-    if (parts.protocol) _protocol.set(this, parts.protocol);
-    if (parts.user) _user.set(this, parts.user);
-    if (parts.password) _password.set(this, parts.password);
-    if (parts.host) _host.set(this, parts.host);
-    if (parts.port) _port.set(this, parts.port);
-    if (parts.directory) _directory.set(this, parts.directory);
-    if (parts.file) _file.set(this, parts.file);
-    if (parts.fragment) _fragment.set(this, parts.fragment);
+  constructor(parts = {}) {
+    if (!!parts.protocol) this.protocol(parts.protocol);
+    if (!!parts.user) this.user(parts.user);
+    if (!!parts.password) this.password(parts.password);
+    if (!!parts.host) this.host(parts.host);
+    if (!!parts.port) this.port(parts.port);
+    if (!!parts.directory) this.directory(parts.directory);
+    if (!!parts.file) this.file(parts.file);
+    if (!!parts.fragment) this.fragment(parts.fragment);
+    this.query(parts.query || {});
   }
 
   /**
@@ -72,7 +64,7 @@ class Url {
    * current protocol.
    */
   protocol(value) {
-    return property.call(this, _protocol, value);
+    return property.call(this, 'protocol', _protocol, value, isNonEmptyString);
   }
 
   /**
@@ -83,7 +75,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current user.
    */
   user(value) {
-    return property.call(this, _user, value);
+    return property.call(this, 'user', _user, value, isNonEmptyString);
   }
 
   /**
@@ -94,7 +86,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current password.
    */
   password(value) {
-    return property.call(this, _password, value);
+    return property.call(this, 'password', _password, value, isNonEmptyString);
   }
 
   /**
@@ -105,7 +97,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current host.
    */
   host(value) {
-    return property.call(this, _host, value);
+    return property.call(this, 'host', _host, value, isNonEmptyString);
   }
 
   /**
@@ -116,7 +108,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current port.
    */
   port(value) {
-    return property.call(this, _port, value);
+    return property.call(this, 'port', _port, value, isValidPort);
   }
 
   /**
@@ -127,7 +119,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current directory.
    */
   directory(value) {
-    return property.call(this, _directory, value);
+    return property.call(this, 'directory', _directory, value, isString);
   }
 
   /**
@@ -138,7 +130,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current file.
    */
   file(value) {
-    return property.call(this, _file, value);
+    return property.call(this, 'file', _file, value, isString);
   }
 
   /**
@@ -149,7 +141,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current fragment.
    */
   fragment(value) {
-    return property.call(this, _fragment, value);
+    return property.call(this, 'fragment', _fragment, value, isString);
   }
 
   /**
@@ -192,20 +184,7 @@ class Url {
    * request.query("foo", "bar").execute()
    */
   query(name, value) {
-    if (!isUndefined(name)) {
-      if (isUndefined(value)) {
-        if (isObject(name)) {
-          _query.set(this, name);
-          return this;
-        }
-        return _query.get(this)[name];
-      }
-      const existing = _query.get(this);
-      existing[name] = value;
-      return this;
-    }
-
-    return assign({}, _query.get(this));
+    return mapProperty.call(this, _query, name, value);
   }
 
   /**
@@ -218,7 +197,7 @@ class Url {
     const u = _user.get(this);
     const p = _password.get(this);
 
-    if (isString(u) && !isEmpty(u.trim()) && isString(p) && isEmpty(p.trim())) {
+    if (isNonEmptyString(u) && isNonEmptyString(p)) {
       return `${u}:${p}`;
     }
 
@@ -248,18 +227,7 @@ class Url {
     const dir = _directory.get(this) || '';
     const f = _file.get(this) || '';
 
-    if (endsWith(dir, '/')) {
-      if (startsWith(f, '/')) {
-        return dir + f.substring(1);
-      }
-
-      return dir + f;
-    } else if (startsWith(f, '/')) {
-      return dir + f;
-    }
-
-    return `${dir}/${f}`;
-    return '';
+    return Path.join(dir, f);
   }
 
   /**
@@ -272,14 +240,24 @@ class Url {
    * from the copy.
    */
   merge(other) {
-    const copied = cloneDeep(parts);
+    const copied = Object.assign(
+      {},
+      { protocol: _protocol.get(this) },
+      { user: _user.get(this) },
+      { password: _password.get(this) },
+      { host: _host.get(this) },
+      { port: _port.get(this) },
+      { directory: _directory.get(this) },
+      { file: _file.get(this) },
+      { fragment: _fragment.get(this) },
+      { query: _query.get(this) }
+    );
+
     const otherParts = parseUri(other.toString());
-    const propertiesToMerge = ['directory', 'file', 'fragment', 'path', 'query'];
+    const propertiesToMerge = ['directory', 'file', 'fragment', 'query'];
     propertiesToMerge.forEach((property) => {
       if (!!otherParts[property]) {
         copied[property] = otherParts[property];
-      } else if (!!copied[property]) {
-        delete copied[property];
       }
     });
 
@@ -300,19 +278,7 @@ class Url {
     const querySerializer = serializeQuery || identity;
     const q = querySerializer(this.query());
 
-    const fullyQualified = (() => {
-      if (endsWith(auth, '/')) {
-        if (endsWith(p, '/')) {
-          return auth + p.substring(1);
-        }
-
-        return auth + p;
-      } else if (startsWith(p, '/')) {
-        return auth + p;
-      }
-
-      return `${auth}/${p}`;
-    })();
+    const fullyQualified = Path.join(auth, p);
 
     const queryParts = reduce(q, (accum, value, key) => {
       let pair = `${encode(key)}=${encode(value)}`;
@@ -346,9 +312,13 @@ class Url {
  */
 Url.factory = (value) => {
   if (isString(value)) {
-    return new Url(parseUri(value));
+    const parsed = parseUri(value);
+    const result = new Url(parsed);
+    return result;
+  } else {
+    const result = new Url(value);
+    return result;
   }
-  return new Url(value);
 }
 
 export default Url;

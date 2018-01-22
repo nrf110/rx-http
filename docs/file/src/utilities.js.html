@@ -52,7 +52,9 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/utilities.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/** @private **/
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isString, isEmpty, isUndefined } from &apos;lodash&apos;;
+
+/** @private **/
 export function isFile(value) {
   return toString.call(value) === &apos;[object File]&apos;;
 }
@@ -65,6 +67,21 @@ export function isFormData(value) {
 /** @private **/
 export function isBlob(value) {
   return toString.call(value) === &apos;[object Blob]&apos;;
+}
+
+/** @private **/
+export function isNonEmptyString(value) {
+  return isString(value) &amp;&amp; !isEmpty(value.trim());
+}
+
+/** @private **/
+export function property(member, value) {
+  if (isUndefined(value)) {
+    return member.get(this);
+  }
+
+  member.set(this, value);
+  return this;
 }
 
 /** parseUri 1.2.2

@@ -22,9 +22,11 @@ export default class XSRF extends Interceptor {
     const xsrfHeader = request.xsrfHeaderName();
 
     if (!isUndefined(xsrfToken) && isString(xsrfToken)) {
-      request.header(xsrfHeader, xsrfToken);
+      request.headers(xsrfHeader, xsrfToken);
     }
 
     accept(request);
   }
 }
+
+export let xsrf = new XSRF();

@@ -23,7 +23,7 @@ export default class BodyTransformer extends Interceptor {
     if (!!body) {
       const serializer = request.serializer();
       const contentType = request.contentType();
-      
+
       request
         .contentType(contentType || serializer.contentType)
         .body(serializer.serialize(body));
@@ -32,3 +32,5 @@ export default class BodyTransformer extends Interceptor {
     accept(request);
   }
 }
+
+export let bodyTransformer = new BodyTransformer();

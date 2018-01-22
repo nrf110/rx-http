@@ -534,9 +534,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/http.js~http#username",
-    "class/src/http.js~Http.html#instance-method-username",
-    "src/http.js~Http#username",
+    "src/http.js~http#user",
+    "class/src/http.js~Http.html#instance-method-user",
+    "src/http.js~Http#user",
     "method"
   ],
   [
@@ -744,9 +744,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/request.js~request#username",
-    "class/src/request.js~Request.html#instance-method-username",
-    "src/request.js~Request#username",
+    "src/request.js~request#user",
+    "class/src/request.js~Request.html#instance-method-user",
+    "src/request.js~Request#user",
     "method"
   ],
   [

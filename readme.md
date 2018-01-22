@@ -22,18 +22,15 @@ bower (not yet tested):
 `bower install rx-http`
 
 ## Browser Support - Based on XmlHTTPRequest browser compatibility matrix.
-- IE 10+
-- Chrome 31+ - Tested against Chrome 50
-- Firefox 20+ - Tested against Firefox 45
+- IE 11
+- Edge 12+
+- Chrome 50+
+- Firefox 45+
 
 # Table of Contents
 - [Basic Usage](#basic-usage)
 - [HTTP Client](#http-client)
 - [Interceptors](#interceptors)
-  - [request](#request)
-  - [requestError](#requesterror)
-  - [response](#responseerror)
-  - [responseError](#responseerror)
   - [Built-in Interceptors](#built-in-interceptors)
 - [Request Body](#request-body)
 - [Response Body](#response-body)
@@ -42,7 +39,7 @@ bower (not yet tested):
 - [Progress Tracking](#progress-tracking)
 - [Authentication](#authentication)
 - [Cookies](#cookies)
-
+- [Contributing](#contributing)
 
 ## Basic Usage
 ```javascript

@@ -21,3 +21,5 @@ export default class ErrorHandling extends Interceptor {
     }
   }
 }
+
+export let errorHandling = new ErrorHandling();

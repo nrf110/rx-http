@@ -30,7 +30,7 @@ export default class Response {
    * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events
    * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events
    */
-  constructor(xhr, body, uploadProgress, downloadProgress) {
+  constructor({ xhr, body, uploadProgress, downloadProgress } = {}) {
     _status.set(this, xhr.status);
     _statusText.set(this, xhr.statusText);
     _headers.set(this, xhr.getAllResponseHeaders());
@@ -87,31 +87,24 @@ export default class Response {
   /**
    * @method
    * @name headers
-   * @returns {Object} - An object containing the response headers
+   * @param {String} [name] - The name of the header to lookup
+   * @returns {String|Object} - If name is given, returns the value of the
+   * header with the given name.  Otherwise, returns the hash containing
+   * all of the response headers
    * @example
    * { "Content-Type": "application/json", "Content-Length": "22" }
    */
-  headers() {
-    return _headers.get(this);
-  }
+  headers(name) {
+    const value = _headers.get(this);
+    if (!isUndefined(name)) {
+      const entry = Object.entries(value)
+        .find((headers) => headers[0].toLowerCase() === name.toLowerCase());
 
-  /**
-   * Look-up the value of an individual resonse header
-   * @method
-   * @name header
-   * @param {String} name - The name of the header to lookup
-   * @returns {String} - The value of the header, or undefined if not found
-   */
-  header(name) {
-    return _headers.get(this)[name];
-  }
+      if (entry) return entry[1];
+      else return null;
+    }
 
-  contentType() {
-    const headers = _headers.get(this);
-    const entry = Object.entries(headers)
-      .find((headers) => headers[0].toLowerCase() === 'content-type');
-
-    if (entry) return entry[1];
+    return value;
   }
 
   /**
@@ -123,7 +116,7 @@ export default class Response {
    */
   isChunked() {
     if (!_isChunked.has(this)) {
-      let transferEncoding = (this.header(Headers.TRANSFER_ENCODING) || '').toLowerCase();
+      let transferEncoding = (this.headers(Headers.TRANSFER_ENCODING) || '').toLowerCase();
       let isChunked = transferEncoding.indexOf('chunked') > -1 ||
                       transferEncoding.indexOf('identity') > -1;
       // Detect SPDY. It uses chunked transfer but doesn't set the Transfer-Encoding header.
@@ -131,7 +124,7 @@ export default class Response {
         let c = window.chrome;
         let loadTimes = c && c.loadTimes && c.loadTimes();
         let chromeSpdy = loadTimes && loadTimes.wasFetchedViaSpdy;
-        let ffSpdy = !!this.header('X-Firefox-Spdy');
+        let ffSpdy = !!this.headers('X-Firefox-Spdy');
         isChunked = ffSpdy || chromeSpdy;
       }
       _isChunked.set(this, isChunked);

@@ -73,8 +73,8 @@ export default class XHRBuilder {
     const xhr = new XMLHttpRequest();
 
     const openArgs = [request.method(), request.url().toString(), true];
-    if (request.username()) {
-      openArgs.push(request.username());
+    if (request.user()) {
+      openArgs.push(request.user());
 
       if (request.password()) {
         openArgs.push(request.password());
@@ -94,7 +94,7 @@ export default class XHRBuilder {
     const headers = request.headers();
 
     Object.keys(headers).forEach(headerName => {
-      xhr.setRequestHeader(headerName, headers[headerName]);
+      xhr.setRequestHeader(headerName, headers[headerName].toString());
     });
 
     if (xhr.upload) {

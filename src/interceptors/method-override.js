@@ -25,9 +25,11 @@ export default class MethodOverride extends Interceptor {
     if (!BROWSER_METHODS.some(m => m === originalMethod)) {
       request
         .method('POST')
-        .header('X-HTTP-Method-Override', originalMethod);
+        .headers('X-HTTP-Method-Override', originalMethod);
     }
 
     accept(request);
   }
 }
+
+export let methodOverride = new MethodOverride();

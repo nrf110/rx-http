@@ -70,7 +70,7 @@ let _interceptors = new WeakMap();
 let _xsrfCookieName = new WeakMap();
 let _xsrfHeaderName = new WeakMap();
 let _withCredentials = new WeakMap();
-let _username = new WeakMap();
+let _user = new WeakMap();
 let _password = new WeakMap();
 let _provider = new WeakMap();
 
@@ -94,7 +94,7 @@ export default class Request {
     _xsrfCookieName.set(this, config.xsrfCookieName);
     _xsrfHeaderName.set(this, config.xsrfHeaderName);
     _withCredentials.set(this, !!config.withCredentials);
-    _username.set(this, config.username || null);
+    _user.set(this, config.user || null);
     _password.set(this, config.password || null);
     _provider.set(this, config.provider);
   }
@@ -108,12 +108,7 @@ export default class Request {
    * returns the current HTTP method
    */
   method(value) {
-    if (isUndefined(value)) {
-     return _method.get(this);
-    }
-
-    _method.set(this, value);
-    return this;
+    return property.call(this, _method, value);
   }
 
   /**
@@ -166,10 +161,13 @@ export default class Request {
     const currentEntry = Object.entries(headers).find((header) =&gt; header[0].toLowerCase() === &apos;content-type&apos;);
 
     if (isUndefined(value)) {
-      return currentEntry[0];
+      if (!!currentEntry) return currentEntry[1];
+      else return;
     }
 
-    headers[currentEntry] = value;
+    if (!!currentEntry) headers[currentEntry[0]] = value;
+    else headers[&apos;Content-Type&apos;] = value;
+
     return this;
   }
 
@@ -184,12 +182,7 @@ export default class Request {
    * returns the current responseType value.
    */
   responseType(value) {
-    if (isUndefined(value)) {
-      return _responseType.get(this);
-    }
-
-    _responseType.set(this, value);
-    return this;
+    return property.call(this, _responseType, value);
   }
 
   /**
@@ -201,12 +194,7 @@ export default class Request {
    * returns the current timeout value.
    */
   timeout(value) {
-    if (isUndefined(value)) {
-      return _timeout.get(this);
-    }
-
-    _timeout.set(this, value);
-    return this;
+    return property.call(this, _timeout, value);
   }
 
   /**
@@ -218,12 +206,7 @@ export default class Request {
    * returns the current Serializer
    */
   serializer(value) {
-    if (isUndefined(value)) {
-      return _serializer.get(this);
-    }
-
-    _serializer.set(this, value);
-    return this;
+    return property.call(this, _serializer, value);
   }
 
   /**
@@ -287,11 +270,7 @@ export default class Request {
    * returns the current set of interceptors.
    */
   interceptors(value) {
-    if (isUndefined(value)) {
-      return _interceptors.get(this);
-    }
-    _interceptors.set(this, value);
-    return this;
+    return property.call(this, _interceptors, value);
   }
 
   /**
@@ -302,11 +281,7 @@ export default class Request {
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfCookieName(value) {
-    if (isUndefined(value)) {
-      return _xsrfCookieName.get(this);
-    }
-    _xsrfCookieName.set(this, value);
-    return this;
+    return property.call(this, _xsrfCookieName, value);
   }
 
   /**
@@ -317,11 +292,7 @@ export default class Request {
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfHeaderName(value) {
-    if (isUndefined(value)) {
-      return _xsrfHeaderName.get(this);
-    }
-    _xsrfHeaderName.set(this, value);
-    return this;
+    return property.call(this, _xsrfHeaderName, value);
   }
 
   /**
@@ -335,26 +306,18 @@ export default class Request {
    * value of the flag.
    */
   withCredentials(value) {
-    if (isUndefined(value)) {
-      return this.config.withCredentials = value;
-    }
-    this.config.withCredentials = value;
-    return this;
+    return property.call(this, _withCredentials, value);
   }
 
   /**
    * @method
-   * @name username
-   * @param {String} [value] - Basic auth username
-   * @returns {String|Request} - If the value is specified, sets the username and returns
-   * the current Request.  If value is ommitted, retursn the current username.
+   * @name user
+   * @param {String} [value] - Basic auth user
+   * @returns {String|Request} - If the value is specified, sets the user and returns
+   * the current Request.  If value is ommitted, retursn the current user.
    */
-  username(value) {
-    if (isUndefined(value)) {
-      return _username.get(this);
-    }
-    _username.set(this, value);
-    return this;
+  user(value) {
+    return property.call(this, _user, value);
   }
 
   /**
@@ -365,11 +328,7 @@ export default class Request {
    * the current Request.  If value is ommitted, retursn the current password.
    */
   password(value) {
-    if (isUndefined(value)) {
-      return _password.get(this);
-    }
-    _password.set(this, value);
-    return this;
+    return property.call(this, _password, value);
   }
 
   /**

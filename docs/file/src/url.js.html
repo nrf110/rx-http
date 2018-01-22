@@ -64,7 +64,8 @@
   identity,
   cloneDeep
 } from &apos;lodash&apos;;
-import { parseUri } from &apos;./utilities&apos;;
+import Path from &apos;./path&apos;;
+import { parseUri, isNonEmptyString, property } from &apos;./utilities&apos;;
 
 function encode(val) {
   return encodeURIComponent(val)
@@ -75,15 +76,6 @@ function encode(val) {
     .replace(/%20/g, &apos;+&apos;)
     .replace(/%5B/gi, &apos;[&apos;)
     .replace(/%5D/gi, &apos;]&apos;);
-}
-
-function property(member, value) {
-  if (isUndefined(value)) {
-    member.get(this);
-  }
-
-  member.set(this);
-  return this;
 }
 
 const _protocol = new WeakMap();
@@ -106,15 +98,16 @@ class Url {
    * @constructor
    * @param {Object} parts
    */
-  constructor(parts) {
-    if (parts.protocol) _protocol.set(this, parts.protocol);
-    if (parts.user) _user.set(this, parts.user);
-    if (parts.password) _password.set(this, parts.password);
-    if (parts.host) _host.set(this, parts.host);
-    if (parts.port) _port.set(this, parts.port);
-    if (parts.directory) _directory.set(this, parts.directory);
-    if (parts.file) _file.set(this, parts.file);
-    if (parts.fragment) _fragment.set(this, parts.fragment);
+  constructor(parts = {}) {
+    if (!!parts.protocol) _protocol.set(this, parts.protocol);
+    if (!!parts.user) _user.set(this, parts.user);
+    if (!!parts.password) _password.set(this, parts.password);
+    if (!!parts.host) _host.set(this, parts.host);
+    if (!!parts.port) _port.set(this, parts.port);
+    if (!!parts.directory) _directory.set(this, parts.directory);
+    if (!!parts.file) _file.set(this, parts.file);
+    if (!!parts.fragment) _fragment.set(this, parts.fragment);
+    _query.set(this, parts.query || {});
   }
 
   /**
@@ -272,7 +265,7 @@ class Url {
     const u = _user.get(this);
     const p = _password.get(this);
 
-    if (isString(u) &amp;&amp; !isEmpty(u.trim()) &amp;&amp; isString(p) &amp;&amp; isEmpty(p.trim())) {
+    if (isNonEmptyString(u) &amp;&amp; isNonEmptyString(p)) {
       return `${u}:${p}`;
     }
 
@@ -302,18 +295,7 @@ class Url {
     const dir = _directory.get(this) || &apos;&apos;;
     const f = _file.get(this) || &apos;&apos;;
 
-    if (endsWith(dir, &apos;/&apos;)) {
-      if (startsWith(f, &apos;/&apos;)) {
-        return dir + f.substring(1);
-      }
-
-      return dir + f;
-    } else if (startsWith(f, &apos;/&apos;)) {
-      return dir + f;
-    }
-
-    return `${dir}/${f}`;
-    return &apos;&apos;;
+    return Path.join(dir, f);
   }
 
   /**

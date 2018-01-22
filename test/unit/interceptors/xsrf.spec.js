@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
-import { Http, Interceptors } from '../../lib/rx-http';
+import Http from '../../../src/http';
+import Interceptors from '../../../src/interceptors';
 
 function failed(message, next) {
   return function(err) {
@@ -14,7 +15,7 @@ describe('XSRF', () => {
       Cookies.set(req.xsrfCookieName(), 'test');
 
       Interceptors.XSRF.request(req, (transformed) => {
-        expect(transformed.header(transformed.xsrfHeaderName())).to.equal('test');
+        expect(transformed.headers(transformed.xsrfHeaderName())).to.equal('test');
         next();
       }, failed("Shouldn't call reject", next));
     });
@@ -23,7 +24,7 @@ describe('XSRF', () => {
       const req = new Http().get('/');
 
       Interceptors.MethodOverride.request(req, (transformed) => {
-        expect(transformed.header(transformed.xsrfHeaderName())).to.be.undefined;
+        expect(transformed.headers(transformed.xsrfHeaderName())).to.be.undefined;
         next();
       }, failed("Shouldn't call reject", next));
     });

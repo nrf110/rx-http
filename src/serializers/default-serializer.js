@@ -16,7 +16,7 @@ const contentTypeSerializers = {
 
 function autoDetect(body, contentType) {
   if (isObject(body)) {
-    if (isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {
+    if (isFormData(body) || isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {
       return new FormDataSerializer(contentType);
     }
   }
@@ -27,7 +27,7 @@ function autoDetect(body, contentType) {
 
   if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {
     const result = contentTypeSerializers[contentType.toLowerCase()];
-    if (!!result) return result;
+    if (!!result) return new result(contentType);
     throw new NoSerializerFoundError(contentType);
   }
 

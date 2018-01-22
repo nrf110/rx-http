@@ -68,7 +68,7 @@ export default class ErrorHandling extends Interceptor {
    * @param {Function} reject - called on failure to pass an error
    */
   response(response, accept, reject) {
-    if (response.status() / 100 === 2) {
+    if (Math.floor(response.status() / 100) === 2) {
       accept(response);
     } else {
       reject(response);

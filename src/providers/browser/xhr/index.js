@@ -1,9 +1,9 @@
 import { partial, isInteger } from 'lodash';
 import Rx from 'rxjs';
 import XHRBuilder from './xhr-builder';
-import Response from './response';
-import RequestInterceptorChain from './request-interceptor-chain';
-import ResponseInterceptorChain from './response-interceptor-chain';
+import Response from '../../../response';
+import RequestInterceptorChain from '../../../request-interceptor-chain';
+import ResponseInterceptorChain from '../../../response-interceptor-chain';
 
 /** @function
  * Provider-implementation for browser-based clients.  Providers are simply
@@ -41,12 +41,12 @@ export default function XHRProvider(request) {
     const xhr = new XHRBuilder()
       .request(request)
       .onHeadersReceived((evt) => {
-        response = new Response(
+        response = new Response({
           xhr,
           body,
           uploadProgress,
           downloadProgress
-        );
+        });
 
         const responseChain = new ResponseInterceptorChain(
           interceptors,

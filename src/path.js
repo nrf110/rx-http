@@ -8,7 +8,7 @@ export default {
     const initial = arguments[0];
     const args = [...arguments].slice(1)
 
-    return reduce(args, (accum, value) => {
+    let joined = reduce(args, (accum, value) => {
       if (value.trim() != '') {
         if (endsWith(accum, separator) && startsWith(value, separator)) {
           accum += value.substring(1);
@@ -21,5 +21,11 @@ export default {
 
       return accum;
     }, initial);
+
+    while (endsWith(joined, separator)) {
+      joined = joined.slice(0, -1);
+    }
+
+    return joined;
   }
 };

@@ -1,4 +1,6 @@
-import { Http, Interceptors, Serializers } from '../../lib/rx-http';
+import Http from '../../../src/http';
+import Interceptors from '../../../src/interceptors';
+import Serializers from '../../../src/serializers';
 
 function failed(message, next) {
   return function(err) {

@@ -1,4 +1,5 @@
-import { Http, Interceptors } from '../../lib/rx-http';
+import Http from '../../../src/http';
+import Interceptors from '../../../src/interceptors';
 
 function failed(message, next) {
   return function(err) {
@@ -12,7 +13,7 @@ describe('MethodOverride', () => {
       const req = new Http().post('/');
 
       Interceptors.MethodOverride.request(req, (transformed) => {
-        expect(transformed.header('X-HTTP-Method-Override')).to.be.undefined;
+        expect(transformed.headers('X-HTTP-Method-Override')).to.be.undefined;
         next();
       }, failed("Shouldn't call reject", next));
     });
@@ -21,7 +22,7 @@ describe('MethodOverride', () => {
       const req = new Http().get('/');
 
       Interceptors.MethodOverride.request(req, (transformed) => {
-        expect(transformed.header('X-HTTP-Method-Override')).to.be.undefined;
+        expect(transformed.headers('X-HTTP-Method-Override')).to.be.undefined;
         next();
       }, failed("Shouldn't call reject", next));
     });
@@ -31,7 +32,7 @@ describe('MethodOverride', () => {
 
       Interceptors.MethodOverride.request(req, (transformed) => {
         expect(transformed.method()).to.equal('POST');
-        expect(transformed.header('X-HTTP-Method-Override')).to.equal('PUT');
+        expect(transformed.headers('X-HTTP-Method-Override')).to.equal('PUT');
         next();
       }, failed("Shouldn't call reject", next));
     });

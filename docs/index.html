@@ -69,13 +69,27 @@
 <p><code>bower install rx-http</code></p>
 <h2 id="browser-support-based-on-xmlhttprequest-browser-compatibility-matrix-">Browser Support - Based on XmlHTTPRequest browser compatibility matrix.</h2>
 <ul>
-<li>IE 10+</li>
-<li>Chrome 31+ - Tested against Chrome 50</li>
-<li>Firefox 20+ - Tested against Firefox 45</li>
+<li>IE 11</li>
+<li>Edge 12+</li>
+<li>Chrome 50+</li>
+<li>Firefox 45+</li>
 </ul>
 <h1 id="table-of-contents">Table of Contents</h1>
 <ul>
 <li><a href="#basic-usage">Basic Usage</a></li>
+<li><a href="#http-client">HTTP Client</a></li>
+<li><a href="#interceptors">Interceptors</a><ul>
+<li><a href="#built-in-interceptors">Built-in Interceptors</a></li>
+</ul>
+</li>
+<li><a href="#request-body">Request Body</a></li>
+<li><a href="#response-body">Response Body</a></li>
+<li><a href="#xsrf">Cross-Site Request Forgery</a></li>
+<li><a href="#timeouts">Timeouts</a></li>
+<li><a href="#progress-tracking">Progress Tracking</a></li>
+<li><a href="#authentication">Authentication</a></li>
+<li><a href="#cookies">Cookies</a></li>
+<li><a href="#contributing">Contributing</a></li>
 </ul>
 <h2 id="basic-usage">Basic Usage</h2>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
@@ -99,8 +113,8 @@ client.post(&apos;http://example.com/my/path&apos;)
       .subscribe((body) =&gt; console.log(body));
   });</code>
 </code></pre>
-<h2 id="the-http-client">The HTTP Client</h2>
-<p>The <a href="class/src/http.js~Http.html">Http</a> class is a client instance that is used to create <a href="class/src/request.js~Request.html">Request</a> objects.  Requests created by a client instance
+<h2 id="http-client">HTTP Client</h2>
+<p>The <a href="https://nrf110.github.io/rx-http/class/src/http.js~Http.html">Http</a> class is a client instance that is used to create <a href="https://nrf110.github.io/rx-http/class/src/request.js~Request.html">Request</a> objects.  Requests created by a client instance
 inherit the settings of that instance as defaults, which can be overridden
 on the request.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">import { Http } from &apos;rx-http&apos;;
@@ -191,7 +205,7 @@ new Http().addInterceptor(new MyRequestErrorInterceptor());</code>
 <h2 id="request-body">Request Body</h2>
 <p>The <code>body([value, [serializer]])</code> method allows setting the request body.  The <code>value</code> may be a File, Blob, Object, or String.  An instance of a Serializer implementation may be provided here to serialize the data before it is sent to the server.  If no serializer is provided, Serializers.Default will be used.  This serializer attempts to automatically determine the correct built-in Serializer implementation and delegate to it.  If no appropriate implementation is found, it will throw a NoSerializerFoundException.</p>
 <h2 id="response-body">Response Body</h2>
-<p>The <a href="class/src/request.js~Request.html">Response</a> body is itself an RxJS Observable.  For a non-chunked response, it will produce exactly 1 element.  For chunked responses, it will emit each chunk by default.  Response Interceptors can be used to transform chunked or non-chunked response bodies before they are consumed by the body Observable.</p>
+<p>The <a href="https://nrf110.github.io/rx-http/class/src/request.js~Request.html">Response</a> body is itself an RxJS Observable.  For a non-chunked response, it will produce exactly 1 element.  For chunked responses, it will emit each chunk by default.  Response Interceptors can be used to transform chunked or non-chunked response bodies before they are consumed by the body Observable.</p>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">const client = new Http();
 client.get(&apos;/widgets/123&apos;)
   .flatMap((response) =&gt; response.body())

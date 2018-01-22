@@ -1,3 +1,6 @@
+import { isString, isObject, isEmpty, isUndefined, isInteger, assign } from 'lodash';
+import { PropertyValidationError } from 'errors';
+
 /** @private **/
 export function isFile(value) {
   return toString.call(value) === '[object File]';
@@ -11,6 +14,52 @@ export function isFormData(value) {
 /** @private **/
 export function isBlob(value) {
   return toString.call(value) === '[object Blob]';
+}
+
+/** @private **/
+export function isNonEmptyString(value) {
+  return isString(value) && !isEmpty(value.trim());
+}
+
+export function isValidPort(value) {
+  return (isInteger(value) && value > 0) || isNonEmptyString(value);
+}
+
+/** @private **/
+export function property(name, member, value, isValid = (val) => true) {
+  if (isUndefined(value)) {
+    return member.get(this);
+  }
+
+  if (isValid(value)) {
+    member.set(this, value);
+    return this;
+  } else {
+    throw new PropertyValidationError(name, value);
+  }
+}
+
+/** @private **/
+export function mapProperty(member, name, value) {
+  if (!isUndefined(name)) {
+    if (isUndefined(value)) {
+      if (isObject(name)) {
+        // 'name' is actually the entire hash to be set
+        member.set(this, name);
+        return this;
+      }
+      // name is the string key to get the value of
+      return member.get(this)[name];
+    }
+    // 'name' and 'value' were both given.  Set the 'name' key to the new value
+    const existing = member.get(this);
+    existing[name] = value;
+    member.set(this, existing);
+    return this;
+  }
+
+  // no name or value given, return a copy of the hash
+  return assign({}, member.get(this));
 }
 
 /** parseUri 1.2.2
@@ -49,11 +98,11 @@ parseUri.options = {
     'path',
     'directory',
     'file',
-    'query',
-    'anchor'
+    'search',
+    'fragment'
   ],
   q: {
-    name: 'queryKey',
+    name: 'query',
     parser: /(?:^|&)([^&=]*)=?([^&]*)/g
   },
   parser: {

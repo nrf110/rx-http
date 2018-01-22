@@ -1,5 +1,5 @@
-import Interceptors from '../../src/interceptors';
-import Response from '../../src/response';
+import Interceptors from '../../../src/interceptors';
+import Response from '../../../src/response';
 
 function failed(message, next) {
   return function(err) {
@@ -17,7 +17,7 @@ describe('ErrorHandling', () => {
           return {};
         }
       }
-      const res = new Response(mockResponse, null, null, null);
+      const res = new Response({ xhr: mockResponse });
 
       Interceptors.ErrorHandling.response(res, failed("Shouldn't call accept", next), (rejected) => {
         expect(rejected).to.equal(res);
@@ -33,7 +33,7 @@ describe('ErrorHandling', () => {
           return {};
         }
       }
-      const res = new Response(mockResponse, null, null, null);
+      const res = new Response({ xhr: mockResponse });
 
       Interceptors.ErrorHandling.response(res, (transformed) => {
         expect(transformed).to.equal(res);

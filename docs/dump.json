@@ -457,7 +457,7 @@
     "__docId__": 19,
     "kind": "file",
     "name": "src/http.js",
-    "content": "import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';\nimport Request from './request';\nimport Interceptors from './interceptors';\nimport XHRProvider from './xhr-provider';\nimport Url from './url';\nimport Path from './path';\nimport { PropertyValidationError } from './errors';\nimport { parseUri } from './utilities';\n\nfunction property(key, isValid) {\n  return function(value) {\n    const settings = _settings.get(this);\n\n    if (isUndefined(value)) {\n      return settings[key];\n    }\n\n    if (isValid(value)) {\n      settings[key] = value;\n      return this;\n    }\n\n    throw new PropertyValidationError(key, value);\n  };\n}\n\nfunction generateRequestMethod(method) {\n  return function(url, options = {}) {\n    return this.request(url, assign({ method }, options));\n  };\n}\n\nconst _settings = new WeakMap();\n\n/**\n * An HTTP client.\n * @class\n * @name Http\n */\nclass Http {\n  /**\n   * @constructor\n   * @param {Object} [options] - A hash of settings for this client.\n   */\n  constructor(options = {}) {\n    const initialSettings = assign({}, Http.defaults, options)\n    _settings.set(this, initialSettings);\n  }\n\n  /**\n   * @method\n   * @name baseUrl\n   * @param {String|Http} [url] - the base URL applied by default to all\n   * requests from this client.\n   * @returns {String|Http} - If url is specified, updates the default baseUrl\n   * for all requests created with this client, and returns the client instance.\n   * If value is ommitted, returns the current baseUrl.\n   */\n  baseUrl(url) {\n    return property('baseUrl', isString).call(this, url);\n  }\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Http} - If value is specified, updates the default request\n   * timeout for all requests created with this client, and returns the client\n   * instance.  If value is ommitted, returns the current timeout value.\n   */\n  timeout(value) {\n    return property('timeout', isInteger).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Http.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    return property('xsrfCookieName', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Http.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    return property('xsrfHeaderName', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Http} - If the value is specified, sets the withCredentials flag\n   * and returns the current Http.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    return property('withCredentials', isBoolean).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Http} - If the value is specified, sets the username and returns\n   * the current Http.  If value is ommitted, returns the current username.\n   */\n  username(value) {\n    return property('username', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Http} - If the value is specified, sets the password and returns\n   * the current Http.  If value is ommitted, returns the current password.\n   */\n  password(value) {\n    return property('password', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [values] - An array of interceptors.\n   * @returns {Interceptor[]|Http} - If values is specified, replaces the default\n   * interceptors for all requests from this client, and returns the client\n   * instance.  If values is ommitted, returns the current array of\n   * interceptors.\n   */\n  interceptors(values) {\n    return property('interceptors', isArray).call(this, values);\n  }\n\n  /**\n   * @method\n   * @name addInterceptor\n   * @param {Interceptor} interceptor - Add the interceptor to the end of the\n   * chain of interceptors.\n   * @return {Http} - The current client instance.\n   */\n  addInterceptor(interceptor) {\n    _settings.get(this).interceptors.push(interceptor);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name removeInterceptor\n   * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.\n   * @returns {Http} - The current client instance.\n   */\n  removeInterceptor(interceptor) {\n    const settings = _settings.get(this);\n    settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name request\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).request('/some/stuff', {\n   *   method: 'POST',\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  request(url, options = {}) {\n    const settings = _settings.get(this);\n    let fullUrl = url;\n\n    if (settings.baseUrl) {\n      fullUrl = Path.join(settings.baseUrl, url);\n    }\n\n    const parsed = parseUri(fullUrl);\n    const config = defaults(options, settings);\n\n    assign(parsed.query, options.query);\n    assign(config, { url: new Url(parsed) });\n\n    return new Request(config);\n  }\n\n  /**\n   * @method\n   * @name head\n   * Helper method for request.  Automatically sets method to HEAD.\n   * @param {string} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  head(url, options) {\n    return generateRequestMethod('HEAD').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name get\n   * Helper method for request.  Automatically sets method to GET.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).get('/some/stuff', {\n   *   retries: 2\n   *   timeout: 10000\n   * })\n   */\n  get(url, options) {\n    return generateRequestMethod('GET').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name options\n   * Helper method for request.  Automatically sets method to OPTIONS.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  options(url, options) {\n    return generateRequestMethod('OPTIONS').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name delete\n   * Helper method for request.  Automatically sets method to DELETE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).delete('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  delete(url, options) {\n    return generateRequestMethod('DELETE').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name trace\n   * Helper method for request.  Automatically sets method to TRACE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).trace('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  trace(url, options) {\n    return generateRequestMethod('TRACE').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name post\n   * Helper method for request.  Automatically sets method to POST.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).post('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  post(url, options) {\n    return generateRequestMethod('POST').call(this, url, options);\n  }\n\n  /** @method\n  * @name put\n  * Helper method for request.  Automatically sets method to PUT.\n  * @param {String} url - the URL where the request will be sent.\n  * @param {Object} [options] - add/override settings for this request.\n  * @return {Request}\n  * @example\n  * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).put('/some/stuff', {\n  *   body: { foo: \"bar\", baz: 1 },\n  *   timeout: 10000\n  * })\n  **/\n  put(url, options) {\n    return generateRequestMethod('PUT').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name patch\n   * Helper method for request.  Automatically sets method to PATCH.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).patch('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  patch(url, options) {\n    return generateRequestMethod('PATCH').call(this, url, options);\n  }\n}\n\nHttp.defaults = {\n  baseUrl: '',\n  retries: 0,\n  timeout: 30000,\n  xsrfCookieName: 'XSRF-TOKEN',\n  xsrfHeaderName: 'X-XSRF-TOKEN',\n  withCredentials: false,\n  interceptors: [\n    Interceptors.MethodOverride,\n    Interceptors.BodyTransformer,\n    Interceptors.XSRF,\n    Interceptors.ErrorHandling\n  ],\n  provider: XHRProvider\n};\n\nexport default Http;\n",
+    "content": "import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults, remove } from 'lodash';\nimport Request from './request';\nimport Interceptors from './interceptors';\nimport XHRProvider from './xhr-provider';\nimport Url from './url';\nimport Path from './path';\nimport { PropertyValidationError } from './errors';\nimport { parseUri } from './utilities';\n\nfunction property(key, isValid) {\n  return function(value) {\n    const settings = _settings.get(this);\n\n    if (isUndefined(value)) {\n      return settings[key];\n    }\n\n    if (isValid(value)) {\n      settings[key] = value;\n      return this;\n    }\n\n    throw new PropertyValidationError(key, value);\n  };\n}\n\nfunction generateRequestMethod(method) {\n  return function(url, options = {}) {\n    return this.request(url, assign({ method }, options));\n  };\n}\n\nconst _settings = new WeakMap();\n\n/**\n * An HTTP client.\n * @class\n * @name Http\n */\nclass Http {\n  /**\n   * @constructor\n   * @param {Object} [options] - A hash of settings for this client.\n   */\n  constructor(options = {}) {\n    const initialSettings = assign({}, Http.defaults, options)\n    _settings.set(this, initialSettings);\n  }\n\n  /**\n   * @method\n   * @name baseUrl\n   * @param {String|Http} [url] - the base URL applied by default to all\n   * requests from this client.\n   * @returns {String|Http} - If url is specified, updates the default baseUrl\n   * for all requests created with this client, and returns the client instance.\n   * If value is ommitted, returns the current baseUrl.\n   */\n  baseUrl(url) {\n    return property('baseUrl', isString).call(this, url);\n  }\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Http} - If value is specified, updates the default request\n   * timeout for all requests created with this client, and returns the client\n   * instance.  If value is ommitted, returns the current timeout value.\n   */\n  timeout(value) {\n    return property('timeout', isInteger).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Http.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    return property('xsrfCookieName', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Http} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Http.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    return property('xsrfHeaderName', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Http} - If the value is specified, sets the withCredentials flag\n   * and returns the current Http.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    return property('withCredentials', isBoolean).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name user\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Http} - If the value is specified, sets the username and returns\n   * the current Http.  If value is ommitted, returns the current username.\n   */\n  user(value) {\n    return property('user', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Http} - If the value is specified, sets the password and returns\n   * the current Http.  If value is ommitted, returns the current password.\n   */\n  password(value) {\n    return property('password', isString).call(this, value);\n  }\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [values] - An array of interceptors.\n   * @returns {Interceptor[]|Http} - If values is specified, replaces the default\n   * interceptors for all requests from this client, and returns the client\n   * instance.  If values is ommitted, returns the current array of\n   * interceptors.\n   */\n  interceptors(values) {\n    return property('interceptors', isArray).call(this, values);\n  }\n\n  /**\n   * @method\n   * @name addInterceptor\n   * @param {Interceptor} interceptor - Add the interceptor to the end of the\n   * chain of interceptors.\n   * @return {Http} - The current client instance.\n   */\n  addInterceptor(interceptor) {\n    _settings.get(this).interceptors.push(interceptor);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name removeInterceptor\n   * @param {Interceptor} interceptor - Remove the interceptor from the chain of interceptors.\n   * @returns {Http} - The current client instance.\n   */\n  removeInterceptor(interceptor) {\n    const settings = _settings.get(this);\n    settings.interceptors = remove(settings.interceptors, (i) => i === interceptor);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name request\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).request('/some/stuff', {\n   *   method: 'POST',\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  request(url, options = {}) {\n    const settings = _settings.get(this);\n    let fullUrl = url;\n\n    if (settings.baseUrl) {\n      fullUrl = Path.join(settings.baseUrl, url);\n    }\n\n    const parsed = parseUri(fullUrl);\n    const config = defaults(options, settings);\n\n    assign(parsed.query, options.query);\n    assign(config, { url: new Url(parsed) });\n\n    return new Request(config);\n  }\n\n  /**\n   * @method\n   * @name head\n   * Helper method for request.  Automatically sets method to HEAD.\n   * @param {string} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  head(url, options) {\n    return generateRequestMethod('HEAD').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name get\n   * Helper method for request.  Automatically sets method to GET.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).get('/some/stuff', {\n   *   retries: 2\n   *   timeout: 10000\n   * })\n   */\n  get(url, options) {\n    return generateRequestMethod('GET').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name options\n   * Helper method for request.  Automatically sets method to OPTIONS.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).head('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  options(url, options) {\n    return generateRequestMethod('OPTIONS').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name delete\n   * Helper method for request.  Automatically sets method to DELETE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).delete('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  delete(url, options) {\n    return generateRequestMethod('DELETE').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name trace\n   * Helper method for request.  Automatically sets method to TRACE.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).trace('/some/stuff', {\n   *   retries: 2,\n   *   timeout: 10000\n   * })\n   */\n  trace(url, options) {\n    return generateRequestMethod('TRACE').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name post\n   * Helper method for request.  Automatically sets method to POST.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).post('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  post(url, options) {\n    return generateRequestMethod('POST').call(this, url, options);\n  }\n\n  /** @method\n  * @name put\n  * Helper method for request.  Automatically sets method to PUT.\n  * @param {String} url - the URL where the request will be sent.\n  * @param {Object} [options] - add/override settings for this request.\n  * @return {Request}\n  * @example\n  * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).put('/some/stuff', {\n  *   body: { foo: \"bar\", baz: 1 },\n  *   timeout: 10000\n  * })\n  **/\n  put(url, options) {\n    return generateRequestMethod('PUT').call(this, url, options);\n  }\n\n  /**\n   * @method\n   * @name patch\n   * Helper method for request.  Automatically sets method to PATCH.\n   * @param {String} url - the URL where the request will be sent.\n   * @param {Object} [options] - add/override settings for this request.\n   * @return {Request}\n   * @example\n   * new Http({ baseUrl: 'http://mydomain.com', timeout: 5000 }).patch('/some/stuff', {\n   *   body: { foo: \"bar\", baz: 1 },\n   *   timeout: 10000\n   * })\n   */\n  patch(url, options) {\n    return generateRequestMethod('PATCH').call(this, url, options);\n  }\n}\n\nHttp.defaults = {\n  baseUrl: '',\n  retries: 0,\n  timeout: 30000,\n  xsrfCookieName: 'XSRF-TOKEN',\n  xsrfHeaderName: 'X-XSRF-TOKEN',\n  withCredentials: false,\n  interceptors: [\n    Interceptors.MethodOverride,\n    Interceptors.BodyTransformer,\n    Interceptors.XSRF,\n    Interceptors.ErrorHandling\n  ],\n  provider: XHRProvider\n};\n\nexport default Http;\n",
     "static": true,
     "longname": "src/http.js",
     "access": null,
@@ -844,12 +844,12 @@
   {
     "__docId__": 30,
     "kind": "method",
-    "name": "username",
+    "name": "user",
     "memberof": "src/http.js~Http",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/http.js~Http#username",
+    "longname": "src/http.js~Http#user",
     "access": null,
     "description": "",
     "lineNumber": 118,
@@ -1774,7 +1774,7 @@
     "__docId__": 51,
     "kind": "file",
     "name": "src/interceptors/body-transformer.js",
-    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Interceptor from '../interceptor';\n\n/**\n * Tries to automatically detect the response content type and deserialize the\n * raw body into the appropriate type.\n * @class\n * @name BodyTransformer\n */\nexport default class BodyTransformer extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    const body = request.body();\n\n    if (!!body) {\n      const serializer = request.serializer();\n      const contentType = request.contentType();\n\n      request\n        .contentType(contentType || serializer.contentType)\n        .body(serializer.serialize(body));\n    }\n\n    accept(request);\n  }\n}\n",
+    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Interceptor from '../interceptor';\n\n/**\n * Tries to automatically detect the response content type and deserialize the\n * raw body into the appropriate type.\n * @class\n * @name BodyTransformer\n */\nexport default class BodyTransformer extends Interceptor {\n  /**\n   * Transforms (or fails) an outgoing request.\n   * @method\n   * @name request\n   * @param {Request} request - The request to be processed\n   * @param {Function<Request>} accept - called on success to process a (potentially transformed) {@link Request}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  request(request, accept, reject) {\n    const body = request.body();\n\n    if (!!body) {\n      const serializer = request.serializer();\n      const contentType = request.contentType();\n      \n      request\n        .contentType(contentType || serializer.contentType)\n        .body(serializer.serialize(body));\n    }\n\n    accept(request);\n  }\n}\n",
     "static": true,
     "longname": "src/interceptors/body-transformer.js",
     "access": null,
@@ -1860,7 +1860,7 @@
     "__docId__": 54,
     "kind": "file",
     "name": "src/interceptors/error-handling.js",
-    "content": "import Interceptor from '../interceptor';\n\n/**\n * Rejects a response with a non-20x status-code.\n * @class\n * @name ErrorHandling\n */\nexport default class ErrorHandling extends Interceptor {\n  /**\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  response(response, accept, reject) {\n    if (response.status() / 100 === 2) {\n      accept(response);\n    } else {\n      reject(response);\n    }\n  }\n}\n",
+    "content": "import Interceptor from '../interceptor';\n\n/**\n * Rejects a response with a non-20x status-code.\n * @class\n * @name ErrorHandling\n */\nexport default class ErrorHandling extends Interceptor {\n  /**\n   * @method\n   * @name response\n   * @param {Response} response - The response to be processed\n   * @param {Function<Response>} accept - called on success to process a (potentially transformed) {@link Response}\n   * @param {Function} reject - called on failure to pass an error\n   */\n  response(response, accept, reject) {\n    if (Math.floor(response.status() / 100) === 2) {\n      accept(response);\n    } else {\n      reject(response);\n    }\n  }\n}\n",
     "static": true,
     "longname": "src/interceptors/error-handling.js",
     "access": null,
@@ -2231,7 +2231,7 @@
     "__docId__": 68,
     "kind": "file",
     "name": "src/request.js",
-    "content": "import { isUndefined, identity, assign, isString, isObject } from 'lodash';\nimport { PropertyValidationError } from './errors';\nimport Path from './path';\nimport Url from './url';\nimport { parseUri } from './utilities';\nimport Serializers from './serializers';\n\nlet _method = new WeakMap();\nlet _headers = new WeakMap();\nlet _timeout = new WeakMap();\nlet _responseType = new WeakMap();\nlet _body = new WeakMap();\nlet _serializer = new WeakMap();\nlet _url = new WeakMap();\nlet _interceptors = new WeakMap();\nlet _xsrfCookieName = new WeakMap();\nlet _xsrfHeaderName = new WeakMap();\nlet _withCredentials = new WeakMap();\nlet _username = new WeakMap();\nlet _password = new WeakMap();\nlet _provider = new WeakMap();\n\n/**\n * A Request should only ever be created by an instance of {@link Http}\n * @class\n * @name Request\n */\nexport default class Request {\n  /**\n   * @constructor\n   * @param {Object} config - Override default settings for this Request only.\n   */\n  constructor(config) {\n    _method.set(this, config.method || null);\n    _headers.set(this, config.headers || {});\n    _timeout.set(this, config.timeout || null);\n    _body.set(this, config.body || null);\n    _url.set(this, config.url || null);\n    _interceptors.set(this, config.interceptors || {})\n    _xsrfCookieName.set(this, config.xsrfCookieName);\n    _xsrfHeaderName.set(this, config.xsrfHeaderName);\n    _withCredentials.set(this, !!config.withCredentials);\n    _username.set(this, config.username || null);\n    _password.set(this, config.password || null);\n    _provider.set(this, config.provider);\n  }\n\n  /**\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   */\n  method(value) {\n    if (isUndefined(value)) {\n     return _method.get(this);\n    }\n\n    _method.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   */\n  header(name, value) {\n    let headers = _headers.get(this);\n    if (isUndefined(value)) {\n      return headers[name];\n    }\n    headers[name] = value.toString();\n    return this;\n  }\n\n  /**\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   */\n  headers(value) {\n    if (isUndefined(value)) {\n      return assign({}, _headers.get(this));\n    }\n\n    _headers.set(this, value);\n    return this;\n  }\n\n  /**\n   * Convenience method for getting/setting the Content-Type header.\n   * @method\n   * @name contentType\n   * @param {String} [value] - The value of the Content-Type header\n   * @returns {String|Request} - If value is specified, sets the\n   * Content-Type header.  If value is ommitted, returns the current value\n   * of the Content-Type header (or undefined);\n   */\n  contentType(value) {\n    const headers = _headers.get(this);\n    const currentEntry = Object.entries(headers).find((header) => header[0].toLowerCase() === 'content-type');\n\n    if (isUndefined(value)) {\n      return currentEntry[0];\n    }\n\n    headers[currentEntry] = value;\n    return this;\n  }\n\n  /**\n   * XHRProvider only - sets the responseType field of the {@link XMLHttpRequest}\n   *\n   * @method\n   * @name responseType\n   * @param {String} [value] - The expected responseType\n   * @returns {String|Request} -  If value is specified, sets the responseType\n   * for this request, and returns the current request.  If value is ommitted,\n   * returns the current responseType value.\n   */\n  responseType(value) {\n    if (isUndefined(value)) {\n      return _responseType.get(this);\n    }\n\n    _responseType.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Request} - If value is specified, sets the timeout\n   * for this request, and returns the current request. If value is ommitted,\n   * returns the current timeout value.\n   */\n  timeout(value) {\n    if (isUndefined(value)) {\n      return _timeout.get(this);\n    }\n\n    _timeout.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name body\n   * @param {Serializer} [value] - The serializer for the body\n   * @returns {Serializer|Request} - If value is specified, sets the Serializer\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current Serializer\n   */\n  serializer(value) {\n    if (isUndefined(value)) {\n      return _serializer.get(this);\n    }\n\n    _serializer.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @param {Serializer} [serializer] - The serializer for the body\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   */\n  body(value, serializer) {\n    if (isUndefined(value)) {\n     return _body.get(this);\n    }\n\n    _body.set(this, value);\n    _serializer.set(this, serializer || new Serializers.Default());\n\n    return this;\n  }\n\n  /**\n   * @method\n   * @name url\n   * @param {Url} [value] - The {@link Url} for this request.\n   * @returns {Url|Request} - If value is specified, sets the {@link Url} for\n   * this request and returns the current Request.  If value is ommitted,\n   * returns the current {@link Url}.\n   */\n  url(value) {\n    if (isUndefined(value)) {\n      return _url.get(this);\n    }\n\n    if (value instanceof Url) {\n      _url.set(this, value);\n      return this;\n    }\n\n    if (isString(value) || isObject(value)) {\n      const newUrl = Url.factory(url);\n      if (newUrl.isAbsolute()) {\n        _url.set(this, newUrl);\n        return this;\n      } else if (_url.get(this) && _url.get().isAbsolute()) {\n        _url.set(this, _url.get(this).merge(newUrl));\n        return this;\n      }\n    }\n\n    throw new PropertyValidationError('url', url);\n  }\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [value] - The set of interceptors to be run against this Request and/or Response\n   * @returns {Interceptor[]|Request} - If value is specified, overrides the current set of interceptors\n   * for this Request and/or Response and returns the current Request.  If value is ommitted,\n   * returns the current set of interceptors.\n   */\n  interceptors(value) {\n    if (isUndefined(value)) {\n      return _interceptors.get(this);\n    }\n    _interceptors.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    if (isUndefined(value)) {\n      return _xsrfCookieName.get(this);\n    }\n    _xsrfCookieName.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    if (isUndefined(value)) {\n      return _xsrfHeaderName.get(this);\n    }\n    _xsrfHeaderName.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    if (isUndefined(value)) {\n      return this.config.withCredentials = value;\n    }\n    this.config.withCredentials = value;\n    return this;\n  }\n\n  /**\n   * @method\n   * @name username\n   * @param {String} [value] - Basic auth username\n   * @returns {String|Request} - If the value is specified, sets the username and returns\n   * the current Request.  If value is ommitted, retursn the current username.\n   */\n  username(value) {\n    if (isUndefined(value)) {\n      return _username.get(this);\n    }\n    _username.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   */\n  password(value) {\n    if (isUndefined(value)) {\n      return _password.get(this);\n    }\n    _password.set(this, value);\n    return this;\n  }\n\n  /**\n   * @method\n   * @name execute\n   * @returns {Object} - Executes the request and returns an object containing\n   * the response, uploadProgress, and downloadProgress streams.\n   * @example\n   * var streams = request.execute();\n   * streams.flatMap(response => response.body()).forEach((body) => console.log(body));\n   * streams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));\n   * streams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));\n   */\n  execute() {\n    const provider = _provider.get(this);\n    return provider(this);\n  };\n}\n",
+    "content": "import { isUndefined, identity, assign, isString, isObject } from 'lodash';\nimport { PropertyValidationError } from './errors';\nimport Path from './path';\nimport Url from './url';\nimport { parseUri } from './utilities';\nimport Serializers from './serializers';\n\nlet _method = new WeakMap();\nlet _headers = new WeakMap();\nlet _timeout = new WeakMap();\nlet _responseType = new WeakMap();\nlet _body = new WeakMap();\nlet _serializer = new WeakMap();\nlet _url = new WeakMap();\nlet _interceptors = new WeakMap();\nlet _xsrfCookieName = new WeakMap();\nlet _xsrfHeaderName = new WeakMap();\nlet _withCredentials = new WeakMap();\nlet _user = new WeakMap();\nlet _password = new WeakMap();\nlet _provider = new WeakMap();\n\n/**\n * A Request should only ever be created by an instance of {@link Http}\n * @class\n * @name Request\n */\nexport default class Request {\n  /**\n   * @constructor\n   * @param {Object} config - Override default settings for this Request only.\n   */\n  constructor(config) {\n    _method.set(this, config.method || null);\n    _headers.set(this, config.headers || {});\n    _timeout.set(this, config.timeout || null);\n    _body.set(this, config.body || null);\n    _url.set(this, config.url || null);\n    _interceptors.set(this, config.interceptors || {})\n    _xsrfCookieName.set(this, config.xsrfCookieName);\n    _xsrfHeaderName.set(this, config.xsrfHeaderName);\n    _withCredentials.set(this, !!config.withCredentials);\n    _user.set(this, config.user || null);\n    _password.set(this, config.password || null);\n    _provider.set(this, config.provider);\n  }\n\n  /**\n   * @method\n   * @name method\n   * @param {String} [value] - The HTTP method for this request\n   * @returns {String|Request} - If value is specified, sets the HTTP method\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current HTTP method\n   */\n  method(value) {\n    return property.call(this, _method, value);\n  }\n\n  /**\n   * @method\n   * @name header\n   * @param {String} name - The name of the header\n   * @param {String} [value] - The value to assign to the header\n   * @returns {String|Request} - If value is specified, sets the header\n   * and returns the current Request.  If value is ommitted, returns the\n   * value for the header.\n   */\n  header(name, value) {\n    let headers = _headers.get(this);\n    if (isUndefined(value)) {\n      return headers[name];\n    }\n    headers[name] = value.toString();\n    return this;\n  }\n\n  /**\n   * @method\n   * @name headers\n   * @param {Object} [value] - The hash of headers to send with this request.\n   * Replaces any existing headers\n   * @returns {Object|Request} - If value is specified, sets the headers\n   * and returns the current Request.  If value is ommitted, returns a copy\n   * of the current headers.\n   */\n  headers(value) {\n    if (isUndefined(value)) {\n      return assign({}, _headers.get(this));\n    }\n\n    _headers.set(this, value);\n    return this;\n  }\n\n  /**\n   * Convenience method for getting/setting the Content-Type header.\n   * @method\n   * @name contentType\n   * @param {String} [value] - The value of the Content-Type header\n   * @returns {String|Request} - If value is specified, sets the\n   * Content-Type header.  If value is ommitted, returns the current value\n   * of the Content-Type header (or undefined);\n   */\n  contentType(value) {\n    const headers = _headers.get(this);\n    const currentEntry = Object.entries(headers).find((header) => header[0].toLowerCase() === 'content-type');\n\n    if (isUndefined(value)) {\n      if (!!currentEntry) return currentEntry[1];\n      else return;\n    }\n\n    if (!!currentEntry) headers[currentEntry[0]] = value;\n    else headers['Content-Type'] = value;\n\n    return this;\n  }\n\n  /**\n   * XHRProvider only - sets the responseType field of the {@link XMLHttpRequest}\n   *\n   * @method\n   * @name responseType\n   * @param {String} [value] - The expected responseType\n   * @returns {String|Request} -  If value is specified, sets the responseType\n   * for this request, and returns the current request.  If value is ommitted,\n   * returns the current responseType value.\n   */\n  responseType(value) {\n    return property.call(this, _responseType, value);\n  }\n\n  /**\n   * @method\n   * @name timeout\n   * @param {Number} [value] - The request timeout in milliseconds\n   * @returns {Number|Request} - If value is specified, sets the timeout\n   * for this request, and returns the current request. If value is ommitted,\n   * returns the current timeout value.\n   */\n  timeout(value) {\n    return property.call(this, _timeout, value);\n  }\n\n  /**\n   * @method\n   * @name body\n   * @param {Serializer} [value] - The serializer for the body\n   * @returns {Serializer|Request} - If value is specified, sets the Serializer\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current Serializer\n   */\n  serializer(value) {\n    return property.call(this, _serializer, value);\n  }\n\n  /**\n   * @method\n   * @name body\n   * @param {Object|FormData|Blob|File|String} [value] - The body for this request\n   * @param {Serializer} [serializer] - The serializer for the body\n   * @returns {Object|FormData|Blob|File|String|Request} - If value is specified, sets the body\n   * for this request and returns the current Request.  If value is ommitted,\n   * returns the current body\n   */\n  body(value, serializer) {\n    if (isUndefined(value)) {\n     return _body.get(this);\n    }\n\n    _body.set(this, value);\n    _serializer.set(this, serializer || new Serializers.Default());\n\n    return this;\n  }\n\n  /**\n   * @method\n   * @name url\n   * @param {Url} [value] - The {@link Url} for this request.\n   * @returns {Url|Request} - If value is specified, sets the {@link Url} for\n   * this request and returns the current Request.  If value is ommitted,\n   * returns the current {@link Url}.\n   */\n  url(value) {\n    if (isUndefined(value)) {\n      return _url.get(this);\n    }\n\n    if (value instanceof Url) {\n      _url.set(this, value);\n      return this;\n    }\n\n    if (isString(value) || isObject(value)) {\n      const newUrl = Url.factory(url);\n      if (newUrl.isAbsolute()) {\n        _url.set(this, newUrl);\n        return this;\n      } else if (_url.get(this) && _url.get().isAbsolute()) {\n        _url.set(this, _url.get(this).merge(newUrl));\n        return this;\n      }\n    }\n\n    throw new PropertyValidationError('url', url);\n  }\n\n  /**\n   * @method\n   * @name interceptors\n   * @param {Interceptor[]} [value] - The set of interceptors to be run against this Request and/or Response\n   * @returns {Interceptor[]|Request} - If value is specified, overrides the current set of interceptors\n   * for this Request and/or Response and returns the current Request.  If value is ommitted,\n   * returns the current set of interceptors.\n   */\n  interceptors(value) {\n    return property.call(this, _interceptors, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfCookieName\n   * @param {String} [value] - The name of the XSRF cookie\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Cookie\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfCookieName(value) {\n    return property.call(this, _xsrfCookieName, value);\n  }\n\n  /**\n   * @method\n   * @name xsrfHeaderName\n   * @param {String} [value] - The name of the XSRF header\n   * @returns {String|Request} - If the value is specified, sets the name of the XSRF Header\n   * and returns the current Request.  If value is ommitted, returns the current name.\n   */\n  xsrfHeaderName(value) {\n    return property.call(this, _xsrfHeaderName, value);\n  }\n\n  /**\n   * @method\n   * @name withCredentials\n   * @param {Boolean} [value] - Flag indicating whether cross-site AccessControl\n   * requests should be made using cookies, authorization headers, or TLS client\n   * certificates.  More detail: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials\n   * @returns {Boolean|Request} - If the value is specified, sets the withCredentials flag\n   * and returns the current Request.  If value is ommitted, returns the current\n   * value of the flag.\n   */\n  withCredentials(value) {\n    return property.call(this, _withCredentials, value);\n  }\n\n  /**\n   * @method\n   * @name user\n   * @param {String} [value] - Basic auth user\n   * @returns {String|Request} - If the value is specified, sets the user and returns\n   * the current Request.  If value is ommitted, retursn the current user.\n   */\n  user(value) {\n    return property.call(this, _user, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value] - Basic auth password\n   * @returns {String|Request} - If the value is specified, sets the password and returns\n   * the current Request.  If value is ommitted, retursn the current password.\n   */\n  password(value) {\n    return property.call(this, _password, value);\n  }\n\n  /**\n   * @method\n   * @name execute\n   * @returns {Object} - Executes the request and returns an object containing\n   * the response, uploadProgress, and downloadProgress streams.\n   * @example\n   * var streams = request.execute();\n   * streams.flatMap(response => response.body()).forEach((body) => console.log(body));\n   * streams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));\n   * streams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));\n   */\n  execute() {\n    const provider = _provider.get(this);\n    return provider(this);\n  };\n}\n",
     "static": true,
     "longname": "src/request.js",
     "access": null,
@@ -2527,10 +2527,10 @@
   {
     "__docId__": 80,
     "kind": "variable",
-    "name": "_username",
+    "name": "_user",
     "memberof": "src/request.js",
     "static": true,
-    "longname": "src/request.js~_username",
+    "longname": "src/request.js~_user",
     "access": null,
     "export": false,
     "importPath": "rx-http/src/request.js",
@@ -2709,7 +2709,7 @@
     "longname": "src/request.js~Request#header",
     "access": null,
     "description": "",
-    "lineNumber": 74,
+    "lineNumber": 69,
     "unknown": [
       {
         "tagName": "@method",
@@ -2763,7 +2763,7 @@
     "longname": "src/request.js~Request#headers",
     "access": null,
     "description": "",
-    "lineNumber": 92,
+    "lineNumber": 87,
     "unknown": [
       {
         "tagName": "@method",
@@ -2807,7 +2807,7 @@
     "longname": "src/request.js~Request#contentType",
     "access": null,
     "description": "Convenience method for getting/setting the Content-Type header.",
-    "lineNumber": 110,
+    "lineNumber": 105,
     "unknown": [
       {
         "tagName": "@method",
@@ -2851,7 +2851,7 @@
     "longname": "src/request.js~Request#responseType",
     "access": null,
     "description": "XHRProvider only - sets the responseType field of the {@link XMLHttpRequest}",
-    "lineNumber": 132,
+    "lineNumber": 130,
     "unknown": [
       {
         "tagName": "@method",
@@ -2895,7 +2895,7 @@
     "longname": "src/request.js~Request#timeout",
     "access": null,
     "description": "",
-    "lineNumber": 149,
+    "lineNumber": 142,
     "unknown": [
       {
         "tagName": "@method",
@@ -2939,7 +2939,7 @@
     "longname": "src/request.js~Request#serializer",
     "access": null,
     "description": "",
-    "lineNumber": 166,
+    "lineNumber": 154,
     "unknown": [
       {
         "tagName": "@method",
@@ -2983,7 +2983,7 @@
     "longname": "src/request.js~Request#body",
     "access": null,
     "description": "",
-    "lineNumber": 184,
+    "lineNumber": 167,
     "unknown": [
       {
         "tagName": "@method",
@@ -3045,7 +3045,7 @@
     "longname": "src/request.js~Request#url",
     "access": null,
     "description": "",
-    "lineNumber": 203,
+    "lineNumber": 186,
     "unknown": [
       {
         "tagName": "@method",
@@ -3089,7 +3089,7 @@
     "longname": "src/request.js~Request#interceptors",
     "access": null,
     "description": "",
-    "lineNumber": 235,
+    "lineNumber": 218,
     "unknown": [
       {
         "tagName": "@method",
@@ -3133,7 +3133,7 @@
     "longname": "src/request.js~Request#xsrfCookieName",
     "access": null,
     "description": "",
-    "lineNumber": 250,
+    "lineNumber": 229,
     "unknown": [
       {
         "tagName": "@method",
@@ -3177,7 +3177,7 @@
     "longname": "src/request.js~Request#xsrfHeaderName",
     "access": null,
     "description": "",
-    "lineNumber": 265,
+    "lineNumber": 240,
     "unknown": [
       {
         "tagName": "@method",
@@ -3221,7 +3221,7 @@
     "longname": "src/request.js~Request#withCredentials",
     "access": null,
     "description": "",
-    "lineNumber": 283,
+    "lineNumber": 254,
     "unknown": [
       {
         "tagName": "@method",
@@ -3257,15 +3257,15 @@
   {
     "__docId__": 98,
     "kind": "method",
-    "name": "username",
+    "name": "user",
     "memberof": "src/request.js~Request",
     "generator": false,
     "async": false,
     "static": false,
-    "longname": "src/request.js~Request#username",
+    "longname": "src/request.js~Request#user",
     "access": null,
     "description": "",
-    "lineNumber": 298,
+    "lineNumber": 265,
     "unknown": [
       {
         "tagName": "@method",
@@ -3273,7 +3273,7 @@
       },
       {
         "tagName": "@returns",
-        "tagValue": "{String|Request} - If the value is specified, sets the username and returns\nthe current Request.  If value is ommitted, retursn the current username."
+        "tagValue": "{String|Request} - If the value is specified, sets the user and returns\nthe current Request.  If value is ommitted, retursn the current user."
       }
     ],
     "params": [
@@ -3285,7 +3285,7 @@
         "spread": false,
         "optional": true,
         "name": "value",
-        "description": "Basic auth username"
+        "description": "Basic auth user"
       }
     ],
     "return": {
@@ -3295,7 +3295,7 @@
         "Request"
       ],
       "spread": false,
-      "description": "If the value is specified, sets the username and returns\nthe current Request.  If value is ommitted, retursn the current username."
+      "description": "If the value is specified, sets the user and returns\nthe current Request.  If value is ommitted, retursn the current user."
     }
   },
   {
@@ -3309,7 +3309,7 @@
     "longname": "src/request.js~Request#password",
     "access": null,
     "description": "",
-    "lineNumber": 313,
+    "lineNumber": 276,
     "unknown": [
       {
         "tagName": "@method",
@@ -3356,7 +3356,7 @@
     "examples": [
       "var streams = request.execute();\nstreams.flatMap(response => response.body()).forEach((body) => console.log(body));\nstreams.flatmap(response => response.uploadProgress()).forEach((event) => console.log(event));\nstreams.flatMap(response => response.downloadProgress()).forEach((event) => console.log(event));"
     ],
-    "lineNumber": 332,
+    "lineNumber": 291,
     "unknown": [
       {
         "tagName": "@method",
@@ -4176,7 +4176,7 @@
     "__docId__": 128,
     "kind": "file",
     "name": "src/serializers/default-serializer.js",
-    "content": "import { isObject, isString } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport { NoSerializerFoundError } from '../errors';\nimport Serializer from '../serializer';\nimport JsonSerializer from './json-serializer';\nimport FormDataSerializer from './form-data-serializer';\nimport TextSerializer from './text-serializer';\n\nconst contentTypeSerializers = {\n  'text/json': JsonSerializer,\n  'application/json': JsonSerializer,\n  'multipart/form-data': FormDataSerializer,\n  'application/x-www-urlencoded': FormDataSerializer,\n  'text/plain': TextSerializer\n}\n\nfunction autoDetect(body, contentType) {\n  if (isObject(body)) {\n    if (isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {\n      return new FormDataSerializer(contentType);\n    }\n  }\n\n  if (isString(body)) {\n    return new TextSerializer('text/plain');\n  }\n\n  if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {\n    const result = contentTypeSerializers[contentType.toLowerCase()];\n    if (!!result) return result;\n    throw new NoSerializerFoundError(contentType);\n  }\n\n  throw new NoSerializerFoundError('unknown');\n}\n\n/**\n * Serializer that attempts uses the given contentType, or tries to detect\n * the content type in order to delegate to the appropriate built-in\n * {@link Serializer}\n * @class\n * @name DefaultSerializer\n * @extends Serializer\n */\nexport default class DefaultSerializer extends Serializer {\n  /**\n   * @method\n   * @name serialize\n   * @param value - the value to be serialized\n   * @returns the serialized content\n   */\n  serialize(value) {\n    const delegate = autoDetect(value, this.contentType)\n    return delegate.serialize(value);\n  }\n}\n",
+    "content": "import { isObject, isString } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport { NoSerializerFoundError } from '../errors';\nimport Serializer from '../serializer';\nimport JsonSerializer from './json-serializer';\nimport FormDataSerializer from './form-data-serializer';\nimport TextSerializer from './text-serializer';\n\nconst contentTypeSerializers = {\n  'text/json': JsonSerializer,\n  'application/json': JsonSerializer,\n  'multipart/form-data': FormDataSerializer,\n  'application/x-www-urlencoded': FormDataSerializer,\n  'text/plain': TextSerializer\n}\n\nfunction autoDetect(body, contentType) {\n  if (isObject(body)) {\n    if (isFormData(body) || isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {\n      return new FormDataSerializer(contentType);\n    }\n  }\n\n  if (isString(body)) {\n    return new TextSerializer('text/plain');\n  }\n\n  if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {\n    const result = contentTypeSerializers[contentType.toLowerCase()];\n    if (!!result) return new result(contentType);\n    throw new NoSerializerFoundError(contentType);\n  }\n\n  throw new NoSerializerFoundError('unknown');\n}\n\n/**\n * Serializer that attempts uses the given contentType, or tries to detect\n * the content type in order to delegate to the appropriate built-in\n * {@link Serializer}\n * @class\n * @name DefaultSerializer\n * @extends Serializer\n */\nexport default class DefaultSerializer extends Serializer {\n  /**\n   * @method\n   * @name serialize\n   * @param value - the value to be serialized\n   * @returns the serialized content\n   */\n  serialize(value) {\n    const delegate = autoDetect(value, this.contentType)\n    return delegate.serialize(value);\n  }\n}\n",
     "static": true,
     "longname": "src/serializers/default-serializer.js",
     "access": null,
@@ -4322,7 +4322,7 @@
     "__docId__": 133,
     "kind": "file",
     "name": "src/serializers/form-data-serializer.js",
-    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Serializer from '../serializer';\n\n/**\n * @class\n * @name FormDataSerializer\n * @extends Serializer\n */\nexport default class FormDataSerializer extends Serializer {\n  /**\n   * @constructor\n   * @param {String} [contentType] - The value of the Content-Type header\n   */\n  constructor(contentType) {\n    super(contentType || 'multipart/form-data');\n  }\n\n  /**\n   * @method\n   * @name serialize\n   * @param {FormData|Blob|Object} value - The content to convert to a\n   * {@link FormData} value.\n   * @returns {FormData} - The {@link FormData} value to be sent to the server\n   */\n  serialize(value) {\n    if (isFormData(value)) return value;\n\n    const result = new FormData();\n\n    if (isFile(value) || isBlob(value)) {\n      result.append('data', value);\n    }\n\n    if (isObject(value)) {\n      Object.entries(value).forEach((entry) => {\n        result.append(entry[0], entry[1]);\n      });\n    }\n\n    throw `${value} is not an object and cannot be converted to FormData`;\n  }\n}\n",
+    "content": "import { isObject } from 'lodash';\nimport { isFile, isFormData, isBlob } from '../utilities';\nimport Serializer from '../serializer';\n\n/**\n * @class\n * @name FormDataSerializer\n * @extends Serializer\n */\nexport default class FormDataSerializer extends Serializer {\n  /**\n   * @constructor\n   * @param {String} [contentType] - The value of the Content-Type header\n   */\n  constructor(contentType) {\n    super(contentType || 'multipart/form-data');\n  }\n\n  /**\n   * @method\n   * @name serialize\n   * @param {FormData|Blob|Object} value - The content to convert to a\n   * {@link FormData} value.\n   * @returns {FormData} - The {@link FormData} value to be sent to the server\n   */\n  serialize(value) {\n    if (isFormData(value)) return value;\n\n    const result = new FormData();\n\n    if (isFile(value) || isBlob(value)) {\n      result.append('file', value, value.name || 'file')\n      return result;\n    } else if (isObject(value)) {\n      Object.entries(value).forEach((entry) => {\n        if (isFile(entry[1])) result.append(entry[0], entry[1], entry[1].name);\n        else result.append(entry[0], entry[1]);\n      });\n\n      return result;\n    }\n\n    throw `${value} is not an object and cannot be converted to FormData`;\n  }\n}\n",
     "static": true,
     "longname": "src/serializers/form-data-serializer.js",
     "access": null,
@@ -4666,7 +4666,7 @@
     "__docId__": 146,
     "kind": "file",
     "name": "src/url.js",
-    "content": "import {\n  isObject,\n  isString,\n  isUndefined,\n  isEmpty,\n  assign,\n  reduce,\n  endsWith,\n  startsWith,\n  identity,\n  cloneDeep\n} from 'lodash';\nimport { parseUri } from './utilities';\n\nfunction encode(val) {\n  return encodeURIComponent(val)\n    .replace(/%40/gi, '@')\n    .replace(/%3A/gi, ':')\n    .replace(/%24/g, '$')\n    .replace(/%2C/gi, ',')\n    .replace(/%20/g, '+')\n    .replace(/%5B/gi, '[')\n    .replace(/%5D/gi, ']');\n}\n\nfunction property(member, value) {\n  if (isUndefined(value)) {\n    member.get(this);\n  }\n\n  member.set(this);\n  return this;\n}\n\nconst _protocol = new WeakMap();\nconst _user = new WeakMap();\nconst _password = new WeakMap();\nconst _host = new WeakMap();\nconst _port = new WeakMap();\nconst _directory = new WeakMap();\nconst _file = new WeakMap();\nconst _fragment = new WeakMap();\nconst _query = new WeakMap();\n\n/**\n * @class\n * @name Url\n * @param {Object} parts\n */\nclass Url {\n  /**\n   * @constructor\n   * @param {Object} parts\n   */\n  constructor(parts) {\n    if (parts.protocol) _protocol.set(this, parts.protocol);\n    if (parts.user) _user.set(this, parts.user);\n    if (parts.password) _password.set(this, parts.password);\n    if (parts.host) _host.set(this, parts.host);\n    if (parts.port) _port.set(this, parts.port);\n    if (parts.directory) _directory.set(this, parts.directory);\n    if (parts.file) _file.set(this, parts.file);\n    if (parts.fragment) _fragment.set(this, parts.fragment);\n  }\n\n  /**\n   * @method\n   * @name protocol\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the protocol for the url\n   * and returns the current instance.  If value is ommitted, returns the\n   * current protocol.\n   */\n  protocol(value) {\n    return property.call(this, _protocol, value);\n  }\n\n  /**\n   * @method\n   * @name user\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the user and returns\n   * the current instance.  If value is ommitted, returns the current user.\n   */\n  user(value) {\n    return property.call(this, _user, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the password and returns\n   * the current instance.  If value is ommitted, returns the current password.\n   */\n  password(value) {\n    return property.call(this, _password, value);\n  }\n\n  /**\n   * @method\n   * @name host\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the host and returns\n   * the current instance.  If value is ommitted, returns the current host.\n   */\n  host(value) {\n    return property.call(this, _host, value);\n  }\n\n  /**\n   * @method\n   * @name port\n   * @param {String|Number} [value]\n   * @returns {Url|String|Number} - If value is specified, sets the port and returns\n   * the current instance.  If value is ommitted, returns the current port.\n   */\n  port(value) {\n    return property.call(this, _port, value);\n  }\n\n  /**\n   * @method\n   * @name directory\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the directory and returns\n   * the current instance.  If value is ommitted, returns the current directory.\n   */\n  directory(value) {\n    return property.call(this, _directory, value);\n  }\n\n  /**\n   * @method\n   * @name file\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the file and returns\n   * the current instance.  If value is ommitted, returns the current file.\n   */\n  file(value) {\n    return property.call(this, _file, value);\n  }\n\n  /**\n   * @method\n   * @name fragment\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the fragment and returns\n   * the current instance.  If value is ommitted, returns the current fragment.\n   */\n  fragment(value) {\n    return property.call(this, _fragment, value);\n  }\n\n  /**\n   * @method\n   * @name isAbsolute\n   * @returns {Boolean} - true if the url is absolute, false if it is relative.\n   */\n  isAbsolute() {\n    return !!this.host();\n  }\n\n  /**\n   * @method\n   * @name isRelative\n   * @returns {Boolean} - true if the url is relative, false if it is absolute.\n   */\n  isRelative() {\n    return !this.isAbsolute();\n  }\n\n  /**\n   * @method\n   * @name query\n   * @param {String|Object} [name] - The name of the query-string parameter\n   * @param [value] - The value of the query-string parameter\n   * @returns {Object|String|Request} -\n   * If no parameters are specified - returns a copy of the entire query hash.\n   * @example\n   * request.query() // returns { \"foo\": \"bar\" }\n   * If only name is specified, and name is a string - returns the value for the key in the query hash.\n   * @example\n   * request.query(\"foo\") // returns \"bar\"\n   * If only name is specified, and name is an object - replaces the entire query hash\n   * and returns the current Request.\n   * @example\n   * request.query({ \"foo\": \"bar\", \"baz\": 1 }).execute()\n   * If name and value are specified - sets the value of name in the query hash\n   * and returns the current Request.\n   * @example\n   * request.query(\"foo\", \"bar\").execute()\n   */\n  query(name, value) {\n    if (!isUndefined(name)) {\n      if (isUndefined(value)) {\n        if (isObject(name)) {\n          _query.set(this, name);\n          return this;\n        }\n        return _query.get(this)[name];\n      }\n      const existing = _query.get(this);\n      existing[name] = value;\n      return this;\n    }\n\n    return assign({}, _query.get(this));\n  }\n\n  /**\n   * @method\n   * @name userInfo\n   * @returns {String} - returns basic auth credentials in the format\n   * user:password, if both user and password are set.\n   */\n  userInfo() {\n    const u = _user.get(this);\n    const p = _password.get(this);\n\n    if (isString(u) && !isEmpty(u.trim()) && isString(p) && isEmpty(p.trim())) {\n      return `${u}:${p}`;\n    }\n\n    return null;\n  }\n\n  /**\n   * @method\n   * @name authority\n   * @returns {String} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])\n   */\n  authority() {\n    const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : '';\n    const ui = this.userInfo() ? `${this.userInfo()}@` : '';\n    const h = _host.get(this) || '';\n    const p = _port.get(this) ? `:${_port.get(this)}` : '';\n\n    return pr + ui + h + p;\n  }\n\n  /**\n   * @method\n   * @name path\n   * @returns {String} - returns the path portion of the url\n   */\n  path() {\n    const dir = _directory.get(this) || '';\n    const f = _file.get(this) || '';\n\n    if (endsWith(dir, '/')) {\n      if (startsWith(f, '/')) {\n        return dir + f.substring(1);\n      }\n\n      return dir + f;\n    } else if (startsWith(f, '/')) {\n      return dir + f;\n    }\n\n    return `${dir}/${f}`;\n    return '';\n  }\n\n  /**\n   * @method\n   * @name merge\n   * @param {Url} other - the {@link Url} to merge into this one\n   * @returns {Url} - returns a copy of this {@link Url} with the directory,\n   * file, gragment, path, and query portions from taken from other.  If\n   * any of those properties do not exist in other, they will be removed\n   * from the copy.\n   */\n  merge(other) {\n    const copied = cloneDeep(parts);\n    const otherParts = parseUri(other.toString());\n    const propertiesToMerge = ['directory', 'file', 'fragment', 'path', 'query'];\n    propertiesToMerge.forEach((property) => {\n      if (!!otherParts[property]) {\n        copied[property] = otherParts[property];\n      } else if (!!copied[property]) {\n        delete copied[property];\n      }\n    });\n\n    return new Url(copied);\n  }\n\n  /**\n   * @method\n   * @name toString\n   * @param {Function<Object, String>} serializeQuery - a function that can customize\n   * how the query-string hash is rendered in the resulting url\n   * @returns {String}\n   */\n  toString(serializeQuery) {\n    const auth = this.authority();\n    const p = this.path();\n    const f = this.fragment();\n    const querySerializer = serializeQuery || identity;\n    const q = querySerializer(this.query());\n\n    const fullyQualified = (() => {\n      if (endsWith(auth, '/')) {\n        if (endsWith(p, '/')) {\n          return auth + p.substring(1);\n        }\n\n        return auth + p;\n      } else if (startsWith(p, '/')) {\n        return auth + p;\n      }\n\n      return `${auth}/${p}`;\n    })();\n\n    const queryParts = reduce(q, (accum, value, key) => {\n      let pair = `${encode(key)}=${encode(value)}`;\n\n      accum.push(pair);\n      return accum;\n    }, []);\n\n    const fullyQualifiedWithQuery = (() => {\n      if (!isEmpty(queryParts)) {\n        return `${fullyQualified}?${queryParts.join('&')}`;\n      }\n\n      return fullyQualified;\n    })();\n\n    if (!isEmpty(f)) {\n      return `${fullyQualifiedWithQuery}#${f}`;\n    }\n\n    return fullyQualifiedWithQuery;\n  }\n}\n\n/**\n * @function\n * @name factory\n * @param {Object|String} value - A hash containing the Url parts, or a string\n * representation of a Url\n * @returns {Url}\n */\nUrl.factory = (value) => {\n  if (isString(value)) {\n    return new Url(parseUri(value));\n  }\n  return new Url(value);\n}\n\nexport default Url;\n",
+    "content": "import {\n  isObject,\n  isString,\n  isUndefined,\n  isEmpty,\n  assign,\n  reduce,\n  endsWith,\n  startsWith,\n  identity,\n  cloneDeep\n} from 'lodash';\nimport Path from './path';\nimport { parseUri, isNonEmptyString, property } from './utilities';\n\nfunction encode(val) {\n  return encodeURIComponent(val)\n    .replace(/%40/gi, '@')\n    .replace(/%3A/gi, ':')\n    .replace(/%24/g, '$')\n    .replace(/%2C/gi, ',')\n    .replace(/%20/g, '+')\n    .replace(/%5B/gi, '[')\n    .replace(/%5D/gi, ']');\n}\n\nconst _protocol = new WeakMap();\nconst _user = new WeakMap();\nconst _password = new WeakMap();\nconst _host = new WeakMap();\nconst _port = new WeakMap();\nconst _directory = new WeakMap();\nconst _file = new WeakMap();\nconst _fragment = new WeakMap();\nconst _query = new WeakMap();\n\n/**\n * @class\n * @name Url\n * @param {Object} parts\n */\nclass Url {\n  /**\n   * @constructor\n   * @param {Object} parts\n   */\n  constructor(parts = {}) {\n    if (!!parts.protocol) _protocol.set(this, parts.protocol);\n    if (!!parts.user) _user.set(this, parts.user);\n    if (!!parts.password) _password.set(this, parts.password);\n    if (!!parts.host) _host.set(this, parts.host);\n    if (!!parts.port) _port.set(this, parts.port);\n    if (!!parts.directory) _directory.set(this, parts.directory);\n    if (!!parts.file) _file.set(this, parts.file);\n    if (!!parts.fragment) _fragment.set(this, parts.fragment);\n    _query.set(this, parts.query || {});\n  }\n\n  /**\n   * @method\n   * @name protocol\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the protocol for the url\n   * and returns the current instance.  If value is ommitted, returns the\n   * current protocol.\n   */\n  protocol(value) {\n    return property.call(this, _protocol, value);\n  }\n\n  /**\n   * @method\n   * @name user\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the user and returns\n   * the current instance.  If value is ommitted, returns the current user.\n   */\n  user(value) {\n    return property.call(this, _user, value);\n  }\n\n  /**\n   * @method\n   * @name password\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the password and returns\n   * the current instance.  If value is ommitted, returns the current password.\n   */\n  password(value) {\n    return property.call(this, _password, value);\n  }\n\n  /**\n   * @method\n   * @name host\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the host and returns\n   * the current instance.  If value is ommitted, returns the current host.\n   */\n  host(value) {\n    return property.call(this, _host, value);\n  }\n\n  /**\n   * @method\n   * @name port\n   * @param {String|Number} [value]\n   * @returns {Url|String|Number} - If value is specified, sets the port and returns\n   * the current instance.  If value is ommitted, returns the current port.\n   */\n  port(value) {\n    return property.call(this, _port, value);\n  }\n\n  /**\n   * @method\n   * @name directory\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the directory and returns\n   * the current instance.  If value is ommitted, returns the current directory.\n   */\n  directory(value) {\n    return property.call(this, _directory, value);\n  }\n\n  /**\n   * @method\n   * @name file\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the file and returns\n   * the current instance.  If value is ommitted, returns the current file.\n   */\n  file(value) {\n    return property.call(this, _file, value);\n  }\n\n  /**\n   * @method\n   * @name fragment\n   * @param {String} [value]\n   * @returns {Url|String} - If value is specified, sets the fragment and returns\n   * the current instance.  If value is ommitted, returns the current fragment.\n   */\n  fragment(value) {\n    return property.call(this, _fragment, value);\n  }\n\n  /**\n   * @method\n   * @name isAbsolute\n   * @returns {Boolean} - true if the url is absolute, false if it is relative.\n   */\n  isAbsolute() {\n    return !!this.host();\n  }\n\n  /**\n   * @method\n   * @name isRelative\n   * @returns {Boolean} - true if the url is relative, false if it is absolute.\n   */\n  isRelative() {\n    return !this.isAbsolute();\n  }\n\n  /**\n   * @method\n   * @name query\n   * @param {String|Object} [name] - The name of the query-string parameter\n   * @param [value] - The value of the query-string parameter\n   * @returns {Object|String|Request} -\n   * If no parameters are specified - returns a copy of the entire query hash.\n   * @example\n   * request.query() // returns { \"foo\": \"bar\" }\n   * If only name is specified, and name is a string - returns the value for the key in the query hash.\n   * @example\n   * request.query(\"foo\") // returns \"bar\"\n   * If only name is specified, and name is an object - replaces the entire query hash\n   * and returns the current Request.\n   * @example\n   * request.query({ \"foo\": \"bar\", \"baz\": 1 }).execute()\n   * If name and value are specified - sets the value of name in the query hash\n   * and returns the current Request.\n   * @example\n   * request.query(\"foo\", \"bar\").execute()\n   */\n  query(name, value) {\n    if (!isUndefined(name)) {\n      if (isUndefined(value)) {\n        if (isObject(name)) {\n          _query.set(this, name);\n          return this;\n        }\n        return _query.get(this)[name];\n      }\n      const existing = _query.get(this);\n      existing[name] = value;\n      return this;\n    }\n\n    return assign({}, _query.get(this));\n  }\n\n  /**\n   * @method\n   * @name userInfo\n   * @returns {String} - returns basic auth credentials in the format\n   * user:password, if both user and password are set.\n   */\n  userInfo() {\n    const u = _user.get(this);\n    const p = _password.get(this);\n\n    if (isNonEmptyString(u) && isNonEmptyString(p)) {\n      return `${u}:${p}`;\n    }\n\n    return null;\n  }\n\n  /**\n   * @method\n   * @name authority\n   * @returns {String} - returns the authority portion of the url ([protocol]://[userInfo@]host[:port])\n   */\n  authority() {\n    const pr = _protocol.get(this) ? `${_protocol.get(this)}://` : '';\n    const ui = this.userInfo() ? `${this.userInfo()}@` : '';\n    const h = _host.get(this) || '';\n    const p = _port.get(this) ? `:${_port.get(this)}` : '';\n\n    return pr + ui + h + p;\n  }\n\n  /**\n   * @method\n   * @name path\n   * @returns {String} - returns the path portion of the url\n   */\n  path() {\n    const dir = _directory.get(this) || '';\n    const f = _file.get(this) || '';\n\n    return Path.join(dir, f);\n  }\n\n  /**\n   * @method\n   * @name merge\n   * @param {Url} other - the {@link Url} to merge into this one\n   * @returns {Url} - returns a copy of this {@link Url} with the directory,\n   * file, gragment, path, and query portions from taken from other.  If\n   * any of those properties do not exist in other, they will be removed\n   * from the copy.\n   */\n  merge(other) {\n    const copied = cloneDeep(parts);\n    const otherParts = parseUri(other.toString());\n    const propertiesToMerge = ['directory', 'file', 'fragment', 'path', 'query'];\n    propertiesToMerge.forEach((property) => {\n      if (!!otherParts[property]) {\n        copied[property] = otherParts[property];\n      } else if (!!copied[property]) {\n        delete copied[property];\n      }\n    });\n\n    return new Url(copied);\n  }\n\n  /**\n   * @method\n   * @name toString\n   * @param {Function<Object, String>} serializeQuery - a function that can customize\n   * how the query-string hash is rendered in the resulting url\n   * @returns {String}\n   */\n  toString(serializeQuery) {\n    const auth = this.authority();\n    const p = this.path();\n    const f = this.fragment();\n    const querySerializer = serializeQuery || identity;\n    const q = querySerializer(this.query());\n\n    const fullyQualified = (() => {\n      if (endsWith(auth, '/')) {\n        if (endsWith(p, '/')) {\n          return auth + p.substring(1);\n        }\n\n        return auth + p;\n      } else if (startsWith(p, '/')) {\n        return auth + p;\n      }\n\n      return `${auth}/${p}`;\n    })();\n\n    const queryParts = reduce(q, (accum, value, key) => {\n      let pair = `${encode(key)}=${encode(value)}`;\n\n      accum.push(pair);\n      return accum;\n    }, []);\n\n    const fullyQualifiedWithQuery = (() => {\n      if (!isEmpty(queryParts)) {\n        return `${fullyQualified}?${queryParts.join('&')}`;\n      }\n\n      return fullyQualified;\n    })();\n\n    if (!isEmpty(f)) {\n      return `${fullyQualifiedWithQuery}#${f}`;\n    }\n\n    return fullyQualifiedWithQuery;\n  }\n}\n\n/**\n * @function\n * @name factory\n * @param {Object|String} value - A hash containing the Url parts, or a string\n * representation of a Url\n * @returns {Url}\n */\nUrl.factory = (value) => {\n  if (isString(value)) {\n    return new Url(parseUri(value));\n  }\n  return new Url(value);\n}\n\nexport default Url;\n",
     "static": true,
     "longname": "src/url.js",
     "access": null,
@@ -4687,7 +4687,7 @@
     "importPath": "rx-http/src/url.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 16,
     "undocument": true,
     "unknown": [
       {
@@ -4711,19 +4711,17 @@
   },
   {
     "__docId__": 148,
-    "kind": "function",
-    "name": "property",
+    "kind": "variable",
+    "name": "_protocol",
     "memberof": "src/url.js",
-    "generator": false,
-    "async": false,
     "static": true,
-    "longname": "src/url.js~property",
+    "longname": "src/url.js~_protocol",
     "access": null,
     "export": false,
     "importPath": "rx-http/src/url.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 26,
+    "lineNumber": 27,
     "undocument": true,
     "unknown": [
       {
@@ -4731,33 +4729,201 @@
         "tagValue": ""
       }
     ],
-    "params": [
-      {
-        "name": "member",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "value",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
+    "type": {
       "types": [
-        "*"
+        "WeakMap"
       ]
     }
   },
   {
     "__docId__": 149,
     "kind": "variable",
-    "name": "_protocol",
+    "name": "_user",
     "memberof": "src/url.js",
     "static": true,
-    "longname": "src/url.js~_protocol",
+    "longname": "src/url.js~_user",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 150,
+    "kind": "variable",
+    "name": "_password",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_password",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 29,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 151,
+    "kind": "variable",
+    "name": "_host",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_host",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 152,
+    "kind": "variable",
+    "name": "_port",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_port",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 153,
+    "kind": "variable",
+    "name": "_directory",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_directory",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 32,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 154,
+    "kind": "variable",
+    "name": "_file",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_file",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 33,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 155,
+    "kind": "variable",
+    "name": "_fragment",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_fragment",
+    "access": null,
+    "export": false,
+    "importPath": "rx-http/src/url.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 34,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "WeakMap"
+      ]
+    }
+  },
+  {
+    "__docId__": 156,
+    "kind": "variable",
+    "name": "_query",
+    "memberof": "src/url.js",
+    "static": true,
+    "longname": "src/url.js~_query",
     "access": null,
     "export": false,
     "importPath": "rx-http/src/url.js",
@@ -4778,215 +4944,7 @@
     }
   },
   {
-    "__docId__": 150,
-    "kind": "variable",
-    "name": "_user",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_user",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 36,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 151,
-    "kind": "variable",
-    "name": "_password",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_password",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 37,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 152,
-    "kind": "variable",
-    "name": "_host",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_host",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 38,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 153,
-    "kind": "variable",
-    "name": "_port",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_port",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 39,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 154,
-    "kind": "variable",
-    "name": "_directory",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_directory",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 40,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 155,
-    "kind": "variable",
-    "name": "_file",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_file",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 41,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 156,
-    "kind": "variable",
-    "name": "_fragment",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_fragment",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 42,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
     "__docId__": 157,
-    "kind": "variable",
-    "name": "_query",
-    "memberof": "src/url.js",
-    "static": true,
-    "longname": "src/url.js~_query",
-    "access": null,
-    "export": false,
-    "importPath": "rx-http/src/url.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 43,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
-    "type": {
-      "types": [
-        "WeakMap"
-      ]
-    }
-  },
-  {
-    "__docId__": 158,
     "kind": "class",
     "name": "Url",
     "memberof": "src/url.js",
@@ -4997,7 +4955,7 @@
     "importPath": "rx-http/src/url.js",
     "importStyle": "Url",
     "description": "",
-    "lineNumber": 50,
+    "lineNumber": 42,
     "unknown": [
       {
         "tagName": "@class",
@@ -5019,7 +4977,7 @@
     "interface": false
   },
   {
-    "__docId__": 159,
+    "__docId__": 158,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/url.js~Url",
@@ -5029,7 +4987,7 @@
     "longname": "src/url.js~Url#constructor",
     "access": null,
     "description": "",
-    "lineNumber": 55,
+    "lineNumber": 47,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -5050,7 +5008,7 @@
     ]
   },
   {
-    "__docId__": 160,
+    "__docId__": 159,
     "kind": "method",
     "name": "protocol",
     "memberof": "src/url.js~Url",
@@ -5060,7 +5018,7 @@
     "longname": "src/url.js~Url#protocol",
     "access": null,
     "description": "",
-    "lineNumber": 74,
+    "lineNumber": 67,
     "unknown": [
       {
         "tagName": "@method",
@@ -5094,7 +5052,7 @@
     }
   },
   {
-    "__docId__": 161,
+    "__docId__": 160,
     "kind": "method",
     "name": "user",
     "memberof": "src/url.js~Url",
@@ -5104,7 +5062,7 @@
     "longname": "src/url.js~Url#user",
     "access": null,
     "description": "",
-    "lineNumber": 85,
+    "lineNumber": 78,
     "unknown": [
       {
         "tagName": "@method",
@@ -5138,7 +5096,7 @@
     }
   },
   {
-    "__docId__": 162,
+    "__docId__": 161,
     "kind": "method",
     "name": "password",
     "memberof": "src/url.js~Url",
@@ -5148,7 +5106,7 @@
     "longname": "src/url.js~Url#password",
     "access": null,
     "description": "",
-    "lineNumber": 96,
+    "lineNumber": 89,
     "unknown": [
       {
         "tagName": "@method",
@@ -5182,7 +5140,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 162,
     "kind": "method",
     "name": "host",
     "memberof": "src/url.js~Url",
@@ -5192,7 +5150,7 @@
     "longname": "src/url.js~Url#host",
     "access": null,
     "description": "",
-    "lineNumber": 107,
+    "lineNumber": 100,
     "unknown": [
       {
         "tagName": "@method",
@@ -5226,7 +5184,7 @@
     }
   },
   {
-    "__docId__": 164,
+    "__docId__": 163,
     "kind": "method",
     "name": "port",
     "memberof": "src/url.js~Url",
@@ -5236,7 +5194,7 @@
     "longname": "src/url.js~Url#port",
     "access": null,
     "description": "",
-    "lineNumber": 118,
+    "lineNumber": 111,
     "unknown": [
       {
         "tagName": "@method",
@@ -5272,7 +5230,7 @@
     }
   },
   {
-    "__docId__": 165,
+    "__docId__": 164,
     "kind": "method",
     "name": "directory",
     "memberof": "src/url.js~Url",
@@ -5282,7 +5240,7 @@
     "longname": "src/url.js~Url#directory",
     "access": null,
     "description": "",
-    "lineNumber": 129,
+    "lineNumber": 122,
     "unknown": [
       {
         "tagName": "@method",
@@ -5316,7 +5274,7 @@
     }
   },
   {
-    "__docId__": 166,
+    "__docId__": 165,
     "kind": "method",
     "name": "file",
     "memberof": "src/url.js~Url",
@@ -5326,7 +5284,7 @@
     "longname": "src/url.js~Url#file",
     "access": null,
     "description": "",
-    "lineNumber": 140,
+    "lineNumber": 133,
     "unknown": [
       {
         "tagName": "@method",
@@ -5360,7 +5318,7 @@
     }
   },
   {
-    "__docId__": 167,
+    "__docId__": 166,
     "kind": "method",
     "name": "fragment",
     "memberof": "src/url.js~Url",
@@ -5370,7 +5328,7 @@
     "longname": "src/url.js~Url#fragment",
     "access": null,
     "description": "",
-    "lineNumber": 151,
+    "lineNumber": 144,
     "unknown": [
       {
         "tagName": "@method",
@@ -5404,7 +5362,7 @@
     }
   },
   {
-    "__docId__": 168,
+    "__docId__": 167,
     "kind": "method",
     "name": "isAbsolute",
     "memberof": "src/url.js~Url",
@@ -5414,7 +5372,7 @@
     "longname": "src/url.js~Url#isAbsolute",
     "access": null,
     "description": "",
-    "lineNumber": 160,
+    "lineNumber": 153,
     "unknown": [
       {
         "tagName": "@method",
@@ -5436,7 +5394,7 @@
     }
   },
   {
-    "__docId__": 169,
+    "__docId__": 168,
     "kind": "method",
     "name": "isRelative",
     "memberof": "src/url.js~Url",
@@ -5446,7 +5404,7 @@
     "longname": "src/url.js~Url#isRelative",
     "access": null,
     "description": "",
-    "lineNumber": 169,
+    "lineNumber": 162,
     "unknown": [
       {
         "tagName": "@method",
@@ -5468,7 +5426,7 @@
     }
   },
   {
-    "__docId__": 170,
+    "__docId__": 169,
     "kind": "method",
     "name": "query",
     "memberof": "src/url.js~Url",
@@ -5484,7 +5442,7 @@
       "request.query({ \"foo\": \"bar\", \"baz\": 1 }).execute()\nIf name and value are specified - sets the value of name in the query hash\nand returns the current Request.",
       "request.query(\"foo\", \"bar\").execute()"
     ],
-    "lineNumber": 194,
+    "lineNumber": 187,
     "unknown": [
       {
         "tagName": "@method",
@@ -5530,7 +5488,7 @@
     }
   },
   {
-    "__docId__": 171,
+    "__docId__": 170,
     "kind": "method",
     "name": "userInfo",
     "memberof": "src/url.js~Url",
@@ -5540,7 +5498,7 @@
     "longname": "src/url.js~Url#userInfo",
     "access": null,
     "description": "",
-    "lineNumber": 217,
+    "lineNumber": 210,
     "unknown": [
       {
         "tagName": "@method",
@@ -5562,7 +5520,7 @@
     }
   },
   {
-    "__docId__": 172,
+    "__docId__": 171,
     "kind": "method",
     "name": "authority",
     "memberof": "src/url.js~Url",
@@ -5572,7 +5530,7 @@
     "longname": "src/url.js~Url#authority",
     "access": null,
     "description": "",
-    "lineNumber": 233,
+    "lineNumber": 226,
     "unknown": [
       {
         "tagName": "@method",
@@ -5594,7 +5552,7 @@
     }
   },
   {
-    "__docId__": 173,
+    "__docId__": 172,
     "kind": "method",
     "name": "path",
     "memberof": "src/url.js~Url",
@@ -5604,7 +5562,7 @@
     "longname": "src/url.js~Url#path",
     "access": null,
     "description": "",
-    "lineNumber": 247,
+    "lineNumber": 240,
     "unknown": [
       {
         "tagName": "@method",
@@ -5626,7 +5584,7 @@
     }
   },
   {
-    "__docId__": 174,
+    "__docId__": 173,
     "kind": "method",
     "name": "merge",
     "memberof": "src/url.js~Url",
@@ -5636,7 +5594,7 @@
     "longname": "src/url.js~Url#merge",
     "access": null,
     "description": "",
-    "lineNumber": 274,
+    "lineNumber": 256,
     "unknown": [
       {
         "tagName": "@method",
@@ -5669,7 +5627,7 @@
     }
   },
   {
-    "__docId__": 175,
+    "__docId__": 174,
     "kind": "method",
     "name": "toString",
     "memberof": "src/url.js~Url",
@@ -5679,7 +5637,7 @@
     "longname": "src/url.js~Url#toString",
     "access": null,
     "description": "",
-    "lineNumber": 296,
+    "lineNumber": 278,
     "unknown": [
       {
         "tagName": "@method",
@@ -5712,10 +5670,10 @@
     }
   },
   {
-    "__docId__": 176,
+    "__docId__": 175,
     "kind": "file",
     "name": "src/utilities.js",
-    "content": "/** @private **/\nexport function isFile(value) {\n  return toString.call(value) === '[object File]';\n}\n\n/** @private **/\nexport function isFormData(value) {\n  return toString.call(value) === '[object FormData]';\n}\n\n/** @private **/\nexport function isBlob(value) {\n  return toString.call(value) === '[object Blob]';\n}\n\n/** parseUri 1.2.2\n * (c) Steven Levithan <stevenlevithan.com>\n * MIT License\n * @private\n */\nexport function parseUri(str) {\n  let\to = parseUri.options;\n  let m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str);\n  let uri = {};\n  let i = 14;\n\n  while (i--) uri[o.key[i]] = m[i] || '';\n\n  uri[o.q.name] = {};\n  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {\n    if ($1) uri[o.q.name][$1] = $2;\n  });\n\n  return uri;\n};\n\nparseUri.options = {\n  strictMode: false,\n  key: [\n    'source',\n    'protocol',\n    'authority',\n    'userInfo',\n    'user',\n    'password',\n    'host',\n    'port',\n    'relative',\n    'path',\n    'directory',\n    'file',\n    'query',\n    'anchor'\n  ],\n  q: {\n    name: 'queryKey',\n    parser: /(?:^|&)([^&=]*)=?([^&]*)/g\n  },\n  parser: {\n    strict: /^(?:([^:\\/?#]+):)?(?:\\/\\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?))?((((?:[^?#\\/]*\\/)*)([^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/,\n    loose: /^(?:(?![^:@]+:[^:@\\/]*@)([^:\\/?#.]+):)?(?:\\/\\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?)(((\\/(?:[^?#](?![^?#\\/]*\\.[^?#\\/.]+(?:[?#]|$)))*\\/?)?([^?#\\/]*))(?:\\?([^#]*))?(?:#(.*))?)/\n  }\n};\n",
+    "content": "import { isString, isEmpty, isUndefined } from 'lodash';\n\n/** @private **/\nexport function isFile(value) {\n  return toString.call(value) === '[object File]';\n}\n\n/** @private **/\nexport function isFormData(value) {\n  return toString.call(value) === '[object FormData]';\n}\n\n/** @private **/\nexport function isBlob(value) {\n  return toString.call(value) === '[object Blob]';\n}\n\n/** @private **/\nexport function isNonEmptyString(value) {\n  return isString(value) && !isEmpty(value.trim());\n}\n\n/** @private **/\nexport function property(member, value) {\n  if (isUndefined(value)) {\n    return member.get(this);\n  }\n\n  member.set(this, value);\n  return this;\n}\n\n/** parseUri 1.2.2\n * (c) Steven Levithan <stevenlevithan.com>\n * MIT License\n * @private\n */\nexport function parseUri(str) {\n  let\to = parseUri.options;\n  let m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str);\n  let uri = {};\n  let i = 14;\n\n  while (i--) uri[o.key[i]] = m[i] || '';\n\n  uri[o.q.name] = {};\n  uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {\n    if ($1) uri[o.q.name][$1] = $2;\n  });\n\n  return uri;\n};\n\nparseUri.options = {\n  strictMode: false,\n  key: [\n    'source',\n    'protocol',\n    'authority',\n    'userInfo',\n    'user',\n    'password',\n    'host',\n    'port',\n    'relative',\n    'path',\n    'directory',\n    'file',\n    'query',\n    'anchor'\n  ],\n  q: {\n    name: 'queryKey',\n    parser: /(?:^|&)([^&=]*)=?([^&]*)/g\n  },\n  parser: {\n    strict: /^(?:([^:\\/?#]+):)?(?:\\/\\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?))?((((?:[^?#\\/]*\\/)*)([^?#]*))(?:\\?([^#]*))?(?:#(.*))?)/,\n    loose: /^(?:(?![^:@]+:[^:@\\/]*@)([^:\\/?#.]+):)?(?:\\/\\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\\/?#]*)(?::(\\d*))?)(((\\/(?:[^?#](?![^?#\\/]*\\.[^?#\\/.]+(?:[?#]|$)))*\\/?)?([^?#\\/]*))(?:\\?([^#]*))?(?:#(.*))?)/\n  }\n};\n",
     "static": true,
     "longname": "src/utilities.js",
     "access": null,
@@ -5723,7 +5681,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 177,
+    "__docId__": 176,
     "kind": "function",
     "name": "isFile",
     "memberof": "src/utilities.js",
@@ -5736,7 +5694,36 @@
     "importPath": "rx-http/src/utilities.js",
     "importStyle": "{isFile}",
     "description": null,
-    "lineNumber": 2,
+    "lineNumber": 4,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 177,
+    "kind": "function",
+    "name": "isFormData",
+    "memberof": "src/utilities.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/utilities.js~isFormData",
+    "access": "private",
+    "export": true,
+    "importPath": "rx-http/src/utilities.js",
+    "importStyle": "{isFormData}",
+    "description": null,
+    "lineNumber": 9,
     "params": [
       {
         "name": "value",
@@ -5754,18 +5741,18 @@
   {
     "__docId__": 178,
     "kind": "function",
-    "name": "isFormData",
+    "name": "isBlob",
     "memberof": "src/utilities.js",
     "generator": false,
     "async": false,
     "static": true,
-    "longname": "src/utilities.js~isFormData",
+    "longname": "src/utilities.js~isBlob",
     "access": "private",
     "export": true,
     "importPath": "rx-http/src/utilities.js",
-    "importStyle": "{isFormData}",
+    "importStyle": "{isBlob}",
     "description": null,
-    "lineNumber": 7,
+    "lineNumber": 14,
     "params": [
       {
         "name": "value",
@@ -5783,18 +5770,18 @@
   {
     "__docId__": 179,
     "kind": "function",
-    "name": "isBlob",
+    "name": "isNonEmptyString",
     "memberof": "src/utilities.js",
     "generator": false,
     "async": false,
     "static": true,
-    "longname": "src/utilities.js~isBlob",
+    "longname": "src/utilities.js~isNonEmptyString",
     "access": "private",
     "export": true,
     "importPath": "rx-http/src/utilities.js",
-    "importStyle": "{isBlob}",
+    "importStyle": "{isNonEmptyString}",
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 19,
     "params": [
       {
         "name": "value",
@@ -5812,6 +5799,41 @@
   {
     "__docId__": 180,
     "kind": "function",
+    "name": "property",
+    "memberof": "src/utilities.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/utilities.js~property",
+    "access": "private",
+    "export": true,
+    "importPath": "rx-http/src/utilities.js",
+    "importStyle": "{property}",
+    "description": null,
+    "lineNumber": 24,
+    "params": [
+      {
+        "name": "member",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 181,
+    "kind": "function",
     "name": "parseUri",
     "memberof": "src/utilities.js",
     "generator": false,
@@ -5823,7 +5845,7 @@
     "importPath": "rx-http/src/utilities.js",
     "importStyle": "{parseUri}",
     "description": "parseUri 1.2.2\n(c) Steven Levithan <stevenlevithan.com>\nMIT License",
-    "lineNumber": 21,
+    "lineNumber": 38,
     "params": [
       {
         "name": "str",
@@ -5839,7 +5861,7 @@
     }
   },
   {
-    "__docId__": 181,
+    "__docId__": 182,
     "kind": "file",
     "name": "src/xhr-builder.js",
     "content": "import { isInteger, partial, noop } from 'lodash';\n\nconst STATE = {\n  UNSENT: 0,\n  OPEN: 1,\n  HEADERS_RECEIVED: 2,\n  LOADING: 3,\n  DONE: 4\n}\n\n/**\n * Internal class used to construct and XMLHttpRequest\n * @private\n * @class\n * @name XHRBuilder\n */\nexport default class XHRBuilder {\n  constructor() {\n    this.headersReceived = noop;\n    this.downloadProgress = noop;\n    this.uploadProgress = noop;\n    this.complete = noop;\n    this.progress = noop;\n    this.error = noop;\n    this.abort = noop;\n    this.load = noop;\n    this.loadEnd = noop;\n  }\n\n  onHeadersReceived(fn) {\n    this.headersReceived = fn;\n    return this;\n  }\n\n  onDownloadProgress(fn) {\n    this.downloadProgress = fn;\n    return this;\n  }\n\n  onUploadProgress(fn) {\n    this.uploadProgress = fn;\n    return this;\n  }\n\n  onError(fn) {\n    this.error = fn;\n    return this;\n  }\n\n  onAbort(fn) {\n    this.abort = fn;\n    return this;\n  }\n\n  onLoad(fn) {\n    this.load = fn;\n    return this;\n  }\n\n  onLoadEnd(fn) {\n    this.loadEnd = fn;\n    return this;\n  }\n\n  request(req) {\n    this.req = req;\n    return this;\n  }\n\n  build() {\n    const self = this;\n    const request = this.req;\n    const xhr = new XMLHttpRequest();\n\n    const openArgs = [request.method(), request.url().toString(), true];\n    if (request.username()) {\n      openArgs.push(request.username());\n\n      if (request.password()) {\n        openArgs.push(request.password());\n      }\n    }\n\n    if (request.responseType()) {\n      xhr.responseType = request.responseType();\n    }\n\n    xhr.open(...openArgs);\n\n    if (isInteger(request)) {\n      xhr.timeout = request.timeout();\n    }\n\n    const headers = request.headers();\n\n    Object.keys(headers).forEach(headerName => {\n      xhr.setRequestHeader(headerName, headers[headerName]);\n    });\n\n    if (xhr.upload) {\n      xhr.upload.addEventListener('progress', self.uploadProgress);\n      xhr.upload.addEventListener('error', self.error);\n      xhr.upload.addEventListener('abort', self.abort);\n    }\n\n    xhr.addEventListener('progress', self.downloadProgress);\n    xhr.addEventListener('error', self.error);\n    xhr.addEventListener('abort', self.abort);\n    xhr.addEventListener('load', self.load);\n    xhr.addEventListener('loadend', self.loadEnd);\n\n    xhr.addEventListener('readystatechange', (evt) => {\n      if (xhr.readyState === STATE.HEADERS_RECEIVED) {\n        self.headersReceived(evt);\n      }\n    });\n\n    return xhr;\n  }\n}\n",
@@ -5850,7 +5872,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 182,
+    "__docId__": 183,
     "kind": "variable",
     "name": "STATE",
     "memberof": "src/xhr-builder.js",
@@ -5876,7 +5898,7 @@
     }
   },
   {
-    "__docId__": 183,
+    "__docId__": 184,
     "kind": "class",
     "name": "XHRBuilder",
     "memberof": "src/xhr-builder.js",
@@ -5897,7 +5919,7 @@
     "interface": false
   },
   {
-    "__docId__": 184,
+    "__docId__": 185,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5918,7 +5940,7 @@
     "params": []
   },
   {
-    "__docId__": 185,
+    "__docId__": 186,
     "kind": "member",
     "name": "headersReceived",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5941,7 +5963,7 @@
     }
   },
   {
-    "__docId__": 186,
+    "__docId__": 187,
     "kind": "member",
     "name": "downloadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5964,7 +5986,7 @@
     }
   },
   {
-    "__docId__": 187,
+    "__docId__": 188,
     "kind": "member",
     "name": "uploadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -5987,7 +6009,7 @@
     }
   },
   {
-    "__docId__": 188,
+    "__docId__": 189,
     "kind": "member",
     "name": "complete",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6010,7 +6032,7 @@
     }
   },
   {
-    "__docId__": 189,
+    "__docId__": 190,
     "kind": "member",
     "name": "progress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6033,7 +6055,7 @@
     }
   },
   {
-    "__docId__": 190,
+    "__docId__": 191,
     "kind": "member",
     "name": "error",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6056,7 +6078,7 @@
     }
   },
   {
-    "__docId__": 191,
+    "__docId__": 192,
     "kind": "member",
     "name": "abort",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6079,7 +6101,7 @@
     }
   },
   {
-    "__docId__": 192,
+    "__docId__": 193,
     "kind": "member",
     "name": "load",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6102,7 +6124,7 @@
     }
   },
   {
-    "__docId__": 193,
+    "__docId__": 194,
     "kind": "member",
     "name": "loadEnd",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6125,7 +6147,7 @@
     }
   },
   {
-    "__docId__": 194,
+    "__docId__": 195,
     "kind": "method",
     "name": "onHeadersReceived",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6158,7 +6180,7 @@
     }
   },
   {
-    "__docId__": 195,
+    "__docId__": 196,
     "kind": "member",
     "name": "headersReceived",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6181,7 +6203,7 @@
     }
   },
   {
-    "__docId__": 196,
+    "__docId__": 197,
     "kind": "method",
     "name": "onDownloadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6214,7 +6236,7 @@
     }
   },
   {
-    "__docId__": 197,
+    "__docId__": 198,
     "kind": "member",
     "name": "downloadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6237,7 +6259,7 @@
     }
   },
   {
-    "__docId__": 198,
+    "__docId__": 199,
     "kind": "method",
     "name": "onUploadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6270,7 +6292,7 @@
     }
   },
   {
-    "__docId__": 199,
+    "__docId__": 200,
     "kind": "member",
     "name": "uploadProgress",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6293,7 +6315,7 @@
     }
   },
   {
-    "__docId__": 200,
+    "__docId__": 201,
     "kind": "method",
     "name": "onError",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6326,7 +6348,7 @@
     }
   },
   {
-    "__docId__": 201,
+    "__docId__": 202,
     "kind": "member",
     "name": "error",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6349,7 +6371,7 @@
     }
   },
   {
-    "__docId__": 202,
+    "__docId__": 203,
     "kind": "method",
     "name": "onAbort",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6382,7 +6404,7 @@
     }
   },
   {
-    "__docId__": 203,
+    "__docId__": 204,
     "kind": "member",
     "name": "abort",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6405,7 +6427,7 @@
     }
   },
   {
-    "__docId__": 204,
+    "__docId__": 205,
     "kind": "method",
     "name": "onLoad",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6438,7 +6460,7 @@
     }
   },
   {
-    "__docId__": 205,
+    "__docId__": 206,
     "kind": "member",
     "name": "load",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6461,7 +6483,7 @@
     }
   },
   {
-    "__docId__": 206,
+    "__docId__": 207,
     "kind": "method",
     "name": "onLoadEnd",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6494,7 +6516,7 @@
     }
   },
   {
-    "__docId__": 207,
+    "__docId__": 208,
     "kind": "member",
     "name": "loadEnd",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6517,7 +6539,7 @@
     }
   },
   {
-    "__docId__": 208,
+    "__docId__": 209,
     "kind": "method",
     "name": "request",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6550,7 +6572,7 @@
     }
   },
   {
-    "__docId__": 209,
+    "__docId__": 210,
     "kind": "member",
     "name": "req",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6573,7 +6595,7 @@
     }
   },
   {
-    "__docId__": 210,
+    "__docId__": 211,
     "kind": "method",
     "name": "build",
     "memberof": "src/xhr-builder.js~XHRBuilder",
@@ -6599,7 +6621,7 @@
     }
   },
   {
-    "__docId__": 211,
+    "__docId__": 212,
     "kind": "file",
     "name": "src/xhr-provider.js",
     "content": "import { partial, isInteger } from 'lodash';\nimport Rx from 'rxjs';\nimport XHRBuilder from './xhr-builder';\nimport Response from './response';\nimport RequestInterceptorChain from './request-interceptor-chain';\nimport ResponseInterceptorChain from './response-interceptor-chain';\n\n/** @function\n * Provider-implementation for browser-based clients.  Providers are simply\n * functions that take in a {@link Request} and return an RxJS Observable\n * that eventually contains the {@link Response}.\n * @name XHRProvider\n * @param {Request} request\n * @returns {Observable<Response>}\n */\nexport default function XHRProvider(request) {\n  const interceptors = request.interceptors();\n\n  function attempt(observable) {\n    let response;\n    let offset = 0;\n    let body = new Rx.Subject();\n    let uploadProgress = new Rx.Subject();\n    let downloadProgress = new Rx.Subject();\n    let all = [observable, body, uploadProgress, downloadProgress];\n\n    function errorAll(err) {\n      all.forEach(o => o.error(err));\n    }\n\n    function completeAll() {\n      all.forEach(o => o.complete());\n    }\n\n    function nextChunk() {\n      let chunk = xhr.responseText.slice(offset);\n      offset = xhr.responseText.length;\n      body.next(chunk);\n    }\n\n    const xhr = new XHRBuilder()\n      .request(request)\n      .onHeadersReceived((evt) => {\n        response = new Response(\n          xhr,\n          body,\n          uploadProgress,\n          downloadProgress\n        );\n\n        const responseChain = new ResponseInterceptorChain(\n          interceptors,\n          (transformedResponse) => observable.next(transformedResponse),\n          Rx.Observable.throw\n        );\n\n        responseChain.run(response);\n      })\n      .onUploadProgress((evt) => {\n        uploadProgress.next(evt);\n      })\n      .onDownloadProgress((evt) => {\n        downloadProgress.next(evt);\n        if (response.isChunked()) {\n          nextChunk();\n        }\n      })\n      .onLoad((evt) => {\n        if (response.isChunked()) {\n          if (xhr.responseText.length > offset) {\n            nextChunk();\n          }\n        } else {\n          body.next(xhr.responseText);\n        }\n      })\n      .onError(Rx.Observable.throw)\n      .onAbort(errorAll)\n      .onLoadEnd(completeAll)\n      .build();\n\n    const success = transformed => {\n      if (!!transformed.body()) xhr.send(transformed.body());\n      else xhr.send();\n    };\n\n    const requestChain = new RequestInterceptorChain(\n      interceptors,\n      success,\n      (err) => {\n        Rx.Observable.throw(err);\n        completeAll();\n      }\n    );\n\n    requestChain.run(request);\n  }\n\n  return Rx.Observable.create(attempt);\n}\n",
@@ -6610,7 +6632,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 212,
+    "__docId__": 213,
     "kind": "function",
     "name": "XHRProvider",
     "memberof": "src/xhr-provider.js",
@@ -6656,7 +6678,7 @@
     }
   },
   {
-    "__docId__": 214,
+    "__docId__": 215,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -6668,7 +6690,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 215,
+    "__docId__": 216,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -6680,7 +6702,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 216,
+    "__docId__": 217,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -6692,7 +6714,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 217,
+    "__docId__": 218,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -6704,7 +6726,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 218,
+    "__docId__": 219,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -6716,7 +6738,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 219,
+    "__docId__": 220,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -6728,7 +6750,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 220,
+    "__docId__": 221,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -6740,7 +6762,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 221,
+    "__docId__": 222,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -6752,7 +6774,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 222,
+    "__docId__": 223,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -6764,7 +6786,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 223,
+    "__docId__": 224,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -6776,7 +6798,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 224,
+    "__docId__": 225,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -6788,7 +6810,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 225,
+    "__docId__": 226,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -6800,7 +6822,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 226,
+    "__docId__": 227,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -6812,7 +6834,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 227,
+    "__docId__": 228,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -6824,7 +6846,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 228,
+    "__docId__": 229,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -6836,7 +6858,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 229,
+    "__docId__": 230,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -6848,7 +6870,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 230,
+    "__docId__": 231,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -6860,7 +6882,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 231,
+    "__docId__": 232,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -6872,7 +6894,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 232,
+    "__docId__": 233,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -6884,7 +6906,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 233,
+    "__docId__": 234,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -6896,7 +6918,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 234,
+    "__docId__": 235,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -6908,7 +6930,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 235,
+    "__docId__": 236,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -6920,7 +6942,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 236,
+    "__docId__": 237,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -6932,7 +6954,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 237,
+    "__docId__": 238,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -6944,7 +6966,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 238,
+    "__docId__": 239,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -6956,7 +6978,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 239,
+    "__docId__": 240,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -6968,7 +6990,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 240,
+    "__docId__": 241,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -6980,7 +7002,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 241,
+    "__docId__": 242,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -6992,7 +7014,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 242,
+    "__docId__": 243,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -7004,7 +7026,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 243,
+    "__docId__": 244,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -7016,7 +7038,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 244,
+    "__docId__": 245,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -7028,7 +7050,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 245,
+    "__docId__": 246,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -7040,7 +7062,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 246,
+    "__docId__": 247,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -7052,7 +7074,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 247,
+    "__docId__": 248,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -7064,7 +7086,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 248,
+    "__docId__": 249,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -7076,7 +7098,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 249,
+    "__docId__": 250,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -7088,7 +7110,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 250,
+    "__docId__": 251,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -7100,7 +7122,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 251,
+    "__docId__": 252,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -7112,7 +7134,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 252,
+    "__docId__": 253,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -7124,7 +7146,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 253,
+    "__docId__": 254,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -7136,7 +7158,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 254,
+    "__docId__": 255,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -7148,7 +7170,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 255,
+    "__docId__": 256,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -7160,7 +7182,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 256,
+    "__docId__": 257,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -7172,7 +7194,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 257,
+    "__docId__": 258,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -7184,7 +7206,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 258,
+    "__docId__": 259,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -7196,7 +7218,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 259,
+    "__docId__": 260,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -7208,7 +7230,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 260,
+    "__docId__": 261,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -7221,7 +7243,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 262,
+    "__docId__": 263,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -7233,7 +7255,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 263,
+    "__docId__": 264,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -7245,7 +7267,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 264,
+    "__docId__": 265,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -7257,7 +7279,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 265,
+    "__docId__": 266,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -7269,7 +7291,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 266,
+    "__docId__": 267,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -7281,7 +7303,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 267,
+    "__docId__": 268,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -7293,7 +7315,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 268,
+    "__docId__": 269,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -7305,7 +7327,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 269,
+    "__docId__": 270,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

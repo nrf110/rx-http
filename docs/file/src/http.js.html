@@ -164,13 +164,13 @@ class Http {
 
   /**
    * @method
-   * @name username
+   * @name user
    * @param {String} [value] - Basic auth username
    * @returns {String|Http} - If the value is specified, sets the username and returns
    * the current Http.  If value is ommitted, returns the current username.
    */
-  username(value) {
-    return property(&apos;username&apos;, isString).call(this, value);
+  user(value) {
+    return property(&apos;user&apos;, isString).call(this, value);
   }
 
   /**
