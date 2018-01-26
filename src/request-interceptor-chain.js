@@ -26,7 +26,7 @@ export default function RequestInterceptorChain(interceptors, accept, reject) {
           const transform = interceptor.requestError;
           const next = partial(step, xs);
 
-          transform(err, recover, next);
+          transform.call(interceptor, err, recover, next);
         } else {
           reject(err);
         }
@@ -49,7 +49,7 @@ export default function RequestInterceptorChain(interceptors, accept, reject) {
         const transform = interceptor.request;
         const success = partial(step, xs);
 
-        transform(request, success, failure(xs, success));
+        transform.call(interceptor, request, success, failure(xs, success));
       } else {
         accept(request);
       }

@@ -20,13 +20,13 @@ export default function ResponseInterceptorChain(interceptors, accept, reject) {
   function failure(remaining, recover) {
     return function (error) {
       function step(rest, err) {
-        if (isEmpty(rest)) {
+        if (!isEmpty(rest)) {
           const interceptor = head(rest);
           const xs = tail(rest);
           const transform = interceptor.responseError;
           const next = partial(step, xs);
 
-          transform(err, recover, next);
+          transform.call(interceptor, err, recover, next);
         } else {
           reject(err);
         }
@@ -49,7 +49,7 @@ export default function ResponseInterceptorChain(interceptors, accept, reject) {
         const transform = interceptor.response;
         const success = partial(step, xs);
 
-        transform(response, success, failure(xs, success));
+        transform.call(interceptor, response, success, failure(xs, success));
       } else {
         accept(response);
       }
