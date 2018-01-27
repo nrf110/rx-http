@@ -38,11 +38,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidPort">isValidPort</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-bodyTransformer">bodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-errorHandling">errorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-methodOverride">methodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xsrf">xsrf</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-provider">provider</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser/xhr</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
@@ -52,31 +58,14 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/http.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults, remove } from &apos;lodash&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isBoolean, isString, isInteger, isArray, isUndefined, assign, defaults } from &apos;lodash&apos;;
 import Request from &apos;./request&apos;;
 import Interceptors from &apos;./interceptors&apos;;
-import XHRProvider from &apos;./xhr-provider&apos;;
+import BrowserProvider from &apos;./providers/browser&apos;;
 import Url from &apos;./url&apos;;
 import Path from &apos;./path&apos;;
 import { PropertyValidationError } from &apos;./errors&apos;;
-import { parseUri } from &apos;./utilities&apos;;
-
-function property(key, isValid) {
-  return function(value) {
-    const settings = _settings.get(this);
-
-    if (isUndefined(value)) {
-      return settings[key];
-    }
-
-    if (isValid(value)) {
-      settings[key] = value;
-      return this;
-    }
-
-    throw new PropertyValidationError(key, value);
-  };
-}
+import { property, parseUri } from &apos;./utilities&apos;;
 
 function generateRequestMethod(method) {
   return function(url, options = {}) {
@@ -84,7 +73,16 @@ function generateRequestMethod(method) {
   };
 }
 
-const _settings = new WeakMap();
+const _baseUrl = new WeakMap();
+const _timeout = new WeakMap();
+const _headers = new WeakMap();
+const _xsrfCookieName = new WeakMap();
+const _xsrfHeaderName = new WeakMap();
+const _withCredentials = new WeakMap();
+const _user = new WeakMap();
+const _password = new WeakMap();
+const _interceptors = new WeakMap();
+const _provider = new WeakMap();
 
 /**
  * An HTTP client.
@@ -96,9 +94,27 @@ class Http {
    * @constructor
    * @param {Object} [options] - A hash of settings for this client.
    */
-  constructor(options = {}) {
-    const initialSettings = assign({}, Http.defaults, options)
-    _settings.set(this, initialSettings);
+  constructor({
+              baseUrl,
+              timeout,
+              xsrfCookieName,
+              xsrfHeaderName,
+              withCredentials,
+              user,
+              password,
+              interceptors,
+              provider
+            } = {}) {
+    _baseUrl.set(this, baseUrl || Http.defaults.baseUrl);
+    _timeout.set(this, timeout || Http.defaults.timeout);
+    _xsrfCookieName.set(this, xsrfCookieName || Http.defaults.xsrfCookieName);
+    _xsrfHeaderName.set(this, xsrfHeaderName || Http.defaults.xsrfHeaderName);
+    _withCredentials.set(this, !!withCredentials);
+    _interceptors.set(this, interceptors || Http.defaults.interceptors);
+    _provider.set(this, provider || Http.defaults.provider);
+
+    if (user) _user.set(this, user);
+    if (password) _password.set(this, password || Http.defaults.password);
   }
 
   /**
@@ -111,7 +127,7 @@ class Http {
    * If value is ommitted, returns the current baseUrl.
    */
   baseUrl(url) {
-    return property(&apos;baseUrl&apos;, isString).call(this, url);
+    return property.call(this, &apos;baseUrl&apos;, _baseUrl, url, isString);
   }
 
   /**
@@ -123,7 +139,7 @@ class Http {
    * instance.  If value is ommitted, returns the current timeout value.
    */
   timeout(value) {
-    return property(&apos;timeout&apos;, isInteger).call(this, value);
+    return property.call(this, &apos;timeout&apos;, _timeout, value, isInteger);
   }
 
   /**
@@ -134,7 +150,7 @@ class Http {
    * and returns the current Http.  If value is ommitted, returns the current name.
    */
   xsrfCookieName(value) {
-    return property(&apos;xsrfCookieName&apos;, isString).call(this, value);
+    return property.call(this, &apos;xsrfCookieName&apos;, _xsrfCookieName, value, isString);
   }
 
   /**
@@ -145,7 +161,7 @@ class Http {
    * and returns the current Http.  If value is ommitted, returns the current name.
    */
   xsrfHeaderName(value) {
-    return property(&apos;xsrfHeaderName&apos;, isString).call(this, value);
+    return property.call(this, &apos;xsrfHeaderName&apos;, _xsrfHeaderName, value, isString);
   }
 
   /**
@@ -159,7 +175,7 @@ class Http {
    * value of the flag.
    */
   withCredentials(value) {
-    return property(&apos;withCredentials&apos;, isBoolean).call(this, value);
+    return property.call(this, &apos;withCredentials&apos;, _withCredentials, value, isBoolean);
   }
 
   /**
@@ -170,7 +186,7 @@ class Http {
    * the current Http.  If value is ommitted, returns the current username.
    */
   user(value) {
-    return property(&apos;user&apos;, isString).call(this, value);
+    return property.call(this, &apos;user&apos;, _user, value, isString);
   }
 
   /**
@@ -181,7 +197,7 @@ class Http {
    * the current Http.  If value is ommitted, returns the current password.
    */
   password(value) {
-    return property(&apos;password&apos;, isString).call(this, value);
+    return property.call(this, &apos;password&apos;, _password, value, isString);
   }
 
   /**
@@ -194,7 +210,7 @@ class Http {
    * interceptors.
    */
   interceptors(values) {
-    return property(&apos;interceptors&apos;, isArray).call(this, values);
+    return property.call(this, &apos;interceptors&apos;, _interceptors, values, isArray);
   }
 
   /**
@@ -205,7 +221,7 @@ class Http {
    * @return {Http} - The current client instance.
    */
   addInterceptor(interceptor) {
-    _settings.get(this).interceptors.push(interceptor);
+    _interceptors.get(this).push(interceptor);
     return this;
   }
 
@@ -216,8 +232,9 @@ class Http {
    * @returns {Http} - The current client instance.
    */
   removeInterceptor(interceptor) {
-    const settings = _settings.get(this);
-    settings.interceptors = remove(settings.interceptors, (i) =&gt; i === interceptor);
+    const current = _interceptors.get(this);
+    const updated = current.filter((i) =&gt; i !== interceptor);
+    _interceptors.set(this, updated);
     return this;
   }
 
@@ -234,21 +251,32 @@ class Http {
    *   timeout: 10000
    * })
    */
-  request(url, options = {}) {
-    const settings = _settings.get(this);
+  request(url, { method, headers, query, timeout, body, interceptors, xsrfCookieName, xsrfHeaderName, withCredentials, user, password, provider } = {}) {
+    const self = this;
+    const baseUrl = _baseUrl.get(this);
     let fullUrl = url;
 
-    if (settings.baseUrl) {
-      fullUrl = Path.join(settings.baseUrl, url);
+    if (!!baseUrl) {
+      fullUrl = Path.join(baseUrl, url);
     }
 
     const parsed = parseUri(fullUrl);
-    const config = defaults(options, settings);
+    assign(parsed.query, query);
 
-    assign(parsed.query, options.query);
-    assign(config, { url: new Url(parsed) });
-
-    return new Request(config);
+    return new Request({
+      method: method,
+      headers: headers || _headers.get(self), // TODO: expose a headers property
+      timeout: timeout || _timeout.get(self),
+      body: body,
+      url: new Url(parsed),
+      interceptors: interceptors || _interceptors.get(self),
+      xsrfCookieName: xsrfCookieName || _xsrfCookieName.get(self),
+      xsrfHeaderName: xsrfHeaderName || _xsrfHeaderName.get(self),
+      withCredentials: withCredentials, // TODO: proper default logic for bool,
+      user: user || _user.get(self),
+      password: password || _password.get(self),
+      provider: provider || _provider.get(self)
+    });
   }
 
   /**
@@ -256,7 +284,7 @@ class Http {
    * @name head
    * Helper method for request.  Automatically sets method to HEAD.
    * @param {string} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).head(&apos;/some/stuff&apos;, {
@@ -264,8 +292,8 @@ class Http {
    *   timeout: 10000
    * })
    */
-  head(url, options) {
-    return generateRequestMethod(&apos;HEAD&apos;).call(this, url, options);
+  head(url, opts = {}) {
+    return generateRequestMethod(&apos;HEAD&apos;).call(this, url, opts);
   }
 
   /**
@@ -273,7 +301,7 @@ class Http {
    * @name get
    * Helper method for request.  Automatically sets method to GET.
    * @param {String} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).get(&apos;/some/stuff&apos;, {
@@ -281,8 +309,8 @@ class Http {
    *   timeout: 10000
    * })
    */
-  get(url, options) {
-    return generateRequestMethod(&apos;GET&apos;).call(this, url, options);
+  get(url, opts = {}) {
+    return generateRequestMethod(&apos;GET&apos;).call(this, url, opts);
   }
 
   /**
@@ -290,7 +318,7 @@ class Http {
    * @name options
    * Helper method for request.  Automatically sets method to OPTIONS.
    * @param {String} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).head(&apos;/some/stuff&apos;, {
@@ -298,8 +326,8 @@ class Http {
    *   timeout: 10000
    * })
    */
-  options(url, options) {
-    return generateRequestMethod(&apos;OPTIONS&apos;).call(this, url, options);
+  options(url, opts = {}) {
+    return generateRequestMethod(&apos;OPTIONS&apos;).call(this, url, opts);
   }
 
   /**
@@ -307,7 +335,7 @@ class Http {
    * @name delete
    * Helper method for request.  Automatically sets method to DELETE.
    * @param {String} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).delete(&apos;/some/stuff&apos;, {
@@ -315,8 +343,8 @@ class Http {
    *   timeout: 10000
    * })
    */
-  delete(url, options) {
-    return generateRequestMethod(&apos;DELETE&apos;).call(this, url, options);
+  delete(url, opts = {}) {
+    return generateRequestMethod(&apos;DELETE&apos;).call(this, url, opts);
   }
 
   /**
@@ -324,7 +352,7 @@ class Http {
    * @name trace
    * Helper method for request.  Automatically sets method to TRACE.
    * @param {String} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).trace(&apos;/some/stuff&apos;, {
@@ -332,8 +360,8 @@ class Http {
    *   timeout: 10000
    * })
    */
-  trace(url, options) {
-    return generateRequestMethod(&apos;TRACE&apos;).call(this, url, options);
+  trace(url, opts = {}) {
+    return generateRequestMethod(&apos;TRACE&apos;).call(this, url, opts);
   }
 
   /**
@@ -341,7 +369,7 @@ class Http {
    * @name post
    * Helper method for request.  Automatically sets method to POST.
    * @param {String} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).post(&apos;/some/stuff&apos;, {
@@ -349,15 +377,15 @@ class Http {
    *   timeout: 10000
    * })
    */
-  post(url, options) {
-    return generateRequestMethod(&apos;POST&apos;).call(this, url, options);
+  post(url, opts = {}) {
+    return generateRequestMethod(&apos;POST&apos;).call(this, url, opts);
   }
 
   /** @method
   * @name put
   * Helper method for request.  Automatically sets method to PUT.
   * @param {String} url - the URL where the request will be sent.
-  * @param {Object} [options] - add/override settings for this request.
+  * @param {Object} [opts] - add/override settings for this request.
   * @return {Request}
   * @example
   * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).put(&apos;/some/stuff&apos;, {
@@ -365,8 +393,8 @@ class Http {
   *   timeout: 10000
   * })
   **/
-  put(url, options) {
-    return generateRequestMethod(&apos;PUT&apos;).call(this, url, options);
+  put(url, opts = {}) {
+    return generateRequestMethod(&apos;PUT&apos;).call(this, url, opts);
   }
 
   /**
@@ -374,7 +402,7 @@ class Http {
    * @name patch
    * Helper method for request.  Automatically sets method to PATCH.
    * @param {String} url - the URL where the request will be sent.
-   * @param {Object} [options] - add/override settings for this request.
+   * @param {Object} [opts] - add/override settings for this request.
    * @return {Request}
    * @example
    * new Http({ baseUrl: &apos;http://mydomain.com&apos;, timeout: 5000 }).patch(&apos;/some/stuff&apos;, {
@@ -382,14 +410,13 @@ class Http {
    *   timeout: 10000
    * })
    */
-  patch(url, options) {
-    return generateRequestMethod(&apos;PATCH&apos;).call(this, url, options);
+  patch(url, opts = {}) {
+    return generateRequestMethod(&apos;PATCH&apos;).call(this, url, opts);
   }
 }
 
 Http.defaults = {
   baseUrl: &apos;&apos;,
-  retries: 0,
   timeout: 30000,
   xsrfCookieName: &apos;XSRF-TOKEN&apos;,
   xsrfHeaderName: &apos;X-XSRF-TOKEN&apos;,
@@ -400,7 +427,7 @@ Http.defaults = {
     Interceptors.XSRF,
     Interceptors.ErrorHandling
   ],
-  provider: XHRProvider
+  provider: BrowserProvider
 };
 
 export default Http;

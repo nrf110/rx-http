@@ -6,6 +6,7 @@ import Interceptors from './interceptors';
 import Errors from './errors';
 import Serializer from './serializer';
 import Serializers from './serializers';
+import Providers from './providers';
 
 export {
   Url,
@@ -15,5 +16,6 @@ export {
   Interceptors,
   Errors,
   Serializer,
-  Serializers
+  Serializers,
+  Providers
 };

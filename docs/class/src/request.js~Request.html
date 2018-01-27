@@ -38,11 +38,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidPort">isValidPort</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-bodyTransformer">bodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-errorHandling">errorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-methodOverride">methodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xsrf">xsrf</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-provider">provider</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser/xhr</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
@@ -227,34 +233,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="class/src/request.js~Request.html#instance-method-header">header</a></span></span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          <span data-ice="name"><span><a href="class/src/request.js~Request.html#instance-method-headers">headers</a></span></span><span data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
+          <span data-ice="name"><span><a href="class/src/request.js~Request.html#instance-method-headers">headers</a></span></span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, value: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
         </p>
       </div>
       <div>
@@ -652,7 +631,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber169">source</a></span></span>
     </span>
   </h3>
 
@@ -734,7 +713,7 @@ returns the current body</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber105">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -810,7 +789,7 @@ of the Content-Type header (or undefined);</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber295">source</a></span></span>
     </span>
   </h3>
 
@@ -866,18 +845,18 @@ streams.flatMap(response =&gt; response.downloadProgress()).forEach((event) =&gt
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-header">
+  <h3 data-ice="anchor" id="instance-method-headers">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span data-ice="name">header</span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
+    <span data-ice="name">headers</span><span data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>, value: <span>*</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber94">source</a></span></span>
     </span>
   </h3>
 
@@ -898,16 +877,16 @@ streams.flatMap(response =&gt; response.downloadProgress()).forEach((event) =&gt
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">name</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
-      <td data-ice="appendix"></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The name of the header</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">value</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
+      <td data-ice="type"><span>*</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The value to assign to the header</p>
+      <td data-ice="description"><p>The value of the header</p>
 </td>
     </tr>
 </tbody>
@@ -920,10 +899,8 @@ streams.flatMap(response =&gt; response.downloadProgress()).forEach((event) =&gt
     <table>
       <tbody>
         <tr>
-          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>If value is specified, sets the header
-and returns the current Request.  If value is ommitted, returns the
-value for the header.</p>
+          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>If no parameters are specified - returns a copy of the entire headers hash.</p>
 </td>
         </tr>
       </tbody>
@@ -940,83 +917,31 @@ value for the header.</p>
 
   
 
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-headers">
-    <span class="access" data-ice="access">public</span>
+  <div data-ice="example">
+    <h4>Example:</h4>
     
-    
-    
-    
-    
-    <span data-ice="name">headers</span><span data-ice="signature">(value: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></span>
-    <span class="right-info">
+  <div class="example-doc" data-ice="exampleDoc">
       
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">request.headers() // returns { &quot;foo&quot;: &quot;bar&quot; }
+If only name is specified, and name is a string - returns the value for the key in the headers hash.</code></pre>
+    </div>
+<div class="example-doc" data-ice="exampleDoc">
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber87">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">value</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The hash of headers to send with this request.
-Replaces any existing headers</p>
-</td>
-    </tr>
-</tbody>
-  </table>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">request.headers(&quot;foo&quot;) // returns &quot;bar&quot;
+If only name is specified, and name is an object - replaces the entire headers hash
+and returns the current Request.</code></pre>
+    </div>
+<div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">request.headers({ &quot;foo&quot;: &quot;bar&quot;, &quot;baz&quot;: 1 })
+If name and value are specified - sets the value of name in the headers hash
+and returns the current Request.</code></pre>
+    </div>
+<div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">request.headers(&quot;foo&quot;, &quot;bar&quot;)</code></pre>
+    </div>
 </div>
-</div>
-
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span> | <span><a href="class/src/request.js~Request.html">Request</a></span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>If value is specified, sets the headers
-and returns the current Request.  If value is ommitted, returns a copy
-of the current headers.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
-
-  
-
-  
-
-  
-
-  
-
-  
 
   
 
@@ -1035,7 +960,7 @@ of the current headers.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber222">source</a></span></span>
     </span>
   </h3>
 
@@ -1110,7 +1035,7 @@ returns the current set of interceptors.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber69">source</a></span></span>
     </span>
   </h3>
 
@@ -1185,7 +1110,7 @@ returns the current HTTP method</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber276">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber280">source</a></span></span>
     </span>
   </h3>
 
@@ -1259,7 +1184,7 @@ the current Request.  If value is ommitted, retursn the current password.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber130">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber132">source</a></span></span>
     </span>
   </h3>
 
@@ -1335,7 +1260,7 @@ returns the current responseType value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber154">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber156">source</a></span></span>
     </span>
   </h3>
 
@@ -1410,7 +1335,7 @@ returns the current Serializer</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber142">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber144">source</a></span></span>
     </span>
   </h3>
 
@@ -1485,7 +1410,7 @@ returns the current timeout value.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber189">source</a></span></span>
     </span>
   </h3>
 
@@ -1560,7 +1485,7 @@ returns the current <span><a href="class/src/url.js~Url.html">Url</a></span>.</p
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
@@ -1634,7 +1559,7 @@ the current Request.  If value is ommitted, retursn the current user.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber254">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
@@ -1711,7 +1636,7 @@ value of the flag.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
@@ -1785,7 +1710,7 @@ and returns the current Request.  If value is ommitted, returns the current name
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/request.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 

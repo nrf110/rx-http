@@ -38,11 +38,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidPort">isValidPort</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-bodyTransformer">bodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-errorHandling">errorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-methodOverride">methodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xsrf">xsrf</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-provider">provider</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser/xhr</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
@@ -84,7 +90,7 @@ export default class Response {
    * @param {Observable&lt;Object&gt;} uploadProgress - An Observable representing a stream of all upload progress events
    * @param {Observable&lt;Object&gt;} downloadProgress - An Observable representing a stram of all download progress events
    */
-  constructor(xhr, body, uploadProgress, downloadProgress) {
+  constructor({ xhr, body, uploadProgress, downloadProgress } = {}) {
     _status.set(this, xhr.status);
     _statusText.set(this, xhr.statusText);
     _headers.set(this, xhr.getAllResponseHeaders());
@@ -141,31 +147,24 @@ export default class Response {
   /**
    * @method
    * @name headers
-   * @returns {Object} - An object containing the response headers
+   * @param {String} [name] - The name of the header to lookup
+   * @returns {String|Object} - If name is given, returns the value of the
+   * header with the given name.  Otherwise, returns the hash containing
+   * all of the response headers
    * @example
    * { &quot;Content-Type&quot;: &quot;application/json&quot;, &quot;Content-Length&quot;: &quot;22&quot; }
    */
-  headers() {
-    return _headers.get(this);
-  }
+  headers(name) {
+    const value = _headers.get(this);
+    if (!isUndefined(name)) {
+      const entry = Object.entries(value)
+        .find((headers) =&gt; headers[0].toLowerCase() === name.toLowerCase());
 
-  /**
-   * Look-up the value of an individual resonse header
-   * @method
-   * @name header
-   * @param {String} name - The name of the header to lookup
-   * @returns {String} - The value of the header, or undefined if not found
-   */
-  header(name) {
-    return _headers.get(this)[name];
-  }
+      if (entry) return entry[1];
+      else return null;
+    }
 
-  contentType() {
-    const headers = _headers.get(this);
-    const entry = Object.entries(headers)
-      .find((headers) =&gt; headers[0].toLowerCase() === &apos;content-type&apos;);
-
-    if (entry) return entry[1];
+    return value;
   }
 
   /**
@@ -177,7 +176,7 @@ export default class Response {
    */
   isChunked() {
     if (!_isChunked.has(this)) {
-      let transferEncoding = (this.header(Headers.TRANSFER_ENCODING) || &apos;&apos;).toLowerCase();
+      let transferEncoding = (this.headers(Headers.TRANSFER_ENCODING) || &apos;&apos;).toLowerCase();
       let isChunked = transferEncoding.indexOf(&apos;chunked&apos;) &gt; -1 ||
                       transferEncoding.indexOf(&apos;identity&apos;) &gt; -1;
       // Detect SPDY. It uses chunked transfer but doesn&apos;t set the Transfer-Encoding header.
@@ -185,7 +184,7 @@ export default class Response {
         let c = window.chrome;
         let loadTimes = c &amp;&amp; c.loadTimes &amp;&amp; c.loadTimes();
         let chromeSpdy = loadTimes &amp;&amp; loadTimes.wasFetchedViaSpdy;
-        let ffSpdy = !!this.header(&apos;X-Firefox-Spdy&apos;);
+        let ffSpdy = !!this.headers(&apos;X-Firefox-Spdy&apos;);
         isChunked = ffSpdy || chromeSpdy;
       }
       _isChunked.set(this, isChunked);

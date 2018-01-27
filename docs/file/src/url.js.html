@@ -38,11 +38,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidPort">isValidPort</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-bodyTransformer">bodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-errorHandling">errorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-methodOverride">methodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xsrf">xsrf</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-provider">provider</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser/xhr</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
@@ -57,7 +63,6 @@
   isString,
   isUndefined,
   isEmpty,
-  assign,
   reduce,
   endsWith,
   startsWith,
@@ -65,7 +70,7 @@
   cloneDeep
 } from &apos;lodash&apos;;
 import Path from &apos;./path&apos;;
-import { parseUri, isNonEmptyString, property } from &apos;./utilities&apos;;
+import { parseUri, isNonEmptyString, isValidPort, property, mapProperty } from &apos;./utilities&apos;;
 
 function encode(val) {
   return encodeURIComponent(val)
@@ -99,15 +104,15 @@ class Url {
    * @param {Object} parts
    */
   constructor(parts = {}) {
-    if (!!parts.protocol) _protocol.set(this, parts.protocol);
-    if (!!parts.user) _user.set(this, parts.user);
-    if (!!parts.password) _password.set(this, parts.password);
-    if (!!parts.host) _host.set(this, parts.host);
-    if (!!parts.port) _port.set(this, parts.port);
-    if (!!parts.directory) _directory.set(this, parts.directory);
-    if (!!parts.file) _file.set(this, parts.file);
-    if (!!parts.fragment) _fragment.set(this, parts.fragment);
-    _query.set(this, parts.query || {});
+    if (!!parts.protocol) this.protocol(parts.protocol);
+    if (!!parts.user) this.user(parts.user);
+    if (!!parts.password) this.password(parts.password);
+    if (!!parts.host) this.host(parts.host);
+    if (!!parts.port) this.port(parts.port);
+    if (!!parts.directory) this.directory(parts.directory);
+    if (!!parts.file) this.file(parts.file);
+    if (!!parts.fragment) this.fragment(parts.fragment);
+    this.query(parts.query || {});
   }
 
   /**
@@ -119,7 +124,7 @@ class Url {
    * current protocol.
    */
   protocol(value) {
-    return property.call(this, _protocol, value);
+    return property.call(this, &apos;protocol&apos;, _protocol, value, isNonEmptyString);
   }
 
   /**
@@ -130,7 +135,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current user.
    */
   user(value) {
-    return property.call(this, _user, value);
+    return property.call(this, &apos;user&apos;, _user, value, isNonEmptyString);
   }
 
   /**
@@ -141,7 +146,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current password.
    */
   password(value) {
-    return property.call(this, _password, value);
+    return property.call(this, &apos;password&apos;, _password, value, isNonEmptyString);
   }
 
   /**
@@ -152,7 +157,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current host.
    */
   host(value) {
-    return property.call(this, _host, value);
+    return property.call(this, &apos;host&apos;, _host, value, isNonEmptyString);
   }
 
   /**
@@ -163,7 +168,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current port.
    */
   port(value) {
-    return property.call(this, _port, value);
+    return property.call(this, &apos;port&apos;, _port, value, isValidPort);
   }
 
   /**
@@ -174,7 +179,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current directory.
    */
   directory(value) {
-    return property.call(this, _directory, value);
+    return property.call(this, &apos;directory&apos;, _directory, value, isString);
   }
 
   /**
@@ -185,7 +190,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current file.
    */
   file(value) {
-    return property.call(this, _file, value);
+    return property.call(this, &apos;file&apos;, _file, value, isString);
   }
 
   /**
@@ -196,7 +201,7 @@ class Url {
    * the current instance.  If value is ommitted, returns the current fragment.
    */
   fragment(value) {
-    return property.call(this, _fragment, value);
+    return property.call(this, &apos;fragment&apos;, _fragment, value, isString);
   }
 
   /**
@@ -239,20 +244,7 @@ class Url {
    * request.query(&quot;foo&quot;, &quot;bar&quot;).execute()
    */
   query(name, value) {
-    if (!isUndefined(name)) {
-      if (isUndefined(value)) {
-        if (isObject(name)) {
-          _query.set(this, name);
-          return this;
-        }
-        return _query.get(this)[name];
-      }
-      const existing = _query.get(this);
-      existing[name] = value;
-      return this;
-    }
-
-    return assign({}, _query.get(this));
+    return mapProperty.call(this, _query, name, value);
   }
 
   /**
@@ -308,14 +300,24 @@ class Url {
    * from the copy.
    */
   merge(other) {
-    const copied = cloneDeep(parts);
+    const copied = Object.assign(
+      {},
+      { protocol: _protocol.get(this) },
+      { user: _user.get(this) },
+      { password: _password.get(this) },
+      { host: _host.get(this) },
+      { port: _port.get(this) },
+      { directory: _directory.get(this) },
+      { file: _file.get(this) },
+      { fragment: _fragment.get(this) },
+      { query: _query.get(this) }
+    );
+
     const otherParts = parseUri(other.toString());
-    const propertiesToMerge = [&apos;directory&apos;, &apos;file&apos;, &apos;fragment&apos;, &apos;path&apos;, &apos;query&apos;];
+    const propertiesToMerge = [&apos;directory&apos;, &apos;file&apos;, &apos;fragment&apos;, &apos;query&apos;];
     propertiesToMerge.forEach((property) =&gt; {
       if (!!otherParts[property]) {
         copied[property] = otherParts[property];
-      } else if (!!copied[property]) {
-        delete copied[property];
       }
     });
 
@@ -336,19 +338,7 @@ class Url {
     const querySerializer = serializeQuery || identity;
     const q = querySerializer(this.query());
 
-    const fullyQualified = (() =&gt; {
-      if (endsWith(auth, &apos;/&apos;)) {
-        if (endsWith(p, &apos;/&apos;)) {
-          return auth + p.substring(1);
-        }
-
-        return auth + p;
-      } else if (startsWith(p, &apos;/&apos;)) {
-        return auth + p;
-      }
-
-      return `${auth}/${p}`;
-    })();
+    const fullyQualified = Path.join(auth, p);
 
     const queryParts = reduce(q, (accum, value, key) =&gt; {
       let pair = `${encode(key)}=${encode(value)}`;
@@ -382,9 +372,13 @@ class Url {
  */
 Url.factory = (value) =&gt; {
   if (isString(value)) {
-    return new Url(parseUri(value));
+    const parsed = parseUri(value);
+    const result = new Url(parsed);
+    return result;
+  } else {
+    const result = new Url(value);
+    return result;
   }
-  return new Url(value);
 }
 
 export default Url;

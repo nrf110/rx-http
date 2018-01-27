@@ -78,9 +78,9 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "rx-http/src/xhr-provider.js~xhrprovider",
+    "rx-http/src/providers/browser/xhr/index.js~xhrprovider",
     "function/index.html#static-function-XHRProvider",
-    "<span>XHRProvider</span> <span class=\"search-result-import-path\">rx-http/src/xhr-provider.js</span>",
+    "<span>XHRProvider</span> <span class=\"search-result-import-path\">rx-http/src/providers/browser/xhr/index.js</span>",
     "function"
   ],
   [
@@ -88,6 +88,42 @@ window.esdocSearchIndex = [
     "class/src/interceptors/xsrf.js~XSRF.html",
     "<span>XSRF</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/xsrf.js</span>",
     "class"
+  ],
+  [
+    "rx-http/src/interceptors/body-transformer.js~bodytransformer",
+    "variable/index.html#static-variable-bodyTransformer",
+    "<span>bodyTransformer</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/body-transformer.js</span>",
+    "variable"
+  ],
+  [
+    "rx-http/src/interceptors/error-handling.js~errorhandling",
+    "variable/index.html#static-variable-errorHandling",
+    "<span>errorHandling</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/error-handling.js</span>",
+    "variable"
+  ],
+  [
+    "rx-http/src/utilities.js~isvalidport",
+    "function/index.html#static-function-isValidPort",
+    "<span>isValidPort</span> <span class=\"search-result-import-path\">rx-http/src/utilities.js</span>",
+    "function"
+  ],
+  [
+    "rx-http/src/interceptors/method-override.js~methodoverride",
+    "variable/index.html#static-variable-methodOverride",
+    "<span>methodOverride</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/method-override.js</span>",
+    "variable"
+  ],
+  [
+    "rx-http/src/providers/browser/index.js~provider",
+    "variable/index.html#static-variable-provider",
+    "<span>provider</span> <span class=\"search-result-import-path\">rx-http/src/providers/browser/index.js</span>",
+    "variable"
+  ],
+  [
+    "rx-http/src/interceptors/xsrf.js~xsrf",
+    "variable/index.html#static-variable-xsrf",
+    "<span>xsrf</span> <span class=\"search-result-import-path\">rx-http/src/interceptors/xsrf.js</span>",
+    "variable"
   ],
   [
     "builtinexternal/ecmascriptexternal.js~array",
@@ -654,6 +690,30 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/providers/browser/index.js",
+    "file/src/providers/browser/index.js.html",
+    "src/providers/browser/index.js",
+    "file"
+  ],
+  [
+    "src/providers/browser/xhr/index.js",
+    "file/src/providers/browser/xhr/index.js.html",
+    "src/providers/browser/xhr/index.js",
+    "file"
+  ],
+  [
+    "src/providers/browser/xhr/xhr-builder.js",
+    "file/src/providers/browser/xhr/xhr-builder.js.html",
+    "src/providers/browser/xhr/xhr-builder.js",
+    "file"
+  ],
+  [
+    "src/providers/index.js",
+    "file/src/providers/index.js.html",
+    "src/providers/index.js",
+    "file"
+  ],
+  [
     "src/request-interceptor-chain.js",
     "file/src/request-interceptor-chain.js.html",
     "src/request-interceptor-chain.js",
@@ -687,12 +747,6 @@ window.esdocSearchIndex = [
     "src/request.js~request#execute",
     "class/src/request.js~Request.html#instance-method-execute",
     "src/request.js~Request#execute",
-    "method"
-  ],
-  [
-    "src/request.js~request#header",
-    "class/src/request.js~Request.html#instance-method-header",
-    "src/request.js~Request#header",
     "method"
   ],
   [
@@ -792,21 +846,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/response.js~response#contenttype",
-    "class/src/response.js~Response.html#instance-method-contentType",
-    "src/response.js~Response#contentType",
-    "method"
-  ],
-  [
     "src/response.js~response#downloadprogress",
     "class/src/response.js~Response.html#instance-method-downloadProgress",
     "src/response.js~Response#downloadProgress",
-    "method"
-  ],
-  [
-    "src/response.js~response#header",
-    "class/src/response.js~Response.html#instance-method-header",
-    "src/response.js~Response#header",
     "method"
   ],
   [
@@ -1047,18 +1089,6 @@ window.esdocSearchIndex = [
     "src/utilities.js",
     "file/src/utilities.js.html",
     "src/utilities.js",
-    "file"
-  ],
-  [
-    "src/xhr-builder.js",
-    "file/src/xhr-builder.js.html",
-    "src/xhr-builder.js",
-    "file"
-  ],
-  [
-    "src/xhr-provider.js",
-    "file/src/xhr-provider.js.html",
-    "src/xhr-provider.js",
     "file"
   ]
 ]

@@ -38,11 +38,17 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/response.js~Response.html">Response</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializer.js~Serializer.html">Serializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/url.js~Url.html">Url</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidPort">isValidPort</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">interceptors</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/body-transformer.js~BodyTransformer.html">BodyTransformer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/error-handling.js~ErrorHandling.html">ErrorHandling</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/method-override.js~MethodOverride.html">MethodOverride</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/interceptors/xsrf.js~XSRF.html">XSRF</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-bodyTransformer">bodyTransformer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-errorHandling">errorHandling</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-methodOverride">methodOverride</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-xsrf">xsrf</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-provider">provider</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">providers/browser/xhr</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-XHRProvider">XHRProvider</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">serializers</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/default-serializer.js~DefaultSerializer.html">DefaultSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/form-data-serializer.js~FormDataSerializer.html">FormDataSerializer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/serializers/json-serializer.js~JsonSerializer.html">JsonSerializer</a></span></span></li>
@@ -52,11 +58,11 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/request.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isUndefined, identity, assign, isString, isObject } from &apos;lodash&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isUndefined, identity, isString, isInteger, isObject } from &apos;lodash&apos;;
 import { PropertyValidationError } from &apos;./errors&apos;;
 import Path from &apos;./path&apos;;
 import Url from &apos;./url&apos;;
-import { parseUri } from &apos;./utilities&apos;;
+import { parseUri, property, mapProperty } from &apos;./utilities&apos;;
 import Serializers from &apos;./serializers&apos;;
 
 let _method = new WeakMap();
@@ -84,19 +90,32 @@ export default class Request {
    * @constructor
    * @param {Object} config - Override default settings for this Request only.
    */
-  constructor(config) {
-    _method.set(this, config.method || null);
-    _headers.set(this, config.headers || {});
-    _timeout.set(this, config.timeout || null);
-    _body.set(this, config.body || null);
-    _url.set(this, config.url || null);
-    _interceptors.set(this, config.interceptors || {})
-    _xsrfCookieName.set(this, config.xsrfCookieName);
-    _xsrfHeaderName.set(this, config.xsrfHeaderName);
-    _withCredentials.set(this, !!config.withCredentials);
-    _user.set(this, config.user || null);
-    _password.set(this, config.password || null);
-    _provider.set(this, config.provider);
+  constructor({
+              method,
+              headers,
+              timeout,
+              body,
+              url,
+              interceptors,
+              xsrfCookieName,
+              xsrfHeaderName,
+              withCredentials,
+              user,
+              password,
+              provider
+            } = {}) {
+    _method.set(this, method || null);
+    _headers.set(this, headers || {});
+    _timeout.set(this, timeout || null);
+    _body.set(this, body || null);
+    _url.set(this, url || null);
+    _interceptors.set(this, interceptors || [])
+    _xsrfCookieName.set(this, xsrfCookieName || null);
+    _xsrfHeaderName.set(this, xsrfHeaderName || null);
+    _withCredentials.set(this, !!withCredentials);
+    _user.set(this, user || null);
+    _password.set(this, password || null);
+    _provider.set(this, provider);
   }
 
   /**
@@ -108,43 +127,32 @@ export default class Request {
    * returns the current HTTP method
    */
   method(value) {
-    return property.call(this, _method, value);
-  }
-
-  /**
-   * @method
-   * @name header
-   * @param {String} name - The name of the header
-   * @param {String} [value] - The value to assign to the header
-   * @returns {String|Request} - If value is specified, sets the header
-   * and returns the current Request.  If value is ommitted, returns the
-   * value for the header.
-   */
-  header(name, value) {
-    let headers = _headers.get(this);
-    if (isUndefined(value)) {
-      return headers[name];
-    }
-    headers[name] = value.toString();
-    return this;
+    return property.call(this, &apos;method&apos;, _method, value, isString);
   }
 
   /**
    * @method
    * @name headers
-   * @param {Object} [value] - The hash of headers to send with this request.
-   * Replaces any existing headers
-   * @returns {Object|Request} - If value is specified, sets the headers
-   * and returns the current Request.  If value is ommitted, returns a copy
-   * of the current headers.
+   * @param {String|Object} [name] - The name of the header
+   * @param [value] - The value of the header
+   * @returns {Object|String|Request} -
+   * If no parameters are specified - returns a copy of the entire headers hash.
+   * @example
+   * request.headers() // returns { &quot;foo&quot;: &quot;bar&quot; }
+   * If only name is specified, and name is a string - returns the value for the key in the headers hash.
+   * @example
+   * request.headers(&quot;foo&quot;) // returns &quot;bar&quot;
+   * If only name is specified, and name is an object - replaces the entire headers hash
+   * and returns the current Request.
+   * @example
+   * request.headers({ &quot;foo&quot;: &quot;bar&quot;, &quot;baz&quot;: 1 })
+   * If name and value are specified - sets the value of name in the headers hash
+   * and returns the current Request.
+   * @example
+   * request.headers(&quot;foo&quot;, &quot;bar&quot;)
    */
-  headers(value) {
-    if (isUndefined(value)) {
-      return assign({}, _headers.get(this));
-    }
-
-    _headers.set(this, value);
-    return this;
+  headers(name, value) {
+    return mapProperty.call(this, _headers, name, value);
   }
 
   /**
@@ -182,7 +190,7 @@ export default class Request {
    * returns the current responseType value.
    */
   responseType(value) {
-    return property.call(this, _responseType, value);
+    return property.call(this, &apos;responseType&apos;, _responseType, value, isString);
   }
 
   /**
@@ -194,7 +202,7 @@ export default class Request {
    * returns the current timeout value.
    */
   timeout(value) {
-    return property.call(this, _timeout, value);
+    return property.call(this, &apos;timeout&apos;, _timeout, value, isInteger);
   }
 
   /**
@@ -206,7 +214,7 @@ export default class Request {
    * returns the current Serializer
    */
   serializer(value) {
-    return property.call(this, _serializer, value);
+    return property.call(this, &apos;serializer&apos;, _serializer, value);
   }
 
   /**
@@ -223,8 +231,9 @@ export default class Request {
      return _body.get(this);
     }
 
+    const currentSerializer = _serializer.get(this);
     _body.set(this, value);
-    _serializer.set(this, serializer || new Serializers.Default());
+    _serializer.set(this, serializer || currentSerializer || new Serializers.Default());
 
     return this;
   }
@@ -248,17 +257,18 @@ export default class Request {
     }
 
     if (isString(value) || isObject(value)) {
-      const newUrl = Url.factory(url);
+      const newUrl = Url.factory(value);
+      const currentUrl = _url.get(this);
       if (newUrl.isAbsolute()) {
         _url.set(this, newUrl);
         return this;
-      } else if (_url.get(this) &amp;&amp; _url.get().isAbsolute()) {
-        _url.set(this, _url.get(this).merge(newUrl));
+      } else if (currentUrl &amp;&amp; currentUrl.isAbsolute()) {
+        _url.set(this, currentUrl.merge(newUrl));
         return this;
       }
     }
 
-    throw new PropertyValidationError(&apos;url&apos;, url);
+    throw new PropertyValidationError(&apos;url&apos;, value);
   }
 
   /**
@@ -270,7 +280,7 @@ export default class Request {
    * returns the current set of interceptors.
    */
   interceptors(value) {
-    return property.call(this, _interceptors, value);
+    return property.call(this, &apos;interceptors&apos;, _interceptors, value);
   }
 
   /**
@@ -281,7 +291,7 @@ export default class Request {
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfCookieName(value) {
-    return property.call(this, _xsrfCookieName, value);
+    return property.call(this, &apos;xsrfCookieName&apos;, _xsrfCookieName, value, isString);
   }
 
   /**
@@ -292,7 +302,7 @@ export default class Request {
    * and returns the current Request.  If value is ommitted, returns the current name.
    */
   xsrfHeaderName(value) {
-    return property.call(this, _xsrfHeaderName, value);
+    return property.call(this, &apos;xsrfHeaderName&apos;, _xsrfHeaderName, value, isString);
   }
 
   /**
@@ -306,7 +316,7 @@ export default class Request {
    * value of the flag.
    */
   withCredentials(value) {
-    return property.call(this, _withCredentials, value);
+    return property.call(this, &apos;withCredentials&apos;, _withCredentials, value);
   }
 
   /**
@@ -317,7 +327,7 @@ export default class Request {
    * the current Request.  If value is ommitted, retursn the current user.
    */
   user(value) {
-    return property.call(this, _user, value);
+    return property.call(this, &apos;user&apos;, _user, value, isString);
   }
 
   /**
@@ -328,7 +338,7 @@ export default class Request {
    * the current Request.  If value is ommitted, retursn the current password.
    */
   password(value) {
-    return property.call(this, _password, value);
+    return property.call(this, &apos;password&apos;, _password, value, isString);
   }
 
   /**

@@ -1,12 +1,14 @@
 {
-  "coverage": "97.93%",
-  "expectCount": 97,
-  "actualCount": 95,
+  "coverage": "93%",
+  "expectCount": 100,
+  "actualCount": 93,
   "files": {
     "src/interceptors/body-transformer.js": {
-      "expectCount": 2,
+      "expectCount": 3,
       "actualCount": 2,
-      "undocumentLines": []
+      "undocumentLines": [
+        36
+      ]
     },
     "src/serializers/default-serializer.js": {
       "expectCount": 2,
@@ -14,9 +16,11 @@
       "undocumentLines": []
     },
     "src/interceptors/error-handling.js": {
-      "expectCount": 2,
+      "expectCount": 3,
       "actualCount": 2,
-      "undocumentLines": []
+      "undocumentLines": [
+        25
+      ]
     },
     "src/serializers/form-data-serializer.js": {
       "expectCount": 3,
@@ -39,21 +43,21 @@
       "undocumentLines": []
     },
     "src/interceptors/method-override.js": {
-      "expectCount": 2,
+      "expectCount": 3,
       "actualCount": 2,
-      "undocumentLines": []
+      "undocumentLines": [
+        35
+      ]
     },
     "src/request.js": {
-      "expectCount": 18,
-      "actualCount": 18,
+      "expectCount": 17,
+      "actualCount": 17,
       "undocumentLines": []
     },
     "src/response.js": {
-      "expectCount": 11,
-      "actualCount": 10,
-      "undocumentLines": [
-        109
-      ]
+      "expectCount": 9,
+      "actualCount": 9,
+      "undocumentLines": []
     },
     "src/serializer.js": {
       "expectCount": 4,
@@ -72,15 +76,31 @@
       "actualCount": 18,
       "undocumentLines": []
     },
-    "src/xhr-provider.js": {
+    "src/providers/browser/xhr/index.js": {
       "expectCount": 1,
       "actualCount": 1,
       "undocumentLines": []
     },
     "src/interceptors/xsrf.js": {
-      "expectCount": 2,
+      "expectCount": 3,
       "actualCount": 2,
-      "undocumentLines": []
+      "undocumentLines": [
+        32
+      ]
+    },
+    "src/utilities.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        24
+      ]
+    },
+    "src/providers/browser/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        3
+      ]
     }
   }
 }
