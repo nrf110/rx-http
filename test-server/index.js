@@ -1,8 +1,9 @@
-const Express     = require('express'),
-      cors        = require('cors'),
-      routes      = require('./routes'),
-      bodyParser  = require('body-parser'),
-      app         = Express();
+const Express         = require('express'),
+      cors            = require('cors'),
+      routes          = require('./routes'),
+      bodyParser      = require('body-parser'),
+      // methodOverride  = require('method-override');
+      app             = Express();
 
 var server;
 

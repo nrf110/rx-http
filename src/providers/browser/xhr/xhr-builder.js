@@ -1,4 +1,5 @@
 import { isInteger, partial, noop } from 'lodash';
+import Errors from '../../../errors';
 
 const STATE = {
   UNSENT: 0,
@@ -71,31 +72,30 @@ export default class XHRBuilder {
     const self = this;
     const request = this.req;
     const xhr = new XMLHttpRequest();
+    const headers = request.headers();
+    let credentials;
 
-    const openArgs = [request.method(), request.url().toString(), true];
-    if (request.user()) {
-      openArgs.push(request.user());
+    if (request.url().user() && request.url().password()) {
+      credentials = `${request.url().user()}:${request.url().password()}`
+    } else if (request.user() && request.password()) {
+      credentials = `${request.user()}:${request.password()}`;
+    }
 
-      if (request.password()) {
-        openArgs.push(request.password());
-      }
+    if (credentials) {
+      headers['Authorization'] = `Basic ${btoa(credentials)}`;
+    }
+
+    if (request.withCredentials()) {
+      xhr.withCredentials = request.withCredentials();
     }
 
     if (request.responseType()) {
       xhr.responseType = request.responseType();
     }
 
-    xhr.open(...openArgs);
-
     if (isInteger(request)) {
       xhr.timeout = request.timeout();
     }
-
-    const headers = request.headers();
-
-    Object.keys(headers).forEach(headerName => {
-      xhr.setRequestHeader(headerName, headers[headerName].toString());
-    });
 
     if (xhr.upload) {
       xhr.upload.addEventListener('progress', self.uploadProgress);
@@ -112,7 +112,21 @@ export default class XHRBuilder {
     xhr.addEventListener('readystatechange', (evt) => {
       if (xhr.readyState === STATE.HEADERS_RECEIVED) {
         self.headersReceived(evt);
+      } else if (xhr.readyState === STATE.DONE) {
+        try {
+          if (xhr.status === 0) {
+            self.error(new Errors.ConnectionError(request.url().toString()));
+          }
+        } catch (err) {
+          self.error(err);
+        }
       }
+    });
+
+    xhr.open(request.method(), request.url().toString(), true);
+
+    Object.keys(headers).forEach(headerName => {
+      xhr.setRequestHeader(headerName, headers[headerName].toString());
     });
 
     return xhr;

@@ -13,8 +13,19 @@ CustomError.prototype.constructor = CustomError;
  * @name NotImplementedError
  */
 class NotImplementedError extends CustomError {
-  constructor(message) {
-    super(message || 'Not Implemented');
+  constructor(message = 'Not Implemented') {
+    super(message);
+  }
+}
+
+/**
+ * @class
+ * @name ConnectionError
+ */
+class ConnectionError extends CustomError {
+  constructor(url, message) {
+    super(message || `Error connecting to ${url}`);
+    this.url = url;
   }
 }
 
@@ -60,6 +71,7 @@ class NoDeserializerFoundError extends CustomError {
 
 export default {
   NotImplementedError,
+  ConnectionError,
   PropertyValidationError,
   NoSerializerFoundError,
   NoDeserializerFoundError

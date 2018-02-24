@@ -4,7 +4,6 @@ import Interceptors from './interceptors';
 import BrowserProvider from './providers/browser';
 import Url from './url';
 import Path from './path';
-import { PropertyValidationError } from './errors';
 import { property, parseUri } from './utilities';
 
 function generateRequestMethod(method) {

@@ -28,4 +28,7 @@ export default function basicBehavior(provider) {
         next();
       });
   });
+
+  // TODO json
+  // TODO xml
 };

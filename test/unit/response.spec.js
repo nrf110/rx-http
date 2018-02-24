@@ -4,13 +4,9 @@ import Rx from 'rxjs';
 
 const behaviors = new PropertyBehaviors(Response);
 const properties = {
-  xhr: {
-    status: 200,
-    statusText: 'OK',
-    getAllResponseHeaders: function() {
-      return { 'Content-Type': 'application/json', 'X-Custom-Header': 'Value' };
-    }
-  },
+  status: 200,
+  statusText: 'OK',
+  headers: { 'Content-Type': 'application/json', 'X-Custom-Header': 'Value' },
   body: new Rx.Subject(),
   uploadProgress: new Rx.Subject(),
   downloadProgress: new Rx.Subject()
@@ -19,14 +15,14 @@ const response = new Response(properties);
 
 describe('status', () => {
   it('should return the status', (next) => {
-    expect(response.status()).to.equal(properties.xhr.status);
+    expect(response.status()).to.equal(properties.status);
     next();
   });
 });
 
 describe('statusText', () => {
   it('should return the statusText', (next) => {
-    expect(response.statusText()).to.equal(properties.xhr.statusText);
+    expect(response.statusText()).to.equal(properties.statusText);
     next();
   });
 });

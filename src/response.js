@@ -25,15 +25,17 @@ function evaluateLazy(property) {
 export default class Response {
 
   /**
-   * @param {XMLHttpRequest} xhr
+   * @param {Number} status - The HTTP status code of the response
+   * @param {String} statusText - The status text of the response
+   * @param {Object} headers - A hash containing the response headers
    * @param {Observable<String>} body - An Observable representing the body/entity of the response
    * @param {Observable<Object>} uploadProgress - An Observable representing a stream of all upload progress events
    * @param {Observable<Object>} downloadProgress - An Observable representing a stram of all download progress events
    */
-  constructor({ xhr, body, uploadProgress, downloadProgress } = {}) {
-    _status.set(this, xhr.status);
-    _statusText.set(this, xhr.statusText);
-    _headers.set(this, xhr.getAllResponseHeaders());
+  constructor({ status, statusText, headers, body, uploadProgress, downloadProgress } = {}) {
+    _status.set(this, status);
+    _statusText.set(this, statusText);
+    _headers.set(this, headers);
     _body.set(this, body);
     _uploadProgress.set(this, uploadProgress);
     _downloadProgress.set(this, downloadProgress);

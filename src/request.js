@@ -1,5 +1,5 @@
 import { isUndefined, identity, isString, isInteger, isObject } from 'lodash';
-import { PropertyValidationError } from './errors';
+import Errors from './errors';
 import Path from './path';
 import Url from './url';
 import { parseUri, property, mapProperty } from './utilities';
@@ -208,7 +208,7 @@ export default class Request {
       }
     }
 
-    throw new PropertyValidationError('url', value);
+    throw new Errors.PropertyValidationError('url', value);
   }
 
   /**

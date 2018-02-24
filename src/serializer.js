@@ -1,4 +1,4 @@
-import { NotImplementedError } from './errors';
+import Errors from './errors';
 
 /**
  * Base class for {@link Request} body serializers
@@ -21,6 +21,6 @@ export default class Serializer {
    * @returns - The serialized content
    */
   serialize(value) {
-    throw new NotImplementedError();
+    throw new Errors.NotImplementedError();
   }
 }

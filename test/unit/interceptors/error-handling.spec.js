@@ -10,14 +10,7 @@ function failed(message, next) {
 describe('ErrorHandling', () => {
   describe('response', () => {
     it('should reject a non 20x status', (next) => {
-      const mockResponse = {
-        status: 400,
-        statusText: 'Not Found',
-        getAllResponseHeaders: function() {
-          return {};
-        }
-      }
-      const res = new Response({ xhr: mockResponse });
+      const res = new Response({ status: 400, statusText: 'NotFound', headers: {} });
 
       Interceptors.ErrorHandling.response(res, failed("Shouldn't call accept", next), (rejected) => {
         expect(rejected).to.equal(res);
@@ -26,14 +19,7 @@ describe('ErrorHandling', () => {
     });
 
     it('should accept a 20x status', (next) => {
-      const mockResponse = {
-        status: 204,
-        statusText: 'Not Found',
-        getAllResponseHeaders: function() {
-          return {};
-        }
-      }
-      const res = new Response({ xhr: mockResponse });
+      const res = new Response({ status: 204, statusText: 'Not Found', headers: {} });
 
       Interceptors.ErrorHandling.response(res, (transformed) => {
         expect(transformed).to.equal(res);

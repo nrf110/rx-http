@@ -1,6 +1,6 @@
 import { isObject, isString } from 'lodash';
 import { isFile, isFormData, isBlob } from '../utilities';
-import { NoSerializerFoundError } from '../errors';
+import Errors from '../errors';
 import Serializer from '../serializer';
 import JsonSerializer from './json-serializer';
 import FormDataSerializer from './form-data-serializer';
@@ -28,10 +28,10 @@ function autoDetect(body, contentType) {
   if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {
     const result = contentTypeSerializers[contentType.toLowerCase()];
     if (!!result) return new result(contentType);
-    throw new NoSerializerFoundError(contentType);
+    throw new Errors.NoSerializerFoundError(contentType);
   }
 
-  throw new NoSerializerFoundError('unknown');
+  throw new Errors.NoSerializerFoundError('unknown');
 }
 
 /**

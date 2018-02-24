@@ -1,5 +1,5 @@
 import { isString, isObject, isEmpty, isUndefined, isInteger, assign } from 'lodash';
-import { PropertyValidationError } from 'errors';
+import Errors from 'errors';
 
 /** @private **/
 export function isFile(value) {
@@ -35,7 +35,7 @@ export function property(name, member, value, isValid = (val) => true) {
     member.set(this, value);
     return this;
   } else {
-    throw new PropertyValidationError(name, value);
+    throw new Errors.PropertyValidationError(name, value);
   }
 }
 
@@ -61,6 +61,24 @@ export function mapProperty(member, name, value) {
   // no name or value given, return a copy of the hash
   return assign({}, member.get(this));
 }
+
+/** @private **/
+export function parseHeaders(rawHeaders) {
+  const headers = {};
+  if (rawHeaders) {
+    const headerLines = rawHeaders.split('\u000d\u000a');
+    headerLines.forEach((line) => {
+      const idx = line.indexOf(':');
+      if (idx > 0) {
+        const headerName = line.substring(0, idx);
+        const headerValue = line.substring(idx + 2);
+        headers[headerName] = headerValue;
+      }
+    });
+  }
+  return headers;
+}
+
 
 /** parseUri 1.2.2
  * (c) Steven Levithan <stevenlevithan.com>

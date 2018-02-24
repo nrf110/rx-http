@@ -12,6 +12,9 @@ module.exports = function(config) {
     colors: true,
     autowatch: false,
     singleRun: true,
+    proxies: {
+      '/test': 'http://localhost:3000'
+    },
     frameworks: [
       'mocha',
       'chai',

@@ -4,6 +4,7 @@ import XHRBuilder from './xhr-builder';
 import Response from '../../../response';
 import RequestInterceptorChain from '../../../request-interceptor-chain';
 import ResponseInterceptorChain from '../../../response-interceptor-chain';
+import { parseHeaders } from '../../../utilities';
 
 /** @function
  * Provider-implementation for browser-based clients.  Providers are simply
@@ -23,13 +24,21 @@ export default function XHRProvider(request) {
     let uploadProgress = new Rx.Subject();
     let downloadProgress = new Rx.Subject();
     let all = [observable, body, uploadProgress, downloadProgress];
+    let failed = false;
 
-    function errorAll(err) {
-      all.forEach(o => o.error(err));
+    function responseError(err) {
+      observable.error(err);
+      body.complete();
+      uploadProgress.complete();
+      downloadProgress.complete();
     }
 
     function completeAll() {
       all.forEach(o => o.complete());
+    }
+
+    function errorAll(err) {
+      all.forEach(o => o.error(err));
     }
 
     function nextChunk() {
@@ -42,7 +51,9 @@ export default function XHRProvider(request) {
       .request(request)
       .onHeadersReceived((evt) => {
         response = new Response({
-          xhr,
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: parseHeaders(xhr.getAllResponseHeaders()),
           body,
           uploadProgress,
           downloadProgress
@@ -50,8 +61,13 @@ export default function XHRProvider(request) {
 
         const responseChain = new ResponseInterceptorChain(
           interceptors,
-          (transformedResponse) => observable.next(transformedResponse),
-          Rx.Observable.throw
+          (transformedResponse) => {
+            observable.next(transformedResponse)
+          },
+          (transformedResponse) => {
+            failed = true;
+            responseError(transformedResponse);
+          }
         );
 
         responseChain.run(response);
@@ -66,31 +82,40 @@ export default function XHRProvider(request) {
         }
       })
       .onLoad((evt) => {
-        if (response.isChunked()) {
-          if (xhr.responseText.length > offset) {
-            nextChunk();
+        if (!failed) {
+          if (response.isChunked()) {
+            if (xhr.responseText.length > offset) {
+              nextChunk();
+            }
+          } else {
+            body.next(xhr.responseText);
           }
-        } else {
-          body.next(xhr.responseText);
         }
       })
-      .onError(Rx.Observable.throw)
-      .onAbort(errorAll)
-      .onLoadEnd(completeAll)
+      .onError(responseError)
+      .onAbort((err) => {
+        errorAll(err);
+      })
+      .onLoadEnd(() => {
+        if (!failed) {
+          completeAll()
+        }
+      })
       .build();
 
     const success = transformed => {
-      if (!!transformed.body()) xhr.send(transformed.body());
-      else xhr.send();
+      try {
+        if (!!transformed.body()) xhr.send(transformed.body());
+        else xhr.send();
+      } catch (err) {
+        responseError(err);
+      }
     };
 
     const requestChain = new RequestInterceptorChain(
       interceptors,
       success,
-      (err) => {
-        Rx.Observable.throw(err);
-        completeAll();
-      }
+      responseError
     );
 
     requestChain.run(request);
