@@ -20,7 +20,7 @@ describe('BodyTransformer', () => {
       }, failed("Shouldn't call reject.", next));
     });
 
-    it ('should set the content-type header', (next) => {
+    it('should set the content-type header', (next) => {
       const req = new Http().post('/')
         .body({ foo: 'bar' }, new Serializers.Json());
 
@@ -30,7 +30,7 @@ describe('BodyTransformer', () => {
       }, failed("Shouldn't call reject.", next));
     });
 
-    it ('should not override the content-type header', (next) => {
+    it('should not override the content-type header', (next) => {
       const req = new Http().post('/')
         .contentType('text/json')
         .body({ foo: 'bar' }, new Serializers.Json());

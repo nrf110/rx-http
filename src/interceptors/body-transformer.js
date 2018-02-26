@@ -1,6 +1,37 @@
-import { isObject } from 'lodash';
+import { isObject, isString } from 'lodash';
 import { isFile, isFormData, isBlob } from '../utilities';
 import Interceptor from '../interceptor';
+import Errors from '../errors';
+import Serializers from '../serializers';
+
+const contentTypeSerializers = {
+  'text/json': Serializers.Json,
+  'application/json': Serializers.Json,
+  'multipart/form-data': Serializers.Form,
+  'application/x-www-urlencoded': Serializers.Form,
+  'text/plain': Serializers.Text
+}
+
+function autoDetect(body, contentType) {
+  if (!!contentType && contentTypeSerializers[contentType.toLowerCase()]) {
+    const result = contentTypeSerializers[contentType.toLowerCase()];
+    return new result(contentType);
+  }
+
+  if (isString(body)) {
+    return new Serializers.Text(contentType);
+  }
+
+  if (isObject(body)) {
+    if (isFormData(body) || isFile(body) || isBlob(body) || Object.entries(body).some((entry) => isFile(entry[1]) || isBlob(entry[1]))) {
+      return new Serializers.Form(contentType);
+    }
+
+    return new Serializers.Json(contentType);
+  }
+
+  throw new Errors.NoSerializerFoundError('unknown');
+}
 
 /**
  * Tries to automatically detect the response content type and deserialize the
@@ -21,12 +52,14 @@ export default class BodyTransformer extends Interceptor {
     const body = request.body();
 
     if (!!body) {
-      const serializer = request.serializer();
-      const contentType = request.contentType();
+      const serializer = request.serializer() || autoDetect(body, request.contentType());
+      const contentType = request.contentType() || serializer.contentType;
 
-      request
-        .contentType(contentType || serializer.contentType)
-        .body(serializer.serialize(body));
+      if (!!contentType) {
+        request.contentType(contentType);
+      }
+
+      request.body(serializer.serialize(body));
     }
 
     accept(request);

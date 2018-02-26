@@ -54,14 +54,6 @@ describe('body', () => {
     next();
   });
 
-  it('should set the value of the body and set the serializer to the default', (next) => {
-    const req = new Request();
-    req.body('hello world');
-    expect(req.body()).to.equal('hello world');
-    expect(req.serializer()).be.an.instanceof(Serializers.Default);
-    next();
-  });
-
   it('should set the value of the body, and not set the serializer', (next) => {
     const req = new Request();
     req.serializer(new Serializers.Json());

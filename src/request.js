@@ -1,3 +1,4 @@
+import Rx from 'rxjs';
 import { isUndefined, identity, isString, isInteger, isObject } from 'lodash';
 import Errors from './errors';
 import Path from './path';
@@ -19,6 +20,7 @@ let _withCredentials = new WeakMap();
 let _user = new WeakMap();
 let _password = new WeakMap();
 let _provider = new WeakMap();
+let _uploadProgress = new WeakMap();
 
 /**
  * A Request should only ever be created by an instance of {@link Http}
@@ -56,6 +58,7 @@ export default class Request {
     _user.set(this, user || null);
     _password.set(this, password || null);
     _provider.set(this, provider);
+    _uploadProgress.set(this, new Rx.BehaviorSubject({ loaded: 0, total: 0 }));
   }
 
   /**
@@ -173,7 +176,7 @@ export default class Request {
 
     const currentSerializer = _serializer.get(this);
     _body.set(this, value);
-    _serializer.set(this, serializer || currentSerializer || new Serializers.Default());
+    _serializer.set(this, serializer || currentSerializer);
 
     return this;
   }
@@ -279,6 +282,15 @@ export default class Request {
    */
   password(value) {
     return property.call(this, 'password', _password, value, isString);
+  }
+
+  /**
+   * @method
+   * @name uploadProgress
+   * @returns {Observable<Object>} - returns an observable of progress events
+   */
+  uploadProgress() {
+    return _uploadProgress.get(this);
   }
 
   /**

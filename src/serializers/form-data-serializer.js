@@ -13,7 +13,7 @@ export default class FormDataSerializer extends Serializer {
    * @param {String} [contentType] - The value of the Content-Type header
    */
   constructor(contentType) {
-    super(contentType || 'multipart/form-data');
+    super(contentType);
   }
 
   /**

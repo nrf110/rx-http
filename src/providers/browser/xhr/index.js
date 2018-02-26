@@ -21,8 +21,8 @@ export default function XHRProvider(request) {
     let response;
     let offset = 0;
     let body = new Rx.Subject();
-    let uploadProgress = new Rx.Subject();
-    let downloadProgress = new Rx.Subject();
+    let uploadProgress = request.uploadProgress();
+    let downloadProgress = new Rx.BehaviorSubject({ loaded: 0, total: 0 });
     let all = [observable, body, uploadProgress, downloadProgress];
     let failed = false;
 
@@ -73,10 +73,10 @@ export default function XHRProvider(request) {
         responseChain.run(response);
       })
       .onUploadProgress((evt) => {
-        uploadProgress.next(evt);
+        uploadProgress.next({ loaded: evt.loaded, total: evt.total });
       })
       .onDownloadProgress((evt) => {
-        downloadProgress.next(evt);
+        downloadProgress.next({ loaded: evt.loaded, total: evt.total });
         if (response.isChunked()) {
           nextChunk();
         }
@@ -93,9 +93,7 @@ export default function XHRProvider(request) {
         }
       })
       .onError(responseError)
-      .onAbort((err) => {
-        errorAll(err);
-      })
+      .onAbort(errorAll)
       .onLoadEnd(() => {
         if (!failed) {
           completeAll()
